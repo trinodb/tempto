@@ -42,7 +42,7 @@ databases:
       port: 9083
 
   presto:
-    jdbc_driver_class: com.facebook.presto.jdbc.PrestoDriver
+    jdbc_driver_class: io.prestosql.jdbc.PrestoDriver
     jdbc_url: jdbc:presto://${cluster.presto}:8080/hive/default
     jdbc_user: hdfs
     jdbc_password: "***empty***"
