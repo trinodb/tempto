@@ -36,8 +36,14 @@ class BatchLoader
         String questionMarks = IntStream.range(0, columnsCount)
                 .mapToObj(i -> "?")
                 .collect(joining(","));
-        preparedStatement = queryExecutor.getConnection()
-                .prepareStatement(String.format("INSERT INTO %s VALUES (%s)", tableName, questionMarks));
+        String sql = String.format("INSERT INTO %s VALUES (%s)", tableName, questionMarks);
+
+        // Test whether driver supports PreparedStatement and PreparedStatement#addBatch
+        try (PreparedStatement prepareStatement = queryExecutor.getConnection().prepareStatement(sql)) {
+            prepareStatement.addBatch();
+        }
+
+        preparedStatement = queryExecutor.getConnection().prepareStatement(sql);
         this.columnsCount = columnsCount;
     }
 
