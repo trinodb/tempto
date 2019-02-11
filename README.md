@@ -189,7 +189,7 @@ databases:           # database connections
     kerberos_keytab: /path/to/username.keytab  
  
   presto:           # connection named presto
-    jdbc_driver_class: com.facebook.presto.jdbc.PrestoDriver
+    jdbc_driver_class: io.prestosql.jdbc.PrestoDriver
     jdbc_url: jdbc:presto://localhost:8080/hive/default
     jdbc_user: hdfs
     jdbc_password: na
