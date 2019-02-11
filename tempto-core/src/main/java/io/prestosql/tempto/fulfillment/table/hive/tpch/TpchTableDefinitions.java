@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table.hive.tpch;
+package io.prestosql.tempto.fulfillment.table.hive.tpch;
 
-import io.prestodb.tempto.fulfillment.table.TableDefinitionsRepository.RepositoryTableDefinition;
-import io.prestodb.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository.RepositoryTableDefinition;
+import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
 
 // Table definitions according to: http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.1.pdf
 // TODO: support for CHAR

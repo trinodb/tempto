@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.command;
+package io.prestosql.tempto.internal.fulfillment.command;
 
-import io.prestodb.tempto.fulfillment.command.TestCommandRequirement;
+import io.prestosql.tempto.fulfillment.command.TestCommandRequirement;
 
 import javax.inject.Inject;
 

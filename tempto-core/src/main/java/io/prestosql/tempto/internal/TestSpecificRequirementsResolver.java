@@ -11,19 +11,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal;
+package io.prestosql.tempto.internal;
 
-import io.prestodb.tempto.CompositeRequirement;
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.RequirementsProvider;
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.CompositeRequirement;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.RequirementsProvider;
+import io.prestosql.tempto.configuration.Configuration;
 import org.testng.ITestNGMethod;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.prestodb.tempto.Requirements.compose;
+import static io.prestosql.tempto.Requirements.compose;
 
 public class TestSpecificRequirementsResolver
 {

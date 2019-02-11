@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.configuration
+package io.prestosql.tempto.internal.configuration
 
-import io.prestodb.tempto.configuration.Configuration
+import io.prestosql.tempto.configuration.Configuration
 import spock.lang.Specification
 
 import static com.google.common.collect.Sets.newHashSet

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.util;
+package io.prestosql.tempto.util;
 
 import javax.annotation.concurrent.ThreadSafe;
 import javax.inject.Provider;

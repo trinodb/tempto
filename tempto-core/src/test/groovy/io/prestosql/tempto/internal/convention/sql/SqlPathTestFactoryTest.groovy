@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention.sql
+package io.prestosql.tempto.internal.convention.sql
 
-import io.prestodb.tempto.CompositeRequirement
-import io.prestodb.tempto.Requirement
-import io.prestodb.tempto.RequirementsProvider
-import io.prestodb.tempto.configuration.Configuration
-import io.prestodb.tempto.fulfillment.table.TableDefinitionsRepository
-import io.prestodb.tempto.internal.convention.ConventionBasedTest
-import io.prestodb.tempto.internal.convention.ConventionBasedTestProxyGenerator
+import io.prestosql.tempto.CompositeRequirement
+import io.prestosql.tempto.Requirement
+import io.prestosql.tempto.RequirementsProvider
+import io.prestosql.tempto.configuration.Configuration
+import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository
+import io.prestosql.tempto.internal.convention.ConventionBasedTest
+import io.prestosql.tempto.internal.convention.ConventionBasedTestProxyGenerator
 import org.apache.commons.io.FilenameUtils
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -30,7 +30,7 @@ import spock.lang.Specification
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import static io.prestodb.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
+import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
 
 class SqlPathTestFactoryTest
         extends Specification

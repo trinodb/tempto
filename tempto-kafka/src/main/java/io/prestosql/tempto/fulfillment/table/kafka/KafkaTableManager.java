@@ -11,19 +11,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.fulfillment.table.kafka;
+package io.prestosql.tempto.fulfillment.table.kafka;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
-import io.prestodb.tempto.fulfillment.table.MutableTableRequirement;
-import io.prestodb.tempto.fulfillment.table.TableDefinition;
-import io.prestodb.tempto.fulfillment.table.TableHandle;
-import io.prestodb.tempto.fulfillment.table.TableInstance;
-import io.prestodb.tempto.fulfillment.table.TableManager;
-import io.prestodb.tempto.internal.fulfillment.table.TableName;
-import io.prestodb.tempto.query.QueryExecutor;
-import io.prestodb.tempto.query.QueryResult;
+import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
+import io.prestosql.tempto.fulfillment.table.TableDefinition;
+import io.prestosql.tempto.fulfillment.table.TableHandle;
+import io.prestosql.tempto.fulfillment.table.TableInstance;
+import io.prestosql.tempto.fulfillment.table.TableManager;
+import io.prestosql.tempto.internal.fulfillment.table.TableName;
+import io.prestosql.tempto.query.QueryExecutor;
+import io.prestosql.tempto.query.QueryResult;
 import kafka.admin.AdminUtils;
 import kafka.admin.RackAwareMode;
 import kafka.utils.ZKStringSerializer$;

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.ssh;
+package io.prestosql.tempto.ssh;
 
 import java.util.Optional;
 

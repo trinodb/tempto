@@ -12,20 +12,20 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention.generator;
+package io.prestosql.tempto.internal.convention.generator;
 
-import io.prestodb.tempto.internal.convention.ConventionBasedTest;
-import io.prestodb.tempto.internal.convention.ConventionBasedTestFactory;
+import io.prestosql.tempto.internal.convention.ConventionBasedTest;
+import io.prestosql.tempto.internal.convention.ConventionBasedTestFactory;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
 import static com.google.common.io.Files.createTempDir;
-import static io.prestodb.tempto.internal.convention.ProcessUtils.execute;
-import static io.prestodb.tempto.internal.convention.SqlTestsFileUtils.getExtension;
-import static io.prestodb.tempto.internal.convention.SqlTestsFileUtils.getFilenameWithoutExtension;
-import static io.prestodb.tempto.internal.convention.SqlTestsFileUtils.makeExecutable;
+import static io.prestosql.tempto.internal.convention.ProcessUtils.execute;
+import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.getExtension;
+import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.getFilenameWithoutExtension;
+import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.makeExecutable;
 
 public class GeneratorPathTestFactory
         implements ConventionBasedTestFactory.PathTestFactory

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table.hive.tpcds;
+package io.prestosql.tempto.fulfillment.table.hive.tpcds;
 
 import com.teradata.tpcds.Table;
 

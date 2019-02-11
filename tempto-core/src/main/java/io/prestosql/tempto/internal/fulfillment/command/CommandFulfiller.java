@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.command;
+package io.prestosql.tempto.internal.fulfillment.command;
 
 import com.google.common.base.Splitter;
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.context.State;
-import io.prestodb.tempto.fulfillment.RequirementFulfiller;
-import io.prestodb.tempto.fulfillment.TestStatus;
-import io.prestodb.tempto.fulfillment.command.Command;
-import io.prestodb.tempto.fulfillment.command.CommandRequirement;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.context.State;
+import io.prestosql.tempto.fulfillment.RequirementFulfiller;
+import io.prestosql.tempto.fulfillment.TestStatus;
+import io.prestosql.tempto.fulfillment.command.Command;
+import io.prestosql.tempto.fulfillment.command.CommandRequirement;
 import org.slf4j.Logger;
 
 import java.io.File;

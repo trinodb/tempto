@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.convention;
+package io.prestosql.tempto.internal.convention;
 
 import com.google.common.base.Splitter;
-import io.prestodb.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
+import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
 
 import java.util.Collections;
 import java.util.List;

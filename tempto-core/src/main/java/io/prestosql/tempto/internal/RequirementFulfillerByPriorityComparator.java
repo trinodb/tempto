@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal;
+package io.prestosql.tempto.internal;
 
-import io.prestodb.tempto.fulfillment.RequirementFulfiller;
+import io.prestosql.tempto.fulfillment.RequirementFulfiller;
 
 import java.util.Comparator;
 
-import static io.prestodb.tempto.internal.RequirementFulfillerPriorityHelper.getPriority;
+import static io.prestosql.tempto.internal.RequirementFulfillerPriorityHelper.getPriority;
 
 public class RequirementFulfillerByPriorityComparator
         implements Comparator<Class<? extends RequirementFulfiller>>

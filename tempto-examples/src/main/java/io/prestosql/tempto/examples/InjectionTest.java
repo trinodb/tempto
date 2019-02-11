@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.examples;
+package io.prestosql.tempto.examples;
 
 import com.google.inject.Inject;
-import io.prestodb.tempto.AfterTestWithContext;
-import io.prestodb.tempto.BeforeTestWithContext;
-import io.prestodb.tempto.ProductTest;
-import io.prestodb.tempto.fulfillment.table.ImmutableTablesState;
-import io.prestodb.tempto.fulfillment.table.MutableTablesState;
+import io.prestosql.tempto.AfterTestWithContext;
+import io.prestosql.tempto.BeforeTestWithContext;
+import io.prestosql.tempto.ProductTest;
+import io.prestosql.tempto.fulfillment.table.ImmutableTablesState;
+import io.prestosql.tempto.fulfillment.table.MutableTablesState;
 import org.testng.annotations.Test;
 
 import javax.inject.Named;

@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table.hive.tpcds;
+package io.prestosql.tempto.fulfillment.table.hive.tpcds;
 
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.Requirements;
-import io.prestodb.tempto.RequirementsProvider;
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.Requirements;
+import io.prestosql.tempto.RequirementsProvider;
+import io.prestosql.tempto.configuration.Configuration;
 
-import static io.prestodb.tempto.fulfillment.table.TableRequirements.immutableTable;
+import static io.prestosql.tempto.fulfillment.table.TableRequirements.immutableTable;
 
 public class ImmutableTpcdsTablesRequirements
         implements RequirementsProvider

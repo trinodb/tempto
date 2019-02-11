@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query;
+package io.prestosql.tempto.internal.query;
 
 import com.google.common.base.Throwables;
 import com.google.common.math.DoubleMath;
 import com.google.common.primitives.UnsignedBytes;
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.configuration.Configuration;
 
 import java.math.BigDecimal;
 import java.sql.Array;

@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.logging;
+package io.prestosql.tempto.logging;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalNotification;
 import com.google.inject.ConfigurationException;
-import io.prestodb.tempto.context.TestContext;
-import io.prestodb.tempto.internal.listeners.TestMetadata;
+import io.prestosql.tempto.context.TestContext;
+import io.prestosql.tempto.internal.listeners.TestMetadata;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Logger;
@@ -37,7 +37,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.io.Files.createParentDirs;
-import static io.prestodb.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
 import static org.apache.commons.io.FileUtils.getTempDirectoryPath;
 
 /**

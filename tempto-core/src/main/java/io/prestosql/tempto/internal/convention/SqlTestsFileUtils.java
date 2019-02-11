@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention;
+package io.prestosql.tempto.internal.convention;
 
 import org.apache.commons.io.FilenameUtils;
 

@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.ssh;
+package io.prestosql.tempto.ssh;
 
 import com.google.common.base.Joiner;
-import io.prestodb.tempto.process.CliProcess;
+import io.prestosql.tempto.process.CliProcess;
 
 import java.io.Closeable;
 import java.io.IOException;

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.fulfillment.table;
+package io.prestosql.tempto.internal.fulfillment.table;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -20,14 +20,14 @@ import com.google.inject.Module;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.fulfillment.table.ReadOnlyTableManager;
-import io.prestodb.tempto.fulfillment.table.TableManager;
-import io.prestodb.tempto.fulfillment.table.TableManagerDispatcher;
-import io.prestodb.tempto.initialization.AutoModuleProvider;
-import io.prestodb.tempto.initialization.SuiteModuleProvider;
-import io.prestodb.tempto.internal.query.JdbcConnectionsConfiguration;
-import io.prestodb.tempto.query.QueryExecutor;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.fulfillment.table.ReadOnlyTableManager;
+import io.prestosql.tempto.fulfillment.table.TableManager;
+import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
+import io.prestosql.tempto.initialization.AutoModuleProvider;
+import io.prestosql.tempto.initialization.SuiteModuleProvider;
+import io.prestosql.tempto.internal.query.JdbcConnectionsConfiguration;
+import io.prestosql.tempto.query.QueryExecutor;
 
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +35,7 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.inject.multibindings.MapBinder.newMapBinder;
 import static com.google.inject.name.Names.named;
-import static io.prestodb.tempto.internal.ReflectionHelper.getAnnotatedSubTypesOf;
+import static io.prestosql.tempto.internal.ReflectionHelper.getAnnotatedSubTypesOf;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toMap;
 

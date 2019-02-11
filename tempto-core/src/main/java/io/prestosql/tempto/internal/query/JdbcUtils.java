@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query;
+package io.prestosql.tempto.internal.query;
 
-import io.prestodb.tempto.query.JdbcConnectivityParamsState;
+import io.prestosql.tempto.query.JdbcConnectivityParamsState;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;

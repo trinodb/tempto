@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention;
+package io.prestosql.tempto.internal.convention;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import io.prestodb.tempto.assertions.QueryAssert.Row;
-import io.prestodb.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
-import io.prestodb.tempto.internal.query.QueryRowMapper;
+import io.prestosql.tempto.assertions.QueryAssert.Row;
+import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
+import io.prestosql.tempto.internal.query.QueryRowMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +33,7 @@ import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.io.Resources.getResource;
-import static io.prestodb.tempto.assertions.QueryAssert.Row.row;
+import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;

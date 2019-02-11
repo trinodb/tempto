@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.fulfillment.table.hive.tpch;
+package io.prestosql.tempto.fulfillment.table.hive.tpch;
 
-import io.prestodb.tempto.fulfillment.table.hive.statistics.ColumnStatistics;
-import io.prestodb.tempto.fulfillment.table.hive.statistics.TableStatistics;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.ColumnStatistics;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

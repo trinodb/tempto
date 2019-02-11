@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.process;
+package io.prestosql.tempto.process;
 
 public class CommandExecutionException
         extends RuntimeException

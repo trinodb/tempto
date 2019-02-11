@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query
+package io.prestosql.tempto.internal.query
 
-import io.prestodb.tempto.context.TestContext
-import io.prestodb.tempto.internal.context.GuiceTestContext
-import io.prestodb.tempto.query.JdbcConnectionsPool
-import io.prestodb.tempto.query.JdbcConnectivityParamsState
-import io.prestodb.tempto.query.JdbcQueryExecutor
-import io.prestodb.tempto.query.QueryResult
+import io.prestosql.tempto.context.TestContext
+import io.prestosql.tempto.internal.context.GuiceTestContext
+import io.prestosql.tempto.query.JdbcConnectionsPool
+import io.prestosql.tempto.query.JdbcConnectivityParamsState
+import io.prestosql.tempto.query.JdbcQueryExecutor
+import io.prestosql.tempto.query.QueryResult
 import org.apache.commons.dbutils.QueryRunner
 import spock.lang.Specification
 
@@ -27,9 +27,9 @@ import java.sql.Connection
 
 import static JdbcUtils.connection
 import static JdbcUtils.registerDriver
-import static io.prestodb.tempto.assertions.QueryAssert.Row.row
-import static io.prestodb.tempto.assertions.QueryAssert.assertThat
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
+import static io.prestosql.tempto.assertions.QueryAssert.Row.row
+import static io.prestosql.tempto.assertions.QueryAssert.assertThat
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
 import static java.sql.JDBCType.INTEGER
 import static java.sql.JDBCType.VARCHAR
 

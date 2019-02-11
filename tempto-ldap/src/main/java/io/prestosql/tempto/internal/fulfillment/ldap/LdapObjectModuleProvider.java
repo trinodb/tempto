@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.ldap;
+package io.prestosql.tempto.internal.fulfillment.ldap;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.initialization.AutoModuleProvider;
-import io.prestodb.tempto.initialization.SuiteModuleProvider;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.initialization.AutoModuleProvider;
+import io.prestosql.tempto.initialization.SuiteModuleProvider;
 
 @AutoModuleProvider
 public class LdapObjectModuleProvider

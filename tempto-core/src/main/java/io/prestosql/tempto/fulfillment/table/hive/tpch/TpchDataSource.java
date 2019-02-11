@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table.hive.tpch;
+package io.prestosql.tempto.fulfillment.table.hive.tpch;
 
-import io.prestodb.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestodb.tempto.fulfillment.table.hive.statistics.TableStatistics;
-import io.prestodb.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
-import io.prestodb.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
-import io.prestodb.tempto.internal.fulfillment.table.hive.tpch.TpchEntityByteSource;
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
+import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
+import io.prestosql.tempto.internal.fulfillment.table.hive.tpch.TpchEntityByteSource;
 
 import java.util.Collection;
 import java.util.Optional;

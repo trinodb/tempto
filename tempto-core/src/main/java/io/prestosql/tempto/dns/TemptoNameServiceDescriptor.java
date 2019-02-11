@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.dns;
+package io.prestosql.tempto.dns;
 
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.configuration.Configuration;
 import sun.net.spi.nameservice.NameService;
 import sun.net.spi.nameservice.NameServiceDescriptor;
 
 import java.util.Map;
 
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
 
 public class TemptoNameServiceDescriptor
         implements NameServiceDescriptor

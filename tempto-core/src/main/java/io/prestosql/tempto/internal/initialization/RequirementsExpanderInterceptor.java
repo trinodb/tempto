@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.initialization;
+package io.prestosql.tempto.internal.initialization;
 
 import com.google.common.collect.Lists;
-import io.prestodb.tempto.CompositeRequirement;
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.Requirements;
-import io.prestodb.tempto.internal.DataProviders;
-import io.prestodb.tempto.internal.RequirementsCollector;
-import io.prestodb.tempto.internal.TestSpecificRequirementsResolver;
+import io.prestosql.tempto.CompositeRequirement;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.Requirements;
+import io.prestosql.tempto.internal.DataProviders;
+import io.prestosql.tempto.internal.RequirementsCollector;
+import io.prestosql.tempto.internal.TestSpecificRequirementsResolver;
 import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
 
 /**
  * Interceptor which for each TestNGMethod creates one or more RequirementAwareTestNGMethods.

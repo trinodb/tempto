@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query
+package io.prestosql.tempto.internal.query
 
-import io.prestodb.tempto.internal.configuration.YamlConfiguration
-import io.prestodb.tempto.query.JdbcConnectivityParamsState
+import io.prestosql.tempto.internal.configuration.YamlConfiguration
+import io.prestosql.tempto.query.JdbcConnectivityParamsState
 import spock.lang.Specification
 
 class JdbcConnectionsConfigurationTest

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.threads;
+package io.prestosql.tempto.threads;
 
 /**
  * An interface of a runnable that has an index and can throw checked exceptions.

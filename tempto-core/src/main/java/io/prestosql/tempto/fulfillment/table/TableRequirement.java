@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table;
+package io.prestosql.tempto.fulfillment.table;
 
-import io.prestodb.tempto.Requirement;
+import io.prestosql.tempto.Requirement;
 
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;

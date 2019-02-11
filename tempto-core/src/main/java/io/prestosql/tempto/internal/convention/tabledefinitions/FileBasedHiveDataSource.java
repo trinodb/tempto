@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention.tabledefinitions;
+package io.prestosql.tempto.internal.convention.tabledefinitions;
 
 import com.google.common.collect.ImmutableSet;
-import io.prestodb.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestodb.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 
 import java.nio.file.Path;
 import java.util.Collection;

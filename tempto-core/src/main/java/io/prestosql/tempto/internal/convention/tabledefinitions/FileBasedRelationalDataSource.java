@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention.tabledefinitions;
+package io.prestosql.tempto.internal.convention.tabledefinitions;
 
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalDataSource;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
 
 import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.prestodb.tempto.internal.convention.tabledefinitions.JdbcDataFileDescriptor.sqlResultDescriptorFor;
+import static io.prestosql.tempto.internal.convention.tabledefinitions.JdbcDataFileDescriptor.sqlResultDescriptorFor;
 import static java.util.Collections.emptyIterator;
 
 public class FileBasedRelationalDataSource

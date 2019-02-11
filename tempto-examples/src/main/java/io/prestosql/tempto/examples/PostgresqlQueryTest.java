@@ -11,34 +11,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.examples;
+package io.prestosql.tempto.examples;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import io.prestodb.tempto.ProductTest;
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.Requirements;
-import io.prestodb.tempto.RequirementsProvider;
-import io.prestodb.tempto.Requires;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.fulfillment.table.ImmutableTableRequirement;
-import io.prestodb.tempto.fulfillment.table.MutableTableRequirement;
-import io.prestodb.tempto.fulfillment.table.MutableTablesState;
-import io.prestodb.tempto.fulfillment.table.TableInstance;
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalDataSource;
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
-import io.prestodb.tempto.query.QueryExecutor;
+import io.prestosql.tempto.ProductTest;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.Requirements;
+import io.prestosql.tempto.RequirementsProvider;
+import io.prestosql.tempto.Requires;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.fulfillment.table.ImmutableTableRequirement;
+import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
+import io.prestosql.tempto.fulfillment.table.MutableTablesState;
+import io.prestosql.tempto.fulfillment.table.TableInstance;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
+import io.prestosql.tempto.query.QueryExecutor;
 import org.testng.annotations.Test;
 
 import javax.inject.Named;
 
 import java.util.List;
 
-import static io.prestodb.tempto.assertions.QueryAssert.Row.row;
-import static io.prestodb.tempto.assertions.QueryAssert.assertThat;
-import static io.prestodb.tempto.fulfillment.table.ImmutableTablesState.immutableTablesState;
-import static io.prestodb.tempto.fulfillment.table.TableHandle.tableHandle;
-import static io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
+import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
+import static io.prestosql.tempto.assertions.QueryAssert.assertThat;
+import static io.prestosql.tempto.fulfillment.table.ImmutableTablesState.immutableTablesState;
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
 
 public class PostgresqlQueryTest
         extends ProductTest

@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query;
+package io.prestosql.tempto.internal.query;
 
 import com.google.common.base.Throwables;
-import io.prestodb.tempto.kerberos.KerberosAuthentication;
-import io.prestodb.tempto.query.JdbcConnectivityParamsState;
+import io.prestosql.tempto.kerberos.KerberosAuthentication;
+import io.prestosql.tempto.query.JdbcConnectivityParamsState;
 
 import javax.security.auth.Subject;
 import javax.sql.DataSource;

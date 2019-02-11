@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.process;
+package io.prestosql.tempto.internal.process;
 
-import io.prestodb.tempto.process.CliProcess;
+import io.prestosql.tempto.process.CliProcess;
 import org.slf4j.Logger;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;

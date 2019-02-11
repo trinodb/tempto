@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal
+package io.prestosql.tempto.internal
 
 import com.google.common.collect.ImmutableList
 import com.google.inject.AbstractModule
@@ -20,8 +20,8 @@ import com.google.inject.ConfigurationException
 import com.google.inject.Injector
 import com.google.inject.Key
 import com.google.inject.TypeLiteral
-import io.prestodb.tempto.Requirement
-import io.prestodb.tempto.fulfillment.RequirementFulfiller
+import io.prestosql.tempto.Requirement
+import io.prestosql.tempto.fulfillment.RequirementFulfiller
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test

@@ -12,16 +12,16 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.context;
+package io.prestosql.tempto.internal.context;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
-import io.prestodb.tempto.context.State;
-import io.prestodb.tempto.context.TestContext;
-import io.prestodb.tempto.context.TestContextCloseCallback;
+import io.prestosql.tempto.context.State;
+import io.prestosql.tempto.context.TestContext;
+import io.prestosql.tempto.context.TestContextCloseCallback;
 import org.slf4j.Logger;
 
 import java.util.List;

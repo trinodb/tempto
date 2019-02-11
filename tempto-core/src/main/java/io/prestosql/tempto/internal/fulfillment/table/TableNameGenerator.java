@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.table;
+package io.prestosql.tempto.internal.fulfillment.table;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 

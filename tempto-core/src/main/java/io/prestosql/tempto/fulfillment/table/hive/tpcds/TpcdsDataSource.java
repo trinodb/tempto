@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.fulfillment.table.hive.tpcds;
+package io.prestosql.tempto.fulfillment.table.hive.tpcds;
 
 import com.google.common.base.Charsets;
 import com.teradata.tpcds.Results;
 import com.teradata.tpcds.Session;
-import io.prestodb.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestodb.tempto.fulfillment.table.hive.statistics.TableStatistics;
-import io.prestodb.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
-import io.prestodb.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
+import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.configuration;
+package io.prestosql.tempto.internal.configuration;
 
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.configuration.Configuration;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.commons.lang3.tuple.Pair;
 

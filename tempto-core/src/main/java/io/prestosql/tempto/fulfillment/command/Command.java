@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.command;
+package io.prestosql.tempto.fulfillment.command;
 
 import java.util.Objects;
 

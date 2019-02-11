@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.fulfillment.table;
+package io.prestosql.tempto.fulfillment.table;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Splitter;

@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention.recursion;
+package io.prestosql.tempto.internal.convention.recursion;
 
-import io.prestodb.tempto.internal.convention.ConventionBasedTest;
-import io.prestodb.tempto.internal.convention.ConventionBasedTestFactory;
+import io.prestosql.tempto.internal.convention.ConventionBasedTest;
+import io.prestosql.tempto.internal.convention.ConventionBasedTestFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

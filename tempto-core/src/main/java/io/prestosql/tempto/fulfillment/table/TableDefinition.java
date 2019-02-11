@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table;
+package io.prestosql.tempto.fulfillment.table;
 
 import java.util.Optional;
 

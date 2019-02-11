@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table
+package io.prestosql.tempto.fulfillment.table
 
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalDataSource
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition
-import io.prestodb.tempto.internal.configuration.EmptyConfiguration
-import io.prestodb.tempto.internal.fulfillment.table.TableNameGenerator
-import io.prestodb.tempto.internal.fulfillment.table.jdbc.JdbcTableManager
-import io.prestodb.tempto.query.QueryExecutor
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition
+import io.prestosql.tempto.internal.configuration.EmptyConfiguration
+import io.prestosql.tempto.internal.fulfillment.table.TableNameGenerator
+import io.prestosql.tempto.internal.fulfillment.table.jdbc.JdbcTableManager
+import io.prestosql.tempto.query.QueryExecutor
 import spock.lang.Specification
 
 import java.sql.Connection

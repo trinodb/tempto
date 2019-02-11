@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.hadoop.hdfs;
+package io.prestosql.tempto.internal.hadoop.hdfs;
 
 import com.google.inject.Inject;
 import com.google.inject.Module;
@@ -20,10 +20,10 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.hadoop.hdfs.HdfsClient;
-import io.prestodb.tempto.initialization.AutoModuleProvider;
-import io.prestodb.tempto.initialization.SuiteModuleProvider;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.hadoop.hdfs.HdfsClient;
+import io.prestosql.tempto.initialization.AutoModuleProvider;
+import io.prestosql.tempto.initialization.SuiteModuleProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.prestodb.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_HOST_KEY;
+import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_HOST_KEY;
 
 @AutoModuleProvider
 public class HdfsModuleProvider

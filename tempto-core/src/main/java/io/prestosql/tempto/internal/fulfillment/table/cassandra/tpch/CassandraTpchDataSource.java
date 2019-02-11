@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.fulfillment.table.cassandra.tpch;
+package io.prestosql.tempto.internal.fulfillment.table.cassandra.tpch;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import io.airlift.tpch.TpchEntity;
 import io.airlift.tpch.TpchTable;
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalDataSource;
-import io.prestodb.tempto.internal.query.QueryRowMapper;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
+import io.prestosql.tempto.internal.query.QueryRowMapper;
 
 import java.sql.JDBCType;
 import java.util.Iterator;

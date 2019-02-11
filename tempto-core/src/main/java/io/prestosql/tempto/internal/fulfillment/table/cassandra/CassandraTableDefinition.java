@@ -11,13 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.fulfillment.table.cassandra;
+package io.prestosql.tempto.internal.fulfillment.table.cassandra;
 
-import io.prestodb.tempto.fulfillment.table.TableHandle;
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalDataSource;
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
+import io.prestosql.tempto.fulfillment.table.TableHandle;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 
-import static io.prestodb.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
 import static java.util.Objects.requireNonNull;
 
 public class CassandraTableDefinition

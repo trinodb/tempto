@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.listeners;
+package io.prestosql.tempto.internal.listeners;
 
 import java.util.Set;
 

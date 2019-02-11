@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table.kafka;
+package io.prestosql.tempto.fulfillment.table.kafka;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

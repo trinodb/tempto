@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table.jdbc;
+package io.prestosql.tempto.fulfillment.table.jdbc;
 
-import io.prestodb.tempto.fulfillment.table.TableDefinition;
-import io.prestodb.tempto.fulfillment.table.TableHandle;
+import io.prestosql.tempto.fulfillment.table.TableDefinition;
+import io.prestosql.tempto.fulfillment.table.TableHandle;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.prestodb.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
