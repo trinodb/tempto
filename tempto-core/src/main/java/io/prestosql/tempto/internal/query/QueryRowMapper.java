@@ -45,7 +45,13 @@ public class QueryRowMapper
 
     public Row mapToRow(List<String> values)
     {
-        checkState(values.size() == columnTypes.size(), "Expected %s values in row: %s", columnTypes.size(), values);
+        checkState(
+                values.size() == columnTypes.size(),
+                "Wrong values count, expected %s of types %s, but got %s values: %s",
+                columnTypes.size(),
+                columnTypes,
+                values.size(),
+                values);
 
         Object[] rowValues = new Object[values.size()];
         for (int i = 0; i < values.size(); ++i) {
