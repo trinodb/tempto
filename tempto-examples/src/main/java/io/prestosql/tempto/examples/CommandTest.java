@@ -12,18 +12,18 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.examples;
+package io.prestosql.tempto.examples;
 
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.Requirements;
-import io.prestodb.tempto.RequirementsProvider;
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.Requirements;
+import io.prestosql.tempto.RequirementsProvider;
+import io.prestosql.tempto.configuration.Configuration;
 import org.testng.annotations.Test;
 
 import java.io.File;
 
-import static io.prestodb.tempto.fulfillment.command.SuiteCommandRequirement.suiteCommand;
-import static io.prestodb.tempto.fulfillment.command.TestCommandRequirement.testCommand;
+import static io.prestosql.tempto.fulfillment.command.SuiteCommandRequirement.suiteCommand;
+import static io.prestosql.tempto.fulfillment.command.TestCommandRequirement.testCommand;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommandTest

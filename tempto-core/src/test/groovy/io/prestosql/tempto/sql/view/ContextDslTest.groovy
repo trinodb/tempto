@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.sql.view
+package io.prestosql.tempto.sql.view
 
-import io.prestodb.tempto.context.ContextDsl
-import io.prestodb.tempto.context.ContextRunnable
-import io.prestodb.tempto.query.QueryExecutor
-import io.prestodb.tempto.query.QueryResult
+import io.prestosql.tempto.context.ContextDsl
+import io.prestosql.tempto.context.ContextRunnable
+import io.prestosql.tempto.query.QueryExecutor
+import io.prestosql.tempto.query.QueryResult
 import spock.lang.Specification
 
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
 
 class ContextDslTest
         extends Specification

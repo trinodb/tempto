@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.context;
+package io.prestosql.tempto.context;
 
 /**
  * Helper class used for execution of instances of {@link ContextRunnable} with context generated

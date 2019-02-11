@@ -11,16 +11,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.ssh;
+package io.prestosql.tempto.internal.ssh;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Module;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.initialization.AutoModuleProvider;
-import io.prestodb.tempto.initialization.SuiteModuleProvider;
-import io.prestodb.tempto.ssh.SshClient;
-import io.prestodb.tempto.ssh.SshClientFactory;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.initialization.AutoModuleProvider;
+import io.prestosql.tempto.initialization.SuiteModuleProvider;
+import io.prestosql.tempto.ssh.SshClient;
+import io.prestosql.tempto.ssh.SshClientFactory;
 
 import java.util.Optional;
 

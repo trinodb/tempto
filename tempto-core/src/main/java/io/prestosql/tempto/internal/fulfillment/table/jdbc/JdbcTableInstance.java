@@ -11,11 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.fulfillment.table.jdbc;
+package io.prestosql.tempto.internal.fulfillment.table.jdbc;
 
-import io.prestodb.tempto.fulfillment.table.TableInstance;
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
-import io.prestodb.tempto.internal.fulfillment.table.TableName;
+import io.prestosql.tempto.fulfillment.table.TableInstance;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
+import io.prestosql.tempto.internal.fulfillment.table.TableName;
 
 public class JdbcTableInstance
         extends TableInstance<RelationalTableDefinition>

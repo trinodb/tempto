@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto;
+package io.prestosql.tempto;
 
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.configuration.Configuration;
 
 @FunctionalInterface
 public interface RequirementsProvider

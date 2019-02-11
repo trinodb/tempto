@@ -11,20 +11,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.fulfillment.table.hive;
+package io.prestosql.tempto.internal.fulfillment.table.hive;
 
 import com.google.inject.Inject;
-import io.prestodb.tempto.fulfillment.table.MutableTableRequirement.State;
-import io.prestodb.tempto.fulfillment.table.TableDefinition;
-import io.prestodb.tempto.fulfillment.table.TableHandle;
-import io.prestodb.tempto.fulfillment.table.TableManager;
-import io.prestodb.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestodb.tempto.fulfillment.table.hive.HiveTableDefinition;
-import io.prestodb.tempto.internal.fulfillment.table.AbstractTableManager;
-import io.prestodb.tempto.internal.fulfillment.table.TableName;
-import io.prestodb.tempto.internal.fulfillment.table.TableNameGenerator;
-import io.prestodb.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter;
-import io.prestodb.tempto.query.QueryExecutor;
+import io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State;
+import io.prestosql.tempto.fulfillment.table.TableDefinition;
+import io.prestosql.tempto.fulfillment.table.TableHandle;
+import io.prestosql.tempto.fulfillment.table.TableManager;
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.prestosql.tempto.internal.fulfillment.table.AbstractTableManager;
+import io.prestosql.tempto.internal.fulfillment.table.TableName;
+import io.prestosql.tempto.internal.fulfillment.table.TableNameGenerator;
+import io.prestosql.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter;
+import io.prestosql.tempto.query.QueryExecutor;
 import org.slf4j.Logger;
 
 import javax.inject.Named;
@@ -35,8 +35,8 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static io.prestodb.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
-import static io.prestodb.tempto.fulfillment.table.MutableTableRequirement.State.PREPARED;
+import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
+import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.PREPARED;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.slf4j.LoggerFactory.getLogger;

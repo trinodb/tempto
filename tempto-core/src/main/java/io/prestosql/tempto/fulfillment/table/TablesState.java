@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.fulfillment.table;
+package io.prestosql.tempto.fulfillment.table;
 
 import com.google.common.collect.ImmutableList;
-import io.prestodb.tempto.context.State;
-import io.prestodb.tempto.internal.fulfillment.table.TableName;
+import io.prestosql.tempto.context.State;
+import io.prestosql.tempto.internal.fulfillment.table.TableName;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
-import static io.prestodb.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;

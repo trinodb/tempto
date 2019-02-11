@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.hadoop.hdfs;
+package io.prestosql.tempto.internal.hadoop.hdfs;
 
-import io.prestodb.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestodb.tempto.hadoop.hdfs.HdfsClient;
-import io.prestodb.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.prestosql.tempto.hadoop.hdfs.HdfsClient;
+import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

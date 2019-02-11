@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.initialization;
+package io.prestosql.tempto.initialization;
 
 import com.google.inject.Module;
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.configuration.Configuration;
 
 /**
  * Classes implementing this interface provide {@link Module}s

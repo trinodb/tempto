@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.examples;
+package io.prestosql.tempto.examples;
 
-import io.prestodb.tempto.ProductTest;
+import io.prestosql.tempto.ProductTest;
 import org.testng.annotations.Test;
 
 import java.net.Inet4Address;

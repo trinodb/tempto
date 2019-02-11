@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention;
+package io.prestosql.tempto.internal.convention;
 
-import io.prestodb.tempto.ProductTest;
-import io.prestodb.tempto.RequirementsProvider;
-import io.prestodb.tempto.testmarkers.WithName;
-import io.prestodb.tempto.testmarkers.WithTestGroups;
+import io.prestosql.tempto.ProductTest;
+import io.prestosql.tempto.RequirementsProvider;
+import io.prestosql.tempto.testmarkers.WithName;
+import io.prestosql.tempto.testmarkers.WithTestGroups;
 
 public abstract class ConventionBasedTest
         extends ProductTest

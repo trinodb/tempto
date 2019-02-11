@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.hadoop.hdfs;
+package io.prestosql.tempto.internal.hadoop.hdfs;
 
 import com.google.common.base.Throwables;
 import com.google.inject.AbstractModule;

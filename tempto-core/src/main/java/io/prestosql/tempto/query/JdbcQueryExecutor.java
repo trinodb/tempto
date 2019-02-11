@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.query;
+package io.prestosql.tempto.query;
 
 import com.google.common.base.Throwables;
-import io.prestodb.tempto.context.TestContext;
+import io.prestosql.tempto.context.TestContext;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -25,8 +25,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static io.prestodb.tempto.query.QueryResult.forSingleIntegerValue;
-import static io.prestodb.tempto.query.QueryResult.toSqlIndex;
+import static io.prestosql.tempto.query.QueryResult.forSingleIntegerValue;
+import static io.prestosql.tempto.query.QueryResult.toSqlIndex;
 import static java.util.Objects.requireNonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 

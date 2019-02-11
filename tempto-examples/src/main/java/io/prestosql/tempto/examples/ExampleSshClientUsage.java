@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.examples;
+package io.prestosql.tempto.examples;
 
 import com.google.inject.Inject;
-import io.prestodb.tempto.ProductTest;
-import io.prestodb.tempto.process.CliProcess;
-import io.prestodb.tempto.ssh.SshClient;
-import io.prestodb.tempto.ssh.SshClientFactory;
+import io.prestosql.tempto.ProductTest;
+import io.prestosql.tempto.process.CliProcess;
+import io.prestosql.tempto.ssh.SshClient;
+import io.prestosql.tempto.ssh.SshClientFactory;
 import org.testng.annotations.Test;
 
 import javax.inject.Named;

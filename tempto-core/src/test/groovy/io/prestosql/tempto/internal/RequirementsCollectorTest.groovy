@@ -12,22 +12,22 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal
+package io.prestosql.tempto.internal
 
 import com.google.common.collect.ImmutableSet
-import io.prestodb.tempto.CompositeRequirement
-import io.prestodb.tempto.Requirement
-import io.prestodb.tempto.Requirements
-import io.prestodb.tempto.RequirementsProvider
-import io.prestodb.tempto.Requires
-import io.prestodb.tempto.configuration.Configuration
-import io.prestodb.tempto.internal.configuration.YamlConfiguration
+import io.prestosql.tempto.CompositeRequirement
+import io.prestosql.tempto.Requirement
+import io.prestosql.tempto.Requirements
+import io.prestosql.tempto.RequirementsProvider
+import io.prestosql.tempto.Requires
+import io.prestosql.tempto.configuration.Configuration
+import io.prestosql.tempto.internal.configuration.YamlConfiguration
 import spock.lang.Specification
 
-import static io.prestodb.tempto.Requirements.compose
-import static io.prestodb.tempto.fulfillment.command.SuiteCommandRequirement.suiteCommand
-import static io.prestodb.tempto.fulfillment.command.TestCommandRequirement.testCommand
-import static io.prestodb.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
+import static io.prestosql.tempto.Requirements.compose
+import static io.prestosql.tempto.fulfillment.command.SuiteCommandRequirement.suiteCommand
+import static io.prestosql.tempto.fulfillment.command.TestCommandRequirement.testCommand
+import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
 import static java.util.Arrays.asList
 
 class RequirementsCollectorTest

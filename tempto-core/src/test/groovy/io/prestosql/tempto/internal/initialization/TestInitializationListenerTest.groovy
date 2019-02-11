@@ -11,22 +11,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.initialization
+package io.prestosql.tempto.internal.initialization
 
 import com.google.common.collect.ImmutableList
 import com.google.inject.Inject
-import io.prestodb.tempto.AfterTestWithContext
-import io.prestodb.tempto.BeforeTestWithContext
-import io.prestodb.tempto.Requirement
-import io.prestodb.tempto.RequirementsProvider
-import io.prestodb.tempto.Requires
-import io.prestodb.tempto.configuration.Configuration
-import io.prestodb.tempto.context.State
-import io.prestodb.tempto.context.TestContext
-import io.prestodb.tempto.context.TestContextCloseCallback
-import io.prestodb.tempto.fulfillment.RequirementFulfiller
-import io.prestodb.tempto.fulfillment.TestStatus
-import io.prestodb.tempto.internal.TestSpecificRequirementsResolver
+import io.prestosql.tempto.AfterTestWithContext
+import io.prestosql.tempto.BeforeTestWithContext
+import io.prestosql.tempto.Requirement
+import io.prestosql.tempto.RequirementsProvider
+import io.prestosql.tempto.Requires
+import io.prestosql.tempto.configuration.Configuration
+import io.prestosql.tempto.context.State
+import io.prestosql.tempto.context.TestContext
+import io.prestosql.tempto.context.TestContextCloseCallback
+import io.prestosql.tempto.fulfillment.RequirementFulfiller
+import io.prestosql.tempto.fulfillment.TestStatus
+import io.prestosql.tempto.internal.TestSpecificRequirementsResolver
 import org.testng.IResultMap
 import org.testng.ITestClass
 import org.testng.ITestContext
@@ -38,10 +38,10 @@ import spock.lang.Specification
 import java.lang.reflect.Method
 
 import static com.google.common.collect.Iterables.getOnlyElement
-import static io.prestodb.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
-import static io.prestodb.tempto.context.ThreadLocalTestContextHolder.assertTestContextSet
-import static io.prestodb.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
-import static io.prestodb.tempto.internal.initialization.TestInitializationListener.collectFulfillers
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextSet
+import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
+import static io.prestosql.tempto.internal.initialization.TestInitializationListener.collectFulfillers
 
 class TestInitializationListenerTest
         extends Specification

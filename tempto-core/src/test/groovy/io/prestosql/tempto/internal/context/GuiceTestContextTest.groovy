@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.context
+package io.prestosql.tempto.internal.context
 
 import com.google.inject.Binder
 import com.google.inject.Module
-import io.prestodb.tempto.context.State
-import io.prestodb.tempto.context.TestContextCloseCallback
+import io.prestosql.tempto.context.State
+import io.prestosql.tempto.context.TestContextCloseCallback
 import spock.lang.Specification
 
 class GuiceTestContextTest

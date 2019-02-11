@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.dns;
+package io.prestosql.tempto.dns;
 
 import sun.net.spi.nameservice.NameService;
 

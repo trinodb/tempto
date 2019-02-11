@@ -12,20 +12,20 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention.sql;
+package io.prestosql.tempto.internal.convention.sql;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.assertions.QueryAssert;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.internal.convention.ConventionBasedTest;
-import io.prestodb.tempto.internal.convention.SqlQueryDescriptor;
-import io.prestodb.tempto.internal.convention.SqlResultDescriptor;
-import io.prestodb.tempto.query.QueryExecutor;
-import io.prestodb.tempto.query.QueryResult;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.assertions.QueryAssert;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.internal.convention.ConventionBasedTest;
+import io.prestosql.tempto.internal.convention.SqlQueryDescriptor;
+import io.prestosql.tempto.internal.convention.SqlResultDescriptor;
+import io.prestosql.tempto.query.QueryExecutor;
+import io.prestosql.tempto.query.QueryResult;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
@@ -46,11 +46,11 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
-import static io.prestodb.tempto.assertions.QueryAssert.assertThat;
-import static io.prestodb.tempto.context.ThreadLocalTestContextHolder.testContext;
-import static io.prestodb.tempto.fulfillment.table.MutableTablesState.mutableTablesState;
-import static io.prestodb.tempto.internal.convention.ConventionTestsUtils.getConventionTestResultsDumpPath;
-import static io.prestodb.tempto.internal.convention.ProcessUtils.execute;
+import static io.prestosql.tempto.assertions.QueryAssert.assertThat;
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
+import static io.prestosql.tempto.fulfillment.table.MutableTablesState.mutableTablesState;
+import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.getConventionTestResultsDumpPath;
+import static io.prestosql.tempto.internal.convention.ProcessUtils.execute;
 import static java.nio.file.Files.newBufferedWriter;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;

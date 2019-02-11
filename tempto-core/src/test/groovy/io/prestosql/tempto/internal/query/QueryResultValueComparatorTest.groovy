@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query
+package io.prestosql.tempto.internal.query
 
-import io.prestodb.tempto.configuration.Configuration
+import io.prestosql.tempto.configuration.Configuration
 import spock.lang.Specification
 import spock.lang.Unroll
 

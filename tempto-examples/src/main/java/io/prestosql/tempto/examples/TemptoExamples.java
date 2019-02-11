@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.examples;
+package io.prestosql.tempto.examples;
 
-import io.prestodb.tempto.runner.TemptoRunner;
-import io.prestodb.tempto.runner.TemptoRunnerCommandLineParser;
+import io.prestosql.tempto.runner.TemptoRunner;
+import io.prestosql.tempto.runner.TemptoRunnerCommandLineParser;
 
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.DEFAULT_TEST_CONFIGURATION_LOCATION;
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.DEFAULT_TEST_CONFIGURATION_LOCATION;
 
 public class TemptoExamples
 {

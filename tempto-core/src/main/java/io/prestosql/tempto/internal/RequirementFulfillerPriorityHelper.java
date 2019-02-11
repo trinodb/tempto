@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal;
+package io.prestosql.tempto.internal;
 
-import io.prestodb.tempto.fulfillment.RequirementFulfiller;
+import io.prestosql.tempto.fulfillment.RequirementFulfiller;
 
 public class RequirementFulfillerPriorityHelper
 {

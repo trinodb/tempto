@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto;
+package io.prestosql.tempto;
 
 import com.google.common.collect.ImmutableSet;
 

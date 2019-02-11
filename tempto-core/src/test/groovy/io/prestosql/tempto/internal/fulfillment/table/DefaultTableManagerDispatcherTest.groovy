@@ -12,18 +12,18 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.table
+package io.prestosql.tempto.internal.fulfillment.table
 
-import io.prestodb.tempto.fulfillment.table.TableManager
-import io.prestodb.tempto.fulfillment.table.hive.HiveDataSource
-import io.prestodb.tempto.fulfillment.table.hive.HiveTableDefinition
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalDataSource
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition
+import io.prestosql.tempto.fulfillment.table.TableManager
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource
+import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static io.prestodb.tempto.fulfillment.table.TableHandle.tableHandle
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle
 import static java.util.Optional.empty
 import static junit.framework.TestCase.fail
 

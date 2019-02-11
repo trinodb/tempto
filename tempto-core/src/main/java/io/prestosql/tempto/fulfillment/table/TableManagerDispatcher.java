@@ -11,11 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.fulfillment.table;
+package io.prestosql.tempto.fulfillment.table;
 
 import java.util.Collection;
 
-import static io.prestodb.tempto.context.ThreadLocalTestContextHolder.testContext;
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
 
 /**
  * Returns an appropriate {@link TableManager} based on table type.

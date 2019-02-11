@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.ssh
+package io.prestosql.tempto.internal.ssh
 
 import org.apache.sshd.server.Command
 import org.apache.sshd.server.Environment

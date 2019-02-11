@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.sql.view;
+package io.prestosql.tempto.sql.view;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 

@@ -12,24 +12,24 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.table
+package io.prestosql.tempto.internal.fulfillment.table
 
-import io.prestodb.tempto.fulfillment.TestStatus
-import io.prestodb.tempto.fulfillment.table.ImmutableTableRequirement
-import io.prestodb.tempto.fulfillment.table.ImmutableTablesState
-import io.prestodb.tempto.fulfillment.table.MutableTableRequirement
-import io.prestodb.tempto.fulfillment.table.MutableTablesState
-import io.prestodb.tempto.fulfillment.table.TableDefinition
-import io.prestodb.tempto.fulfillment.table.TableHandle
-import io.prestodb.tempto.fulfillment.table.TableInstance
-import io.prestodb.tempto.fulfillment.table.TableManager
-import io.prestodb.tempto.fulfillment.table.TableManagerDispatcher
+import io.prestosql.tempto.fulfillment.TestStatus
+import io.prestosql.tempto.fulfillment.table.ImmutableTableRequirement
+import io.prestosql.tempto.fulfillment.table.ImmutableTablesState
+import io.prestosql.tempto.fulfillment.table.MutableTableRequirement
+import io.prestosql.tempto.fulfillment.table.MutableTablesState
+import io.prestosql.tempto.fulfillment.table.TableDefinition
+import io.prestosql.tempto.fulfillment.table.TableHandle
+import io.prestosql.tempto.fulfillment.table.TableInstance
+import io.prestosql.tempto.fulfillment.table.TableManager
+import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher
 import spock.lang.Specification
 
 import static com.google.common.collect.Iterables.getOnlyElement
-import static io.prestodb.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
-import static io.prestodb.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
-import static io.prestodb.tempto.fulfillment.table.TableHandle.tableHandle
+import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
+import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle
 import static junit.framework.TestCase.fail
 
 class TableRequirementFulfillerTest

@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.listeners;
+package io.prestosql.tempto.internal.listeners;
 
-import io.prestodb.tempto.testmarkers.WithName;
-import io.prestodb.tempto.testmarkers.WithTestGroups;
+import io.prestosql.tempto.testmarkers.WithName;
+import io.prestosql.tempto.testmarkers.WithTestGroups;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 

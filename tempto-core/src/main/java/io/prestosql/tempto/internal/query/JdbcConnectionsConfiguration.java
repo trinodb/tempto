@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query;
+package io.prestosql.tempto.internal.query;
 
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.configuration.KeyUtils;
-import io.prestodb.tempto.query.JdbcConnectivityParamsState;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.configuration.KeyUtils;
+import io.prestosql.tempto.query.JdbcConnectivityParamsState;
 
 import java.util.HashSet;
 import java.util.Optional;

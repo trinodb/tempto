@@ -12,38 +12,38 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.examples;
+package io.prestosql.tempto.examples;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import io.prestodb.tempto.AfterTestWithContext;
-import io.prestodb.tempto.BeforeTestWithContext;
-import io.prestodb.tempto.ProductTest;
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.RequirementsProvider;
-import io.prestodb.tempto.Requires;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.fulfillment.table.ImmutableTableRequirement;
-import io.prestodb.tempto.fulfillment.table.MutableTablesState;
-import io.prestodb.tempto.fulfillment.table.TableDefinition;
-import io.prestodb.tempto.fulfillment.table.TableInstance;
-import io.prestodb.tempto.fulfillment.table.TableManager;
+import io.prestosql.tempto.AfterTestWithContext;
+import io.prestosql.tempto.BeforeTestWithContext;
+import io.prestosql.tempto.ProductTest;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.RequirementsProvider;
+import io.prestosql.tempto.Requires;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.fulfillment.table.ImmutableTableRequirement;
+import io.prestosql.tempto.fulfillment.table.MutableTablesState;
+import io.prestosql.tempto.fulfillment.table.TableDefinition;
+import io.prestosql.tempto.fulfillment.table.TableInstance;
+import io.prestosql.tempto.fulfillment.table.TableManager;
 import org.junit.After;
 import org.junit.Before;
 import org.testng.annotations.Test;
 
-import static io.prestodb.tempto.Requirements.allOf;
-import static io.prestodb.tempto.assertions.QueryAssert.Row.row;
-import static io.prestodb.tempto.assertions.QueryAssert.assertThat;
-import static io.prestodb.tempto.context.ThreadLocalTestContextHolder.testContext;
-import static io.prestodb.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
-import static io.prestodb.tempto.fulfillment.table.MutableTableRequirement.State.CREATED;
-import static io.prestodb.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
-import static io.prestodb.tempto.fulfillment.table.TableRequirements.mutableTable;
-import static io.prestodb.tempto.fulfillment.table.hive.HiveTableDefinition.like;
-import static io.prestodb.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions.NATION;
-import static io.prestodb.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions.REGION;
-import static io.prestodb.tempto.query.QueryExecutor.query;
+import static io.prestosql.tempto.Requirements.allOf;
+import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
+import static io.prestosql.tempto.assertions.QueryAssert.assertThat;
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
+import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.CREATED;
+import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
+import static io.prestosql.tempto.fulfillment.table.TableRequirements.mutableTable;
+import static io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition.like;
+import static io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions.NATION;
+import static io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions.REGION;
+import static io.prestosql.tempto.query.QueryExecutor.query;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleQueryTest

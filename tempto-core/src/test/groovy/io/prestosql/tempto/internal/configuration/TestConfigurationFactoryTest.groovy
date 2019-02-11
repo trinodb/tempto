@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.configuration
+package io.prestosql.tempto.internal.configuration
 
-import io.prestodb.tempto.configuration.Configuration
+import io.prestosql.tempto.configuration.Configuration
 import spock.lang.Specification
 
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
 
 class TestConfigurationFactoryTest
         extends Specification

@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.runner;
+package io.prestosql.tempto.runner;
 
 import com.google.common.base.Joiner;
-import io.prestodb.tempto.dns.TemptoNameServiceDescriptor;
-import io.prestodb.tempto.internal.listeners.TestNameGroupNameMethodSelector;
+import io.prestosql.tempto.dns.TemptoNameServiceDescriptor;
+import io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.TestNG;
@@ -28,12 +28,12 @@ import org.testng.xml.XmlTest;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY;
-import static io.prestodb.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_DIR_KEY;
-import static io.prestodb.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY;
-import static io.prestodb.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_EXCLUDE_PROPERTY;
-import static io.prestodb.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_RUN_PROPERTY;
-import static io.prestodb.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY;
+import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_DIR_KEY;
+import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY;
+import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_EXCLUDE_PROPERTY;
+import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_RUN_PROPERTY;
+import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
 import static java.util.Collections.singletonList;
 
 public class TemptoRunner

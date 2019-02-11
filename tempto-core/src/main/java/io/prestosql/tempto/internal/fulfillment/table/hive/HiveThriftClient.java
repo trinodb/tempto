@@ -11,11 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.fulfillment.table.hive;
+package io.prestosql.tempto.internal.fulfillment.table.hive;
 
-import io.prestodb.tempto.fulfillment.table.hive.statistics.ColumnStatistics;
-import io.prestodb.tempto.fulfillment.table.hive.statistics.TableStatistics;
-import io.prestodb.tempto.internal.fulfillment.table.TableName;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.ColumnStatistics;
+import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
+import io.prestosql.tempto.internal.fulfillment.table.TableName;
 import org.apache.hadoop.hive.metastore.api.ColumnStatisticsData;
 import org.apache.hadoop.hive.metastore.api.ColumnStatisticsDesc;
 import org.apache.hadoop.hive.metastore.api.ColumnStatisticsObj;

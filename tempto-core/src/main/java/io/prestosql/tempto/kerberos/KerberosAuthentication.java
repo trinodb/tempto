@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.kerberos;
+package io.prestosql.tempto.kerberos;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;

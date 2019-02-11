@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.query;
+package io.prestosql.tempto.internal.query;
 
-import io.prestodb.tempto.assertions.QueryAssert.Row;
+import io.prestosql.tempto.assertions.QueryAssert.Row;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -26,7 +26,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkState;
-import static io.prestodb.tempto.assertions.QueryAssert.Row.row;
+import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
 import static java.util.Objects.requireNonNull;
 
 /**

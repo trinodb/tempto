@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal;
+package io.prestosql.tempto.internal;
 
 import org.testng.ITestNGMethod;
 import org.testng.annotations.DataProvider;

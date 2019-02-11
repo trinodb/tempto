@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.initialization.modules;
+package io.prestosql.tempto.internal.initialization.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.initialization.AutoModuleProvider;
-import io.prestodb.tempto.initialization.TestMethodModuleProvider;
-import io.prestodb.tempto.internal.listeners.TestMetadata;
-import io.prestodb.tempto.internal.listeners.TestMetadataReader;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.initialization.AutoModuleProvider;
+import io.prestosql.tempto.initialization.TestMethodModuleProvider;
+import io.prestosql.tempto.internal.listeners.TestMetadata;
+import io.prestosql.tempto.internal.listeners.TestMetadataReader;
 import org.testng.ITestResult;
 
 @AutoModuleProvider

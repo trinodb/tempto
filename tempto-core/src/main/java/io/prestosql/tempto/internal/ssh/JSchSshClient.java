@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.ssh;
+package io.prestosql.tempto.internal.ssh;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
@@ -19,8 +19,8 @@ import com.google.common.io.ByteStreams;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.prestodb.tempto.process.CliProcess;
-import io.prestodb.tempto.ssh.SshClient;
+import io.prestosql.tempto.process.CliProcess;
+import io.prestosql.tempto.ssh.SshClient;
 import org.slf4j.Logger;
 
 import java.io.IOException;

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.configuration
+package io.prestosql.tempto.internal.configuration
 
 import spock.lang.Shared
 import spock.lang.Specification

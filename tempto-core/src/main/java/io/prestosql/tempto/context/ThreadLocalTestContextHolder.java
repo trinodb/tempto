@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.context;
+package io.prestosql.tempto.context;
 
-import io.prestodb.tempto.internal.context.TestContextStack;
+import io.prestosql.tempto.internal.context.TestContextStack;
 
 import java.util.Optional;
 

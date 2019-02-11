@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.logging;
+package io.prestosql.tempto.internal.logging;
 
-import io.prestodb.tempto.internal.listeners.TestMetadata;
-import io.prestodb.tempto.internal.listeners.TestMetadataReader;
+import io.prestosql.tempto.internal.listeners.TestMetadata;
+import io.prestosql.tempto.internal.listeners.TestMetadataReader;
 import org.testng.ITestResult;
 
 public class LoggingMdcHelper

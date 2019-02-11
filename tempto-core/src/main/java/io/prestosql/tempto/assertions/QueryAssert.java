@@ -12,16 +12,16 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.assertions;
+package io.prestosql.tempto.assertions;
 
 import com.google.common.base.Joiner;
-import io.prestodb.tempto.configuration.Configuration;
-import io.prestodb.tempto.internal.convention.SqlResultDescriptor;
-import io.prestodb.tempto.internal.query.QueryResultValueComparator;
-import io.prestodb.tempto.internal.query.QueryRowMapper;
-import io.prestodb.tempto.query.QueryExecutionException;
-import io.prestodb.tempto.query.QueryExecutor;
-import io.prestodb.tempto.query.QueryResult;
+import io.prestosql.tempto.configuration.Configuration;
+import io.prestosql.tempto.internal.convention.SqlResultDescriptor;
+import io.prestosql.tempto.internal.query.QueryResultValueComparator;
+import io.prestosql.tempto.internal.query.QueryRowMapper;
+import io.prestosql.tempto.query.QueryExecutionException;
+import io.prestosql.tempto.query.QueryExecutor;
+import io.prestosql.tempto.query.QueryResult;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
@@ -38,10 +38,10 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.collect.Lists.newArrayList;
-import static io.prestodb.tempto.assertions.QueryAssert.Row.row;
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
-import static io.prestodb.tempto.query.QueryResult.fromSqlIndex;
-import static io.prestodb.tempto.query.QueryResult.toSqlIndex;
+import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
+import static io.prestosql.tempto.query.QueryResult.fromSqlIndex;
+import static io.prestosql.tempto.query.QueryResult.toSqlIndex;
 import static java.lang.String.format;
 import static java.sql.JDBCType.INTEGER;
 import static java.util.Collections.singletonList;

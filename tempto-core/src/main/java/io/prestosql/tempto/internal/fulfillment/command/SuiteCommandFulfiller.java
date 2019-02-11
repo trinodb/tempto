@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.fulfillment.command;
+package io.prestosql.tempto.internal.fulfillment.command;
 
-import io.prestodb.tempto.fulfillment.command.SuiteCommandRequirement;
+import io.prestosql.tempto.fulfillment.command.SuiteCommandRequirement;
 
 public class SuiteCommandFulfiller
         extends CommandFulfiller<SuiteCommandRequirement>

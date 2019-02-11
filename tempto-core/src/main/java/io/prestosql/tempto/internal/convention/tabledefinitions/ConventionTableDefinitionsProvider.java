@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.convention.tabledefinitions;
+package io.prestosql.tempto.internal.convention.tabledefinitions;
 
-import io.prestodb.tempto.fulfillment.table.TableDefinition;
-import io.prestodb.tempto.fulfillment.table.TableDefinitionsRepository;
-import io.prestodb.tempto.fulfillment.table.TableHandle;
-import io.prestodb.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestodb.tempto.fulfillment.table.hive.HiveTableDefinition;
-import io.prestodb.tempto.fulfillment.table.jdbc.RelationalDataSource;
-import io.prestodb.tempto.internal.convention.ConventionBasedTestFactory;
+import io.prestosql.tempto.fulfillment.table.TableDefinition;
+import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository;
+import io.prestosql.tempto.fulfillment.table.TableHandle;
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
+import io.prestosql.tempto.internal.convention.ConventionBasedTestFactory;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -29,10 +29,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
-import static io.prestodb.tempto.fulfillment.table.TableHandle.tableHandle;
-import static io.prestodb.tempto.fulfillment.table.hive.HiveTableDefinition.hiveTableDefinition;
-import static io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
-import static io.prestodb.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition.hiveTableDefinition;
+import static io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
+import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newDirectoryStream;
 import static java.util.Collections.emptyList;

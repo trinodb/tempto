@@ -11,11 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.fulfillment.table;
+package io.prestosql.tempto.fulfillment.table;
 
 import com.google.common.collect.MapMaker;
-import io.prestodb.tempto.internal.ReflectionHelper;
-import io.prestodb.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionsProvider;
+import io.prestosql.tempto.internal.ReflectionHelper;
+import io.prestosql.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
-import static io.prestodb.tempto.internal.ReflectionHelper.getFieldsAnnotatedWith;
+import static io.prestosql.tempto.internal.ReflectionHelper.getFieldsAnnotatedWith;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 

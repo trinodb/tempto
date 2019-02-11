@@ -12,24 +12,24 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.assertions
+package io.prestosql.tempto.assertions
 
 import com.google.common.collect.HashBiMap
-import io.prestodb.tempto.internal.convention.AnnotatedFileParser
-import io.prestodb.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult
-import io.prestodb.tempto.internal.convention.SqlResultDescriptor
-import io.prestodb.tempto.query.QueryExecutionException
-import io.prestodb.tempto.query.QueryResult
+import io.prestosql.tempto.internal.convention.AnnotatedFileParser
+import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult
+import io.prestosql.tempto.internal.convention.SqlResultDescriptor
+import io.prestosql.tempto.query.QueryExecutionException
+import io.prestosql.tempto.query.QueryResult
 import org.assertj.core.api.AbstractListAssert
 import spock.lang.Specification
 
 import java.sql.ResultSet
 
 import static com.google.common.collect.Iterables.getOnlyElement
-import static io.prestodb.tempto.assertions.QueryAssert.Row.row
-import static io.prestodb.tempto.assertions.QueryAssert.anyOf
-import static io.prestodb.tempto.assertions.QueryAssert.assertThat
-import static io.prestodb.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
+import static io.prestosql.tempto.assertions.QueryAssert.Row.row
+import static io.prestosql.tempto.assertions.QueryAssert.anyOf
+import static io.prestosql.tempto.assertions.QueryAssert.assertThat
+import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
 import static java.sql.JDBCType.BIGINT
 import static java.sql.JDBCType.INTEGER
 import static java.sql.JDBCType.VARCHAR

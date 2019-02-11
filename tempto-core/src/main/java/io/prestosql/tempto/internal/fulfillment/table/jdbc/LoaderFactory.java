@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.table.jdbc;
+package io.prestosql.tempto.internal.fulfillment.table.jdbc;
 
-import io.prestodb.tempto.query.QueryExecutor;
+import io.prestosql.tempto.query.QueryExecutor;
 import org.slf4j.Logger;
 
 import java.sql.JDBCType;

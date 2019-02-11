@@ -12,21 +12,21 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.table;
+package io.prestosql.tempto.internal.fulfillment.table;
 
 import com.google.inject.Inject;
-import io.prestodb.tempto.fulfillment.TestStatus;
-import io.prestodb.tempto.fulfillment.table.MutableTableRequirement;
-import io.prestodb.tempto.fulfillment.table.MutableTablesState;
-import io.prestodb.tempto.fulfillment.table.TableInstance;
-import io.prestodb.tempto.fulfillment.table.TableManager;
-import io.prestodb.tempto.fulfillment.table.TableManagerDispatcher;
-import io.prestodb.tempto.fulfillment.table.TablesState;
+import io.prestosql.tempto.fulfillment.TestStatus;
+import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
+import io.prestosql.tempto.fulfillment.table.MutableTablesState;
+import io.prestosql.tempto.fulfillment.table.TableInstance;
+import io.prestosql.tempto.fulfillment.table.TableManager;
+import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
+import io.prestosql.tempto.fulfillment.table.TablesState;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkState;
-import static io.prestodb.tempto.fulfillment.TestStatus.FAILURE;
+import static io.prestosql.tempto.fulfillment.TestStatus.FAILURE;
 
 public class MutableTablesFulfiller
         extends TableRequirementFulfiller<MutableTableRequirement>

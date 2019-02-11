@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.runner;
+package io.prestosql.tempto.runner;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.prestodb.tempto.internal.configuration.TestConfigurationFactory;
-import io.prestodb.tempto.internal.convention.ConventionTestsUtils;
+import io.prestosql.tempto.internal.configuration.TestConfigurationFactory;
+import io.prestosql.tempto.internal.convention.ConventionTestsUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -36,16 +36,16 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.CONFIG_FILES;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.CONVENTION_TESTS_DIR;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.DUMP_CONVENTION_RESULTS;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.EXCLUDED_GROUPS;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.GROUPS;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.HELP;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.PACKAGE;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.REPORT_DIR;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.TESTS;
-import static io.prestodb.tempto.runner.TemptoRunnerOptions.THREAD_COUNT;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.CONFIG_FILES;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.CONVENTION_TESTS_DIR;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.DUMP_CONVENTION_RESULTS;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.EXCLUDED_GROUPS;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.GROUPS;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.HELP;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.PACKAGE;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.REPORT_DIR;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.TESTS;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.THREAD_COUNT;
 import static java.lang.Boolean.TRUE;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;

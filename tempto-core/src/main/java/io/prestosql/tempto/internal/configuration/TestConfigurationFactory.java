@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.internal.configuration;
+package io.prestosql.tempto.internal.configuration;
 
 import com.google.common.base.Splitter;
-import io.prestodb.tempto.configuration.Configuration;
+import io.prestosql.tempto.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
-import static io.prestodb.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration;
+import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration;
 
 public class TestConfigurationFactory
 {

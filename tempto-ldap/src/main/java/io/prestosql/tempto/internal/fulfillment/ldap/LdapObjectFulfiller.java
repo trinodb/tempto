@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestodb.tempto.internal.fulfillment.ldap;
+package io.prestosql.tempto.internal.fulfillment.ldap;
 
 import com.google.inject.Inject;
-import io.prestodb.tempto.Requirement;
-import io.prestodb.tempto.context.State;
-import io.prestodb.tempto.fulfillment.RequirementFulfiller;
-import io.prestodb.tempto.fulfillment.TestStatus;
-import io.prestodb.tempto.fulfillment.ldap.LdapObjectRequirement;
+import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.context.State;
+import io.prestosql.tempto.fulfillment.RequirementFulfiller;
+import io.prestosql.tempto.fulfillment.TestStatus;
+import io.prestosql.tempto.fulfillment.ldap.LdapObjectRequirement;
 
 import java.util.Set;
 

@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestodb.tempto.fulfillment.table.kafka;
+package io.prestosql.tempto.fulfillment.table.kafka;
 
-import io.prestodb.tempto.fulfillment.table.TableInstance;
-import io.prestodb.tempto.internal.fulfillment.table.TableName;
+import io.prestosql.tempto.fulfillment.table.TableInstance;
+import io.prestosql.tempto.internal.fulfillment.table.TableName;
 
 public class KafkaTableInstance
         extends TableInstance<KafkaTableDefinition>
