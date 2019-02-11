@@ -64,12 +64,12 @@ Log messages coming from different tests are logged to separate files.
 
 Example contents of log directory:
 ```
-com.facebook.presto.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesOrc_2015-04-22_15-23-09
-com.facebook.presto.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesParquetFile_2015-04-22_15-23-09
-com.facebook.presto.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesRcfile_2015-04-22_15-23-09
-com.facebook.presto.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesTextFile_2015-04-22_15-23-09
-com.facebook.presto.tests.hive.TestAllDatatypesFromHiveConnector.testSelectBinaryColumnTextFile_2015-04-22_15-23-09
-com.facebook.presto.tests.hive.TestAllDatatypesFromHiveConnector.testSelectVarcharColumnForOrc_2015-04-22_15-23-09
+io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesOrc_2019-02-07_15-23-09
+io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesParquetFile_2019-02-07_15-23-09
+io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesRcfile_2019-02-07_15-23-09
+io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesTextFile_2019-02-07_15-23-09
+io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectBinaryColumnTextFile_2019-02-07_15-23-09
+io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectVarcharColumnForOrc_2019-02-07_15-23-09
 SUITE_2015-04-22_15-23-09
 ```
 

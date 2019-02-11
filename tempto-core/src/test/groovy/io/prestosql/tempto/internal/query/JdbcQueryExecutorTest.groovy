@@ -74,7 +74,7 @@ class JdbcQueryExecutorTest
                     )')
             run.update(c, 'INSERT INTO company(comp_id, comp_name) values (1, \'Teradata\')')
             run.update(c, 'INSERT INTO company(comp_id, comp_name) values (2, \'Oracle\')')
-            run.update(c, 'INSERT INTO company(comp_id, comp_name) values (3, \'Facebook\')')
+            run.update(c, 'INSERT INTO company(comp_id, comp_name) values (3, \'Starburst\')')
         }
         finally {
             if (c != null) {
@@ -94,7 +94,7 @@ class JdbcQueryExecutorTest
                 .containsExactly(
                 row(1, 'Teradata'),
                 row(2, 'Oracle'),
-                row(3, 'Facebook'))
+                row(3, 'Starburst'))
     }
 
     def 'test update'()
@@ -103,7 +103,7 @@ class JdbcQueryExecutorTest
         QueryResult result
 
         when:
-        result = queryExecutor.executeQuery('UPDATE company SET comp_name=\'Teradata Kings\' WHERE comp_id=1')
+        result = queryExecutor.executeQuery('UPDATE company SET comp_name=\'Starburst Data\' WHERE comp_id=3')
 
         then:
         assertThat(result)
@@ -118,8 +118,8 @@ class JdbcQueryExecutorTest
         assertThat(result)
                 .hasColumns(INTEGER, VARCHAR)
                 .containsExactly(
-                row(1, 'Teradata Kings'),
+                row(1, 'Teradata'),
                 row(2, 'Oracle'),
-                row(3, 'Facebook'))
+                row(3, 'Starburst Data'))
     }
 }

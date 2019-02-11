@@ -1,7 +1,3 @@
-#
-# Copyright 2015, Teradata, Inc. All rights reserved.
-#
-
 # Set root logger to INFO and add a custom appender.
 log4j.rootLogger=TRACE, CONSOLE, TEST_FRAMEWORK_LOGGING_APPENDER
 
