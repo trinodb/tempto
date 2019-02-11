@@ -32,7 +32,7 @@ import static io.prestosql.tempto.query.QueryExecutor.query;
 import static java.lang.String.format;
 import static java.sql.JDBCType.BIGINT;
 import static java.sql.JDBCType.DOUBLE;
-import static java.sql.JDBCType.LONGNVARCHAR;
+import static java.sql.JDBCType.VARCHAR;
 
 public class CassandraQueryTest
         extends ProductTest
@@ -75,7 +75,7 @@ public class CassandraQueryTest
         // in this example it's gonna be (c, a, b, d). c and a together are the primary key (order in primary key is preserved),
         // then b comes before d even though it was defined later (alphabetical order).
         assertThat(query(format("SELECT *  FROM %s.%s.%s", TEST_DATABASE_NAME, TEST_SCHEMA_NAME, TEST_TABLE_NAME)))
-                .hasColumns(BIGINT, LONGNVARCHAR, BIGINT, DOUBLE)
+                .hasColumns(BIGINT, VARCHAR, BIGINT, DOUBLE)
                 .containsOnly(
                         row(1L, "foo", 2, 754.1985),
                         row(4L, "bar", 3, 754.2008));
