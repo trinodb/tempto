@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat
 class ConventionBasedTestProxyGeneratorTest
         extends Specification
 {
-    private ConventionBasedTestProxyGenerator proxyGenerator = new ConventionBasedTestProxyGenerator("io.prestodb.tempto");
+    private ConventionBasedTestProxyGenerator proxyGenerator = new ConventionBasedTestProxyGenerator("io.prestosql.tempto");
 
     def 'testGenerateProxy'()
     {
@@ -87,9 +87,9 @@ class ConventionBasedTestProxyGeneratorTest
 
         where:
         testName                       | expectedClassName                 | expectedMethodName
-        'a.b.c.d'                      | 'io.prestodb.tempto.c'            | 'd'
-        'a.b.9c.1d'                    | 'io.prestodb.tempto._9c'          | '_1d'
-        'a.b.ala ma kota.a-kot-ma ale' | 'io.prestodb.tempto.ala_ma_kota'  | 'a_kot_ma_ale'
+        'a.b.c.d'                      | 'io.prestosql.tempto.c'           | 'd'
+        'a.b.9c.1d'                    | 'io.prestosql.tempto._9c'         | '_1d'
+        'a.b.ala ma kota.a-kot-ma ale' | 'io.prestosql.tempto.ala_ma_kota' | 'a_kot_ma_ale'
     }
 
     private static class DummyConventionBasedTest

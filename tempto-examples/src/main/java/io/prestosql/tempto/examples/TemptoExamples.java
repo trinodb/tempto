@@ -25,7 +25,7 @@ public class TemptoExamples
     {
         TemptoRunnerCommandLineParser parser = TemptoRunnerCommandLineParser
                 .builder("tempto examples")
-                .setTestsPackage("io.prestodb.tempto.examples", false)
+                .setTestsPackage("io.prestosql.tempto.examples", false)
                 .setConfigFile(DEFAULT_TEST_CONFIGURATION_LOCATION, true)
                 .build();
         TemptoRunner.runTempto(parser, args);
