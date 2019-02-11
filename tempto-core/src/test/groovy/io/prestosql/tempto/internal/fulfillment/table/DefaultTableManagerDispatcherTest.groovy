@@ -84,7 +84,7 @@ class DefaultTableManagerDispatcherTest
         then:
         IllegalStateException e = thrown()
         e.message.contains(
-                'Multiple databases found for table: TableHandle{name=name}, definition class \'class io.prestodb.tempto.fulfillment.table.jdbc.RelationalTableDefinition\'. Pick a database from [psql1, psql2]')
+                'Multiple databases found for table: TableHandle{name=name}, definition class \'class io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition\'. Pick a database from [psql1, psql2]')
     }
 
     def 'no database found'()

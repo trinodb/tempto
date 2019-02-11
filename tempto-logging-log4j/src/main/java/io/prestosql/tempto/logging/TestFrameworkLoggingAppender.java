@@ -82,7 +82,7 @@ public class TestFrameworkLoggingAppender
 
     private String getRootLogsDirectory()
     {
-        String userLogsDir = System.getProperty("io.prestodb.tempto.root.logs.dir");
+        String userLogsDir = System.getProperty("io.prestosql.tempto.root.logs.dir");
         if (userLogsDir != null) {
             return userLogsDir;
         }

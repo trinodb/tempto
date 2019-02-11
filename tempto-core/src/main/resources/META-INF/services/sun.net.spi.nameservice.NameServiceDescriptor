@@ -1,1 +1,1 @@
-io.prestodb.tempto.dns.TemptoNameServiceDescriptor
+io.prestosql.tempto.dns.TemptoNameServiceDescriptor

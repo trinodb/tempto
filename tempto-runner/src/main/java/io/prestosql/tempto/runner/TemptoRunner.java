@@ -128,7 +128,7 @@ public class TemptoRunner
         XmlPackage testPackage = new XmlPackage(options.getTestsPackage());
         List<XmlPackage> testPackages = newArrayList(testPackage);
         test.setPackages(testPackages);
-        XmlClass conventionBasedTestsClass = new XmlClass("io.prestodb.tempto.internal.convention.ConventionBasedTestFactory");
+        XmlClass conventionBasedTestsClass = new XmlClass("io.prestosql.tempto.internal.convention.ConventionBasedTestFactory");
         List<XmlClass> classes = newArrayList(conventionBasedTestsClass);
         test.setClasses(classes);
         test.setParallel(XmlSuite.ParallelMode.METHODS);

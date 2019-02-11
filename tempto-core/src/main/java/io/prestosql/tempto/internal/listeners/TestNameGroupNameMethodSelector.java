@@ -39,9 +39,9 @@ import static java.util.Optional.ofNullable;
  * So we introduce our own mechanism of tests selection.
  * This is governed by following java system properties:
  * <ul>
- * <li>io.prestodb.tempto.groups - should contain comma separated list of groups from which tests should be run
- * <li>io.prestodb.tempto.exclude_groups - should contain comma separated list of groups from which tests should be excluded
- * <li>io.prestodb.tempto.tests - should contain comma separated list of test names to be run
+ * <li>{@value #TEST_GROUPS_TO_RUN_PROPERTY} - should contain comma separated list of groups from which tests should be run
+ * <li>{@value #TEST_GROUPS_TO_EXCLUDE_PROPERTY} - should contain comma separated list of groups from which tests should be excluded
+ * <li>{@value #TEST_NAMES_TO_RUN_PROPERTY} - should contain comma separated list of test names to be run
  * </ul>
  * <p>
  * <p>
@@ -50,9 +50,9 @@ import static java.util.Optional.ofNullable;
 public class TestNameGroupNameMethodSelector
         implements IMethodSelector
 {
-    public static final String TEST_NAMES_TO_RUN_PROPERTY = "io.prestodb.tempto.tests";
-    public static final String TEST_GROUPS_TO_RUN_PROPERTY = "io.prestodb.tempto.groups";
-    public static final String TEST_GROUPS_TO_EXCLUDE_PROPERTY = "io.prestodb.tempto.exclude_groups";
+    public static final String TEST_NAMES_TO_RUN_PROPERTY = "io.prestosql.tempto.tests";
+    public static final String TEST_GROUPS_TO_RUN_PROPERTY = "io.prestosql.tempto.groups";
+    public static final String TEST_GROUPS_TO_EXCLUDE_PROPERTY = "io.prestosql.tempto.exclude_groups";
 
     private final Optional<Set<String>> testNamesToRun;
     private final Optional<Set<String>> testGroupsToRun;
