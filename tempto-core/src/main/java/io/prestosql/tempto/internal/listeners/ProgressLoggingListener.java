@@ -117,6 +117,9 @@ public class ProgressLoggingListener
     private String formatTestName(ITestResult testCase)
     {
         TestMetadata testMetadata = testMetadataReader.readTestMetadata(testCase);
+        if (testMetadata.testGroups.isEmpty()) {
+            return testMetadata.testName;
+        }
         String testGroups = Joiner.on(", ").join(testMetadata.testGroups);
         return format("%s (Groups: %s)", testMetadata.testName, testGroups);
     }
