@@ -18,6 +18,7 @@ import io.prestosql.tempto.query.QueryExecutor;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -40,6 +41,9 @@ class BatchLoader
 
         // Test whether driver supports PreparedStatement and PreparedStatement#addBatch
         try (PreparedStatement prepareStatement = queryExecutor.getConnection().prepareStatement(sql)) {
+            for (int i = 0; i < columnsCount; i++) {
+                prepareStatement.setNull(i + 1, Types.NULL);
+            }
             prepareStatement.addBatch();
         }
 
