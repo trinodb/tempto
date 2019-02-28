@@ -204,8 +204,8 @@ configure(subprojects - expected_result_generator - tempto_examples) {
                     developers {
                         developer {
                             id 'thc'
-                            name 'Teradata Hadoop Center'
-                            email 'EB230060 aat teradata doot com'
+                            name 'Presto community'
+                            url 'https://prestosql.io/community.html'
                         }
                     }
                 }
