@@ -45,7 +45,7 @@ ext.versions = [
         commons_lang3: '3.3.2',
         commons_dbcp2: '2.1',
         hive_jdbc    : '0.13.1-6',
-        hive         : '1.2.2-3',
+        hive         : '3.0.0-1',
         presto       : '302',
         reflections  : '0.9.9',
         bytebuddy    : '0.7-rc2',
