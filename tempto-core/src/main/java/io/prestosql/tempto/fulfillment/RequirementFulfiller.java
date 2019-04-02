@@ -32,7 +32,7 @@ public interface RequirementFulfiller
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE})
-    public @interface AutoSuiteLevelFulfiller
+    @interface AutoSuiteLevelFulfiller
     {
         /**
          * With priority you can manage the order of fulfiller execution.
