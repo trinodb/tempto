@@ -27,7 +27,7 @@ import static java.util.stream.Collectors.toList;
 public interface CliProcess
         extends Closeable
 {
-    public static List<String> trimLines(List<String> lines)
+    static List<String> trimLines(List<String> lines)
     {
         return lines.stream().map(String::trim).collect(toList());
     }

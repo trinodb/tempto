@@ -384,7 +384,7 @@ public class QueryAssert
     }
 
     @FunctionalInterface
-    public static interface QueryCallback
+    public interface QueryCallback
     {
         QueryResult executeQuery()
                 throws QueryExecutionException;
