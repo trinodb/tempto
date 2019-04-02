@@ -90,13 +90,14 @@ public class QueryAssert
             hasColumns(sqlResultDescriptor.getExpectedTypes().get());
         }
 
-        List<Row> rows = null;
+        List<Row> rows;
         try {
             rows = sqlResultDescriptor.getRows(columnTypes);
         }
         catch (Exception e) {
-            failWithMessage("Could not map expected file content to query column types; types=%s; content=<%s>; error=<%s>",
-                    columnTypes, sqlResultDescriptor.getOriginalContent(), e.getMessage());
+            throw new RuntimeException(
+                    format("Could not map expected file content to query column types; types=%s; content=<%s>", columnTypes, sqlResultDescriptor.getOriginalContent()),
+                    e);
         }
 
         if (sqlResultDescriptor.isIgnoreOrder()) {
