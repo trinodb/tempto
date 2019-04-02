@@ -70,6 +70,7 @@ public class QueryResultValueComparator
         switch (type) {
             case CHAR:
             case VARCHAR:
+            case NVARCHAR:
             case LONGVARCHAR:
             case LONGNVARCHAR:
                 return stringsEqual(actual, expected);
