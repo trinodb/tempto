@@ -34,6 +34,7 @@ import static java.sql.JDBCType.INTEGER
 import static java.sql.JDBCType.LONGVARBINARY
 import static java.sql.JDBCType.LONGVARCHAR
 import static java.sql.JDBCType.NUMERIC
+import static java.sql.JDBCType.NVARCHAR
 import static java.sql.JDBCType.SMALLINT
 import static java.sql.JDBCType.TIME
 import static java.sql.JDBCType.TIMESTAMP
@@ -64,6 +65,7 @@ class QueryResultValueComparatorTest
 
         CHAR                    | "a"                                      | "a"                                      | 0
         VARCHAR                 | "a"                                      | "a"                                      | 0
+        NVARCHAR                | "a"                                      | "a"                                      | 0
         LONGVARCHAR             | "a"                                      | "a"                                      | 0
         VARCHAR                 | "a"                                      | "b"                                      | -1
         VARCHAR                 | "b"                                      | "a"                                      | 1

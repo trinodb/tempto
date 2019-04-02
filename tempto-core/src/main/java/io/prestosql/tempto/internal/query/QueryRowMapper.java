@@ -75,6 +75,7 @@ public class QueryRowMapper
         switch (expectedType) {
             case CHAR:
             case VARCHAR:
+            case NVARCHAR:
             case LONGVARCHAR:
             case LONGNVARCHAR:
                 return value;
