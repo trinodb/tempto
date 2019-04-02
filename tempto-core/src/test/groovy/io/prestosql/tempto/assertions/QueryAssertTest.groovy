@@ -435,10 +435,11 @@ B|ARGENTINA|SOUTH AMERICA|
         assertThat(NATION_JOIN_REGION_QUERY_RESULT).matches(new SqlResultDescriptor(parsingResult))
 
         then:
-        def e = thrown(AssertionError.class)
+        def e = thrown(RuntimeException.class)
         e.getMessage() == '''Could not map expected file content to query column types; types=[BIGINT, VARCHAR, VARCHAR]; content=<-- delimiter: |; ignoreOrder: false
 A|ALGERIA|AFRICA|
-B|ARGENTINA|SOUTH AMERICA|>; error=<For input string: "A">'''
+B|ARGENTINA|SOUTH AMERICA|>'''
+        e.getCause().toString() == 'java.lang.NumberFormatException: For input string: "A"'
     }
 
     private SectionParsingResult parseResultFor(String fileContent)
