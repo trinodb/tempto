@@ -133,11 +133,10 @@ the framework accesses HDFS through the WebHDFS REST API. In your Java tests you
 access HDFS through the `HdfsClient` interface. Below is an example hdfs configuration section:
 
 ```YAML
-hdfs:                     # HDFS related settings
-  username: hdfs          # username to use for accessing HDFS
+hdfs:                           # HDFS related settings
+  username: hdfs                # username to use for accessing HDFS
   webhdfs:
-    host: master          # hostname exposing HDFS REST interface
-    port: 50070           # port of HDFS REST interface
+    uri: http://master:50070    # service exposing HDFS REST interface
 ```
 
 Framework supports the `SPNEGO` authentication for HDFS. Below is the sample configuration:
@@ -146,8 +145,7 @@ Framework supports the `SPNEGO` authentication for HDFS. Below is the sample con
 hdfs:                     
   username: user@EXAMPLE.COM          # kerberos principal to use for accessing HDFS
   webhdfs:
-    host: master                      # hostname exposing HDFS REST interface
-    port: 50070                       # port of HDFS REST interface
+    uri: http://master:50070          # service exposing HDFS REST interface
     authentication: SPNEGO            # authentication type now is set to `SPNEGO`
     keytab: /path/to/user.keytab      # path to the `user` keytab
 ```
