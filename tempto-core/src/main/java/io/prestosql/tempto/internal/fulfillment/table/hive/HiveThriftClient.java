@@ -35,6 +35,8 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 
+import javax.annotation.Nullable;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -51,11 +53,26 @@ import static java.util.stream.Collectors.toList;
 public class HiveThriftClient
         implements AutoCloseable
 {
-    private final TTransport transport;
-    private final ThriftHiveMetastore.Client client;
+    private final String thriftHost;
+    private final int thriftPort;
+
+    @Nullable
+    private TTransport transport;
+    @Nullable
+    private ThriftHiveMetastore.Client client;
 
     public HiveThriftClient(String thriftHost, int thriftPort)
     {
+        this.thriftHost = requireNonNull(thriftHost, "thriftHost is null");
+        this.thriftPort = thriftPort;
+    }
+
+    private void open()
+    {
+        if (transport != null) {
+            checkState(client != null, "Previously failed to open");
+            return;
+        }
         transport = new TSocket(thriftHost, thriftPort);
         try {
             transport.open();
@@ -69,6 +86,7 @@ public class HiveThriftClient
 
     void setStatistics(TableName tableName, TableStatistics tableStatistics)
     {
+        open();
         try {
             Table table = client.get_table(getSchema(tableName), tableName.getSchemalessNameInDatabase());
             setRowsCount(tableName, tableStatistics, table);
@@ -203,7 +221,11 @@ public class HiveThriftClient
     @Override
     public void close()
     {
-        transport.close();
+        if (transport != null) {
+            transport.close();
+        }
+        transport = null;
+        client = null;
     }
 
     private static Decimal toHiveDecimal(Object objectValue, int scale)
