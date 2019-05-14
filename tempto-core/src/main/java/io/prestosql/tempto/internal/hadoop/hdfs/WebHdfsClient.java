@@ -67,6 +67,7 @@ public class WebHdfsClient
 
     public static final String CONF_HDFS_WEBHDFS_URI_KEY = "hdfs.webhdfs.uri";
     public static final String CONF_HDFS_USERNAME_KEY = "hdfs.username";
+    public static final String CONF_HDFS_PASSWORD_KEY = "hdfs.webhdfs.password";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {};

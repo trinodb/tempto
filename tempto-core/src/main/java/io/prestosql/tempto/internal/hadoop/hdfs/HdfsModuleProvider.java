@@ -15,6 +15,7 @@
 package io.prestosql.tempto.internal.hadoop.hdfs;
 
 import com.google.inject.Inject;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
@@ -38,6 +39,8 @@ import java.security.GeneralSecurityException;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.google.inject.name.Names.named;
+import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_PASSWORD_KEY;
 import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_URI_KEY;
 
 @AutoModuleProvider
@@ -66,6 +69,9 @@ public class HdfsModuleProvider
                             CONF_HDFS_WEBHDFS_URI_KEY,
                             CONF_TESTS_HDFS_PATH_KEY);
                     return;
+                }
+                if (!configurationKeys.contains(CONF_HDFS_PASSWORD_KEY)) {
+                    bind(Key.get(String.class, named(CONF_HDFS_PASSWORD_KEY))).toInstance("");
                 }
 
                 install(httpRequestsExecutorModule());
