@@ -24,16 +24,21 @@ import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.hadoop.hdfs.HdfsClient;
 import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.GeneralSecurityException;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_HOST_KEY;
+import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_URI_KEY;
 
 @AutoModuleProvider
 public class HdfsModuleProvider
@@ -55,10 +60,10 @@ public class HdfsModuleProvider
             protected void configure()
             {
                 Set<String> configurationKeys = configuration.listKeys();
-                if (!configurationKeys.contains(CONF_HDFS_WEBHDFS_HOST_KEY)
+                if (!configurationKeys.contains(CONF_HDFS_WEBHDFS_URI_KEY)
                         || !configurationKeys.contains(CONF_TESTS_HDFS_PATH_KEY)) {
                     logger.debug("No HDFS support enabled as '{}' or '{}' is not configured",
-                            CONF_HDFS_WEBHDFS_HOST_KEY,
+                            CONF_HDFS_WEBHDFS_URI_KEY,
                             CONF_TESTS_HDFS_PATH_KEY);
                     return;
                 }
@@ -95,7 +100,22 @@ public class HdfsModuleProvider
             {
                 HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
                 httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(NUMBER_OF_HTTP_RETRIES, true));
+                skipCertificateValidation(httpClientBuilder);
                 return httpClientBuilder.build();
+            }
+
+            private void skipCertificateValidation(HttpClientBuilder httpClientBuilder)
+            {
+                try {
+                    httpClientBuilder.setSSLSocketFactory(new SSLConnectionSocketFactory(
+                            SSLContextBuilder.create()
+                                    .loadTrustMaterial(new TrustSelfSignedStrategy())
+                                    .build(),
+                            new NoopHostnameVerifier()));
+                }
+                catch (GeneralSecurityException e) {
+                    throw new RuntimeException(e);
+                }
             }
         };
     }

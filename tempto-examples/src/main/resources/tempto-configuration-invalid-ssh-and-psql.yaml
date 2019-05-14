@@ -15,8 +15,7 @@ cluster:
 hdfs:
   username: hdfs
   webhdfs:
-    host: ${cluster.hadoop}
-    port: 50070
+    uri: http://${cluster.hadoop}:50070
 
 psql1:
   port: 15432

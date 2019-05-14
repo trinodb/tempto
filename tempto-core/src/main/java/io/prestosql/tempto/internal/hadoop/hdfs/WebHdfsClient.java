@@ -17,7 +17,6 @@ package io.prestosql.tempto.internal.hadoop.hdfs;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.net.HostAndPort;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.prestosql.tempto.hadoop.hdfs.HdfsClient;
@@ -49,6 +48,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.emptyMap;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.apache.commons.io.IOUtils.copyLarge;
 import static org.apache.http.HttpStatus.SC_CREATED;
@@ -65,26 +65,23 @@ public class WebHdfsClient
 {
     private static final Logger logger = getLogger(WebHdfsClient.class);
 
-    public static final String CONF_HDFS_WEBHDFS_HOST_KEY = "hdfs.webhdfs.host";
-    public static final String CONF_HDFS_WEBHDFS_PORT_KEY = "hdfs.webhdfs.port";
+    public static final String CONF_HDFS_WEBHDFS_URI_KEY = "hdfs.webhdfs.uri";
     public static final String CONF_HDFS_USERNAME_KEY = "hdfs.username";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {};
 
-    private final HostAndPort namenode;
+    private final URI uri;
     private final String username;
     private final HttpRequestsExecutor httpRequestsExecutor;
 
     @Inject
     public WebHdfsClient(
-            @Named(CONF_HDFS_WEBHDFS_HOST_KEY) String namenodeHost,
-            @Named(CONF_HDFS_WEBHDFS_PORT_KEY) int namenodePort,
+            @Named(CONF_HDFS_WEBHDFS_URI_KEY) String uri,
             @Named(CONF_HDFS_USERNAME_KEY) String username,
             HttpRequestsExecutor httpRequestsExecutor)
     {
-        checkNotNull(namenodeHost, "namenodeHost is null");
-        this.namenode = HostAndPort.fromParts(namenodeHost, namenodePort);
+        this.uri = URI.create(requireNonNull(uri, "uri is null"));
         this.username = checkNotNull(username, "username is null");
         this.httpRequestsExecutor = checkNotNull(httpRequestsExecutor, "username is null");
     }
@@ -321,10 +318,7 @@ public class WebHdfsClient
             if (!path.startsWith("/")) {
                 path = "/" + path;
             }
-            URIBuilder uriBuilder = new URIBuilder()
-                    .setScheme("http")
-                    .setHost(namenode.getHost())
-                    .setPort(namenode.getPort())
+            URIBuilder uriBuilder = new URIBuilder(this.uri)
                     .setPath("/webhdfs/v1" + checkNotNull(path))
                     .setParameter("op", checkNotNull(operation));
 
@@ -335,9 +329,7 @@ public class WebHdfsClient
             return uriBuilder.build();
         }
         catch (URISyntaxException e) {
-            throw new RuntimeException("Could not create save file URI" +
-                    ", nameNode: " + namenode +
-                    ", path: " + path);
+            throw new RuntimeException(e);
         }
     }
 
