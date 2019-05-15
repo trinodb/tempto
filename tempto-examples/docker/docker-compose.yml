@@ -2,7 +2,7 @@ version: '2'
 services:
   hadoop-master:
     hostname: hadoop-master
-    image: 'prestodb/hdp2.5-hive:1'
+    image: 'prestodev/hdp2.5-hive:13'
     ports:
       - '1080:1080'
       - '8020:8020'
@@ -70,7 +70,7 @@ services:
       - 'presto-master'
 
   runner:
-    image: 'prestodb/centos6-oj8:1'
+    image: 'prestodev/centos6-oj8:13'
     ports:
       - '5005:5005'
     volumes:

@@ -1,4 +1,4 @@
-FROM prestodb/centos6-oj8
+FROM prestodev/centos6-oj8
 MAINTAINER Presto community <https://prestosql.io/community.html>
 
 RUN yum install -y openssh-server openssh-clients passwd
