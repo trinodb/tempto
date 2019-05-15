@@ -55,6 +55,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 import static com.beust.jcommander.internal.Lists.newArrayList;
@@ -221,7 +222,9 @@ public class TestInitializationListener
     public void onTestStart(ITestResult testResult)
     {
         setupLoggingMdcForTest(testResult);
-        checkState(suiteTestContextStack.isPresent(), "test suite not initialized");
+        if (!suiteTestContextStack.isPresent()) {
+            throw new SuiteInitializationException("test suite not initialized");
+        }
         GuiceTestContext initTestContext = suiteTestContextStack.get().peek().createChildContext(emptyList(), getTestModules(testResult));
         TestContextStack<GuiceTestContext> testContextStack = new TestContextStack<>();
         testContextStack.push(initTestContext);
@@ -411,5 +414,21 @@ public class TestInitializationListener
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result)
     {
+    }
+
+    private static class SuiteInitializationException
+            extends RuntimeException
+    {
+        private static final AtomicLong instanceCount = new AtomicLong();
+
+        SuiteInitializationException(String message)
+        {
+            super(
+                    message,
+                    null,
+                    true,
+                    // Suppress stacktrace for all but first 10 exceptions. It is not useful when printed for every test.
+                    instanceCount.getAndIncrement() < 10);
+        }
     }
 }

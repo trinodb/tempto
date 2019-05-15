@@ -14,9 +14,11 @@
 
 package io.prestosql.tempto.context;
 
+import com.google.common.annotations.VisibleForTesting;
 import io.prestosql.tempto.internal.context.TestContextStack;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -101,7 +103,9 @@ public final class ThreadLocalTestContextHolder
 
     public static void assertTestContextSet()
     {
-        checkState(testContextStackThreadLocal.get() != null && !testContextStackThreadLocal.get().empty(), "test context not set for current thread");
+        if (testContextStackThreadLocal.get() == null || testContextStackThreadLocal.get().empty()) {
+            throw new ThreadLocalTestContextException("test context not set for current thread");
+        }
     }
 
     private static void ensureTestContextStack()
@@ -112,4 +116,21 @@ public final class ThreadLocalTestContextHolder
     }
 
     private ThreadLocalTestContextHolder() {}
+
+    @VisibleForTesting
+    static class ThreadLocalTestContextException
+            extends RuntimeException
+    {
+        private static final AtomicLong instanceCount = new AtomicLong();
+
+        ThreadLocalTestContextException(String message)
+        {
+            super(
+                    message,
+                    null,
+                    true,
+                    // Suppress stacktrace for all but first 10 exceptions. It is not useful when printed for every test.
+                    instanceCount.getAndIncrement() < 10);
+        }
+    }
 }

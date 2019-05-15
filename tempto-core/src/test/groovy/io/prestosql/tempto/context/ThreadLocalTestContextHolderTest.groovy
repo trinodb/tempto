@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.context
+package io.prestosql.tempto.context
 
-import io.prestosql.tempto.context.TestContext
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
 import static io.prestosql.tempto.context.TestContextDsl.withChildTestContext
+import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.ThreadLocalTestContextException
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.popAllTestContexts
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.popTestContext
@@ -63,7 +63,7 @@ class ThreadLocalTestContextHolderTest
         testContext()
 
         then:
-        thrown(IllegalStateException)
+        thrown(ThreadLocalTestContextException)
     }
 
     def "getting testContext returns what was set"()
