@@ -37,6 +37,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.nullToEmpty;
+import static com.google.common.base.Verify.verify;
 import static com.google.common.collect.Lists.newArrayList;
 import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
 import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
@@ -476,6 +477,12 @@ public class QueryAssert
 
             if (value instanceof Double || value instanceof Float) {
                 return DECIMAL_FORMAT.format(value);
+            }
+
+            if (value.getClass().isArray()) {
+                String wrapped = Arrays.deepToString(new Object[] {value});
+                verify(wrapped.charAt(0) == '[' && wrapped.charAt(wrapped.length() - 1) == ']'); // guaranteed by Arrays.deepToString
+                return wrapped.substring(1, wrapped.length() - 1);
             }
 
             return value.toString();
