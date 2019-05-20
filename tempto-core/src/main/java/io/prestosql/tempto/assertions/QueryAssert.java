@@ -463,20 +463,22 @@ public class QueryAssert
         @Override
         public String toString()
         {
-            StringBuilder msg = new StringBuilder();
-            for (Object value : values) {
-                if (value instanceof Double || value instanceof Float) {
-                    msg.append(DECIMAL_FORMAT.format(value));
-                }
-                else if (value == null) {
-                    msg.append("null");
-                }
-                else {
-                    msg.append(value.toString());
-                }
-                msg.append('|');
+            return values.stream()
+                    .map(Row::valueToString)
+                    .collect(Collectors.joining("|", "", "|"));
+        }
+
+        private static String valueToString(Object value)
+        {
+            if (value == null) {
+                return "null";
             }
-            return msg.toString();
+
+            if (value instanceof Double || value instanceof Float) {
+                return DECIMAL_FORMAT.format(value);
+            }
+
+            return value.toString();
         }
     }
 
