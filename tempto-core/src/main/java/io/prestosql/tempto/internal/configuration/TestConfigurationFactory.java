@@ -55,7 +55,7 @@ public class TestConfigurationFactory
     private static Configuration readTestConfiguration()
     {
         String testConfigurationUris = System.getProperty(TEST_CONFIGURATION_URIS_KEY, DEFAULT_TEST_CONFIGURATION_LOCATION);
-        LOGGER.info("Reading configuriontion from {}", testConfigurationUris);
+        LOGGER.info("Reading configuration from {}", testConfigurationUris);
         Configuration configuration = emptyConfiguration();
         for (String testConfigurationUri : Splitter.on(",").split(testConfigurationUris)) {
             Optional<InputStream> testConfigurationStream = getConfigurationInputStream(testConfigurationUri);
