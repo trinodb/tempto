@@ -46,11 +46,19 @@ public interface Configuration
 
     boolean getBooleanMandatory(String key, String errorMessage);
 
+    boolean isList(String key);
+
     List<String> getStringList(String key);
 
     List<String> getStringListMandatory(String key, String errorMessage);
 
     List<String> getStringListMandatory(String key);
+
+    /**
+     * Gets value under key and returns as list. If value is not a list, singleton list is returned.
+     * If value is missing, empty list is returned.
+     */
+    List<String> getStringOrList(String key);
 
     /**
      * Lists all keys in configuration

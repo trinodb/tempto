@@ -75,6 +75,11 @@ class MapConfigurationTest
         subConfigurationX.listKeyPrefixes(1) == ['y'] as Set
         subConfigurationX.getSubconfiguration('y') == emptyConfiguration()
         subConfigurationXY.listKeyPrefixes(1) == [] as Set
+        !subConfigurationA.isList('e')
+        subConfigurationA.getString('e') == Optional.of('tola')
+        subConfigurationA.getStringOrList('e') == ['tola']
+        subConfigurationA.isList('list1')
         subConfigurationA.getStringList('list1') == ['element1', 'element2', 'element3']
+        subConfigurationA.getStringOrList('list1') == ['element1', 'element2', 'element3']
     }
 }
