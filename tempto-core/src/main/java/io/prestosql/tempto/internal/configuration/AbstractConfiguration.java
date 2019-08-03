@@ -14,6 +14,7 @@
 
 package io.prestosql.tempto.internal.configuration;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.configuration.KeyUtils;
@@ -116,6 +117,14 @@ public abstract class AbstractConfiguration
     }
 
     @Override
+    public boolean isList(String key)
+    {
+        return get(key)
+                .map(List.class::isInstance)
+                .orElse(false);
+    }
+
+    @Override
     public List<String> getStringList(String key)
     {
         Optional<Object> object = get(key);
@@ -139,6 +148,17 @@ public abstract class AbstractConfiguration
     public List<String> getStringListMandatory(String key)
     {
         return getStringListMandatory(key, standardValueNotFoundMessage(key));
+    }
+
+    @Override
+    public List<String> getStringOrList(String key)
+    {
+        if (isList(key)) {
+            return getStringListMandatory(key);
+        }
+        return getString(key)
+                .map(ImmutableList::of)
+                .orElseGet(ImmutableList::of);
     }
 
     @Override

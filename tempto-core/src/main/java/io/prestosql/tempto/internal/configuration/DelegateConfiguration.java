@@ -105,6 +105,12 @@ public abstract class DelegateConfiguration
     }
 
     @Override
+    public boolean isList(String key)
+    {
+        return getDelegate().isList(key);
+    }
+
+    @Override
     public List<String> getStringList(String key)
     {
         return getDelegate().getStringList(key);
@@ -120,6 +126,12 @@ public abstract class DelegateConfiguration
     public List<String> getStringListMandatory(String key)
     {
         return getDelegate().getStringListMandatory(key);
+    }
+
+    @Override
+    public List<String> getStringOrList(String key)
+    {
+        return getDelegate().getStringOrList(key);
     }
 
     @Override

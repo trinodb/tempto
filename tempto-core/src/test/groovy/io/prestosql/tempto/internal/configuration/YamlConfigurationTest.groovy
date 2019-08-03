@@ -34,9 +34,16 @@ list:
 """)
         expect:
         configuration.listKeys() == ['a.b.d', 'x.y', 'list'] as Set
+        configuration.getString('missing') == Optional.empty()
+        configuration.getStringList('missing') == []
+        configuration.getStringOrList('missing') == []
         configuration.getInt('x.y') == Optional.of(10)
         configuration.getString('a.b.d') == Optional.of('ela${foo}')
+        !configuration.isList('x.y')
         configuration.getString('x.y') == Optional.of('10')
+        configuration.getStringOrList('x.y') == ['10']
+        configuration.isList('list')
         configuration.getStringList('list') == ['element1', 'element2']
+        configuration.getStringOrList('list') == ['element1', 'element2']
     }
 }
