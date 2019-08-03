@@ -14,6 +14,7 @@
 
 package io.prestosql.tempto.internal.query
 
+import com.google.common.collect.ImmutableList
 import io.prestosql.tempto.internal.configuration.YamlConfiguration
 import io.prestosql.tempto.query.JdbcConnectivityParamsState
 import spock.lang.Specification
@@ -79,7 +80,7 @@ databases:
                     .setUser('buser')
                     .setPassword('bpassword')
                     .setJar(Optional.of('/path/to/jar.jar'))
-                    .setPrepareStatement(Optional.of('USE schema'))
+                    .setPrepareStatements(ImmutableList.of('USE schema'))
                     .setKerberosPrincipal(Optional.of('HIVE@EXAMPLE.COM'))
                     .setKerberosKeytab(Optional.of('example.keytab'))
                     .build();
@@ -92,7 +93,7 @@ databases:
                     .setUser('buser')
                     .setPassword('bpassword')
                     .setJar(Optional.of('/path/to/jar.jar'))
-                    .setPrepareStatement(Optional.of('USE schema'))
+                    .setPrepareStatements(ImmutableList.of('USE schema'))
                     .setKerberosPrincipal(Optional.of('HIVE@EXAMPLE.COM'))
                     .setKerberosKeytab(Optional.of('example.keytab'))
                     .build();
