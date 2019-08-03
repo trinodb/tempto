@@ -49,6 +49,7 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class QueryAssert
@@ -259,6 +260,42 @@ public class QueryAssert
     }
 
     /**
+     * @param rows Rows not to be matched
+     * @return this
+     */
+    public QueryAssert doesNotContain(Row... rows)
+    {
+        return doesNotContain(Arrays.asList(rows));
+    }
+
+    /**
+     * @param rows Rows not to be matched
+     * @return this
+     */
+    public QueryAssert doesNotContain(List<Row> rows)
+    {
+        List<Row> contained = new ArrayList<>();
+        for (Row row : rows) {
+            if (containsRow(row.getValues())) {
+                contained.add(row);
+            }
+        }
+
+        if (!contained.isEmpty()) {
+            StringBuilder message = new StringBuilder("Unexpectedly found rows:\n")
+                    .append(contained.stream()
+                            .map(Row::getValues)
+                            .map(List::toString)
+                            .collect(joining("\n")))
+                    .append("\n\nactual rows:");
+            appendRows(message, actual.rows());
+            failWithMessage(message.toString());
+        }
+
+        return this;
+    }
+
+    /**
      * Verifies number of rows updated/inserted by last update query
      *
      * @param count Number of rows expected
@@ -466,7 +503,7 @@ public class QueryAssert
         {
             return values.stream()
                     .map(Row::valueToString)
-                    .collect(Collectors.joining("|", "", "|"));
+                    .collect(joining("|", "", "|"));
         }
 
         private static String valueToString(Object value)

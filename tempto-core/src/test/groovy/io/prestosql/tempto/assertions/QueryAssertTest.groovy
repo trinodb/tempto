@@ -358,6 +358,120 @@ class QueryAssertTest
         noExceptionThrown()
     }
 
+    def 'doesNotContain - missing row'()
+    {
+        when:
+        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+                .doesNotContain(
+                row(1, "SOMETHING", "SOMETHING"),
+        )
+
+        then:
+        noExceptionThrown()
+    }
+
+    def 'doesNotContain - different value'()
+    {
+        when:
+        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+                .doesNotContain(
+                row(2, "ALGERIA", "SOMETHING"),
+        )
+
+        then:
+        noExceptionThrown()
+    }
+
+    def 'doesNotContain - contained'()
+    {
+        when:
+        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+                .doesNotContain(
+                row(1, "ALGERIA", "AFRICA"),
+        )
+
+        then:
+        def e = thrown(AssertionError)
+        e.message == 'Unexpectedly found rows:\n' +
+                '[1, ALGERIA, AFRICA]\n' +
+                '\n' +
+                'actual rows:\n' +
+                '[1, ALGERIA, AFRICA]\n' +
+                '[2, ARGENTINA, SOUTH AMERICA]'
+    }
+
+    def 'doesNotContain - one contained'()
+    {
+        when:
+        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+                .doesNotContain(
+                row(1, "ALGERIA", "SOMETHING"),
+                row(2, "ARGENTINA", "SOUTH AMERICA"),
+        )
+
+        then:
+        def e = thrown(AssertionError)
+        e.message == 'Unexpectedly found rows:\n' +
+                '[2, ARGENTINA, SOUTH AMERICA]\n' +
+                '\n' +
+                'actual rows:\n' +
+                '[1, ALGERIA, AFRICA]\n' +
+                '[2, ARGENTINA, SOUTH AMERICA]'
+    }
+
+    def 'doesNotContain with multiple possible values - contained'()
+    {
+        when:
+        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+                .doesNotContain(
+                row(1, "ALGERIA", anyOf("AFRICA", "MARS")),
+        )
+
+        then:
+        def e = thrown(AssertionError)
+        e.message == 'Unexpectedly found rows:\n' +
+                '[1, ALGERIA, anyOf(AFRICA, MARS)]\n' +
+                '\n' +
+                'actual rows:\n' +
+                '[1, ALGERIA, AFRICA]\n' +
+                '[2, ARGENTINA, SOUTH AMERICA]'
+    }
+
+
+    def 'doesNotContain with multiple possible values - not contained'()
+    {
+        when:
+        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+                .doesNotContain(
+                row(2, "ARGENTINA", anyOf("AFRICA", "MARS")),
+        )
+
+        then:
+        noExceptionThrown()
+    }
+
+    def 'doesNotContain with multiple contained'()
+    {
+        when:
+        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+                .doesNotContain(
+                row(1, "ALGERIA", anyOf("AFRICA", "MARS")),
+                row(1, "ALGERIA", "AFRICA"),
+                row(2, "ARGENTINA", "SOUTH AMERICA"),
+        )
+
+        then:
+        def e = thrown(AssertionError)
+        e.message == 'Unexpectedly found rows:\n' +
+                '[1, ALGERIA, anyOf(AFRICA, MARS)]\n' +
+                '[1, ALGERIA, AFRICA]\n' +
+                '[2, ARGENTINA, SOUTH AMERICA]\n' +
+                '\n' +
+                'actual rows:\n' +
+                '[1, ALGERIA, AFRICA]\n' +
+                '[2, ARGENTINA, SOUTH AMERICA]'
+    }
+
     def 'Matches file - ok - with types'()
     {
         def parsingResult = parseResultFor('''\
