@@ -13,8 +13,10 @@
  */
 package io.prestosql.tempto.query;
 
+import com.google.common.collect.ImmutableList;
 import io.prestosql.tempto.context.State;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -36,7 +38,7 @@ public class JdbcConnectivityParamsState
     public final String password;
     public final boolean pooling;
     public final Optional<String> jar;
-    public final Optional<String> prepareStatement;
+    public final List<String> prepareStatements;
     public final Optional<String> kerberosPrincipal;
     public final Optional<String> kerberosKeytab;
 
@@ -48,7 +50,7 @@ public class JdbcConnectivityParamsState
             String password,
             boolean pooling,
             Optional<String> jar,
-            Optional<String> prepareStatement,
+            List<String> prepareStatements,
             Optional<String> kerberosPrincipal,
             Optional<String> kerberosKeytab)
     {
@@ -59,7 +61,7 @@ public class JdbcConnectivityParamsState
         this.password = requireNonNull(password, "password is null");
         this.pooling = pooling;
         this.jar = requireNonNull(jar, "jar is null");
-        this.prepareStatement = requireNonNull(prepareStatement, "prepareStatement is null");
+        this.prepareStatements = ImmutableList.copyOf(requireNonNull(prepareStatements, "prepareStatements is null"));
         this.kerberosPrincipal = requireNonNull(kerberosPrincipal, "kerberosPrincipal is null");
         this.kerberosKeytab = requireNonNull(kerberosKeytab, "kerberosKeytab is null");
     }
@@ -102,7 +104,7 @@ public class JdbcConnectivityParamsState
         private String password = "";
         private boolean pooling = false;
         private Optional<String> jar = empty();
-        private Optional<String> prepareStatement = empty();
+        private List<String> prepareStatements = ImmutableList.of();
         private Optional<String> kerberosPrincipal = empty();
         private Optional<String> kerberosKeytab = empty();
 
@@ -150,9 +152,9 @@ public class JdbcConnectivityParamsState
             return this;
         }
 
-        public Builder setPrepareStatement(Optional<String> prepareStatement)
+        public Builder setPrepareStatements(List<String> prepareStatement)
         {
-            this.prepareStatement = prepareStatement;
+            this.prepareStatements = prepareStatement;
             return this;
         }
 
@@ -178,7 +180,7 @@ public class JdbcConnectivityParamsState
                     password,
                     pooling,
                     jar,
-                    prepareStatement,
+                    prepareStatements,
                     kerberosPrincipal,
                     kerberosKeytab
             );

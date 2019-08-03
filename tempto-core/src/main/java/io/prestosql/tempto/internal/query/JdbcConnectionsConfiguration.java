@@ -61,7 +61,7 @@ public class JdbcConnectionsConfiguration
                 .setPassword(connectionConfiguration.getStringMandatory(JDBC_PASSWORD_KEY))
                 .setPooling(connectionConfiguration.getBoolean(JDBC_POOLING_KEY).orElse(false))
                 .setJar(connectionConfiguration.getString(JDBC_JAR))
-                .setPrepareStatement(connectionConfiguration.getString(PREPARE_STATEMENT_KEY))
+                .setPrepareStatements(connectionConfiguration.getStringOrList(PREPARE_STATEMENT_KEY))
                 .setKerberosPrincipal(connectionConfiguration.getString(KERBEROS_PRINCIPAL_KEY))
                 .setKerberosKeytab(connectionConfiguration.getString(KERBEROS_KEYTAB_KEY))
                 .build();

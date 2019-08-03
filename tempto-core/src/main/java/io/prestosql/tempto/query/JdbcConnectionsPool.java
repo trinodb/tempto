@@ -35,9 +35,16 @@ public class JdbcConnectionsPool
         }
 
         Connection connection = dataSources.get(jdbcParamsState).getConnection();
-        if (jdbcParamsState.prepareStatement.isPresent()) {
+        if (!jdbcParamsState.prepareStatements.isEmpty()) {
             try (Statement statement = connection.createStatement()) {
-                statement.execute(jdbcParamsState.prepareStatement.get());
+                for (String query : jdbcParamsState.prepareStatements) {
+                    try {
+                        statement.execute(query);
+                    }
+                    catch (SQLException e) {
+                        throw new SQLException("Preparatory statement failed: " + query, e);
+                    }
+                }
             }
         }
         return connection;
