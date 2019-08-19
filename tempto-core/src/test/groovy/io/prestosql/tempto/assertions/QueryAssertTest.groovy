@@ -182,7 +182,7 @@ class QueryAssertTest
         noExceptionThrown()
     }
 
-    def 'hasRows - different number of rows'()
+    def 'contains - different number of rows'()
     {
         when:
         assertThat(NATION_JOIN_REGION_QUERY_RESULT)
@@ -195,7 +195,7 @@ class QueryAssertTest
         noExceptionThrown()
     }
 
-    def 'hasRows - different value - no row'()
+    def 'contains - different value - no row'()
     {
         when:
         assertThat(NATION_JOIN_REGION_QUERY_RESULT)
@@ -214,7 +214,7 @@ class QueryAssertTest
                 '[2, ARGENTINA, SOUTH AMERICA]'
     }
 
-    def 'hasRows'()
+    def 'contains'()
     {
         when:
         assertThat(NATION_JOIN_REGION_QUERY_RESULT)
@@ -227,7 +227,7 @@ class QueryAssertTest
         noExceptionThrown()
     }
 
-    def 'hasRows - missing suffix column'()
+    def 'contains - missing suffix column'()
     {
         when:
         assertThat(NATION_JOIN_REGION_QUERY_RESULT)
@@ -247,7 +247,7 @@ class QueryAssertTest
                 '[2, ARGENTINA, SOUTH AMERICA]'
     }
 
-    def 'hasRows - missing middle column'()
+    def 'contains - missing middle column'()
     {
         when:
         assertThat(NATION_JOIN_REGION_QUERY_RESULT)
@@ -267,7 +267,7 @@ class QueryAssertTest
                 '[2, ARGENTINA, SOUTH AMERICA]'
     }
 
-    def 'hasRows with multiple possible values'()
+    def 'contains with multiple possible values'()
     {
         when:
         assertThat(NATION_JOIN_REGION_QUERY_RESULT)
@@ -280,7 +280,7 @@ class QueryAssertTest
         noExceptionThrown()
     }
 
-    def 'hasRows with multiple possible values - no row matching'()
+    def 'contains with multiple possible values - no row matching'()
     {
         when:
         assertThat(NATION_JOIN_REGION_QUERY_RESULT)
