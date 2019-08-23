@@ -17,6 +17,7 @@ package io.prestosql.tempto.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -24,13 +25,17 @@ import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.sql.JDBCType.INTEGER;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
@@ -48,10 +53,12 @@ public class QueryResult
 
     private QueryResult(List<JDBCType> columnTypes, BiMap<String, Integer> columnNamesIndexes, List<List<Object>> values, Optional<ResultSet> jdbcResultSet)
     {
-        this.columnTypes = columnTypes;
-        this.values = values;
-        this.columnNamesIndexes = columnNamesIndexes;
-        this.jdbcResultSet = jdbcResultSet;
+        this.columnTypes = ImmutableList.copyOf(requireNonNull(columnTypes, "columnTypes is null"));
+        this.values = requireNonNull(values, "values is null").stream()
+                .map(row -> unmodifiableList(new ArrayList<>(row)))
+                .collect(toImmutableList());
+        this.columnNamesIndexes = ImmutableBiMap.copyOf(requireNonNull(columnNamesIndexes, "columnNamesIndexes is null"));
+        this.jdbcResultSet = requireNonNull(jdbcResultSet, "jdbcResultSet is null");
     }
 
     public int getRowsCount()
