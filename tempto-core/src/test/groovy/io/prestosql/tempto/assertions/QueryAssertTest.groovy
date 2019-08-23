@@ -30,8 +30,10 @@ import static io.prestosql.tempto.assertions.QueryAssert.Row.row
 import static io.prestosql.tempto.assertions.QueryAssert.anyOf
 import static io.prestosql.tempto.assertions.QueryAssert.assertThat
 import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
+import static java.nio.charset.StandardCharsets.UTF_8
 import static java.sql.JDBCType.BIGINT
 import static java.sql.JDBCType.INTEGER
+import static java.sql.JDBCType.VARBINARY
 import static java.sql.JDBCType.VARCHAR
 
 class QueryAssertTest
@@ -47,6 +49,17 @@ class QueryAssertTest
             [
                     [1, "ALGERIA", "AFRICA"],
                     [2, "ARGENTINA", "SOUTH AMERICA"]
+            ], Optional.of(Mock(ResultSet)));
+
+    private final QueryResult QUERY_RESULT_WITH_VARBINARY = new QueryResult(
+            [VARCHAR, VARBINARY],
+            HashBiMap.create([
+                    "key": 1,
+                    "value": 2,
+            ]),
+            [
+                    ["one", "one".getBytes(UTF_8)],
+                    ["two", "two".getBytes(UTF_8)],
             ], Optional.of(Mock(ResultSet)));
 
     private final ColumnValuesAssert EMPTY_COLUMN_VALUE_ASSERT = new ColumnValuesAssert<Object>() {
@@ -495,5 +508,21 @@ B|ARGENTINA|SOUTH AMERICA|>'''
 
         then:
         noExceptionThrown()
+    }
+
+    def 'QueryAssert with varbinary'()
+    {
+        when:
+        assertThat(QUERY_RESULT_WITH_VARBINARY)
+                .contains(row("three", "three".getBytes(UTF_8)))
+
+        then:
+        def e = thrown(AssertionError)
+        e.message == 'Could not find rows:\n' +
+                '[three, [116, 104, 114, 101, 101]]\n' +
+                '\n' +
+                'actual rows:\n' +
+                '[one, [111, 110, 101]]\n' +
+                '[two, [116, 119, 111]]'
     }
 }

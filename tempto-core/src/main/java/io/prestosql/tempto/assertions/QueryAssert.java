@@ -49,6 +49,7 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class QueryAssert
@@ -292,7 +293,16 @@ public class QueryAssert
 
     private void appendRows(StringBuilder msg, List<List<?>> rows)
     {
-        rows.stream().forEach(row -> msg.append('\n').append(row));
+        rows.stream()
+                .map(QueryAssert::rowToString)
+                .forEach(row -> msg.append('\n').append(row));
+    }
+
+    private static String rowToString(List<?> row)
+    {
+        return row.stream()
+                .map(Row::valueToString)
+                .collect(joining(", ", "[", "]"));
     }
 
     private String buildContainsExactlyErrorMessage(List<Integer> unequalRowsIndexes, List<Row> rows)
@@ -466,10 +476,10 @@ public class QueryAssert
         {
             return values.stream()
                     .map(Row::valueToString)
-                    .collect(Collectors.joining("|", "", "|"));
+                    .collect(joining("|", "", "|"));
         }
 
-        private static String valueToString(Object value)
+        static String valueToString(Object value)
         {
             if (value == null) {
                 return "null";
