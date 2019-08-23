@@ -99,7 +99,7 @@ public class KafkaTableManager
     {
         String sql = format("select count(1) from %s.information_schema.tables where table_schema='%s' and table_name='%s'", prestoKafkaCatalog, schema, name);
         QueryResult queryResult = prestoQueryExecutor.executeQuery(sql);
-        if ((long) queryResult.row(0).get(0) != 1) {
+        if ((Long) queryResult.row(0).get(0) != 1) {
             throw new RuntimeException(format("Table %s.%s not defined if kafka catalog (%s)", schema, name, prestoKafkaCatalog));
         }
     }

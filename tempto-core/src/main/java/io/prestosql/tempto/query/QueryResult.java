@@ -48,10 +48,10 @@ public class QueryResult
 {
     private final List<JDBCType> columnTypes;
     private final BiMap<String, Integer> columnNamesIndexes;
-    private final List<List<Object>> values;
+    private final List<List<?>> values;
     private final Optional<ResultSet> jdbcResultSet;
 
-    private QueryResult(List<JDBCType> columnTypes, BiMap<String, Integer> columnNamesIndexes, List<List<Object>> values, Optional<ResultSet> jdbcResultSet)
+    private QueryResult(List<JDBCType> columnTypes, BiMap<String, Integer> columnNamesIndexes, List<? extends List<?>> values, Optional<ResultSet> jdbcResultSet)
     {
         this.columnTypes = ImmutableList.copyOf(requireNonNull(columnTypes, "columnTypes is null"));
         this.values = requireNonNull(values, "values is null").stream()
@@ -86,12 +86,12 @@ public class QueryResult
         return ofNullable(columnNamesIndexes.get(columnName));
     }
 
-    public List<Object> row(int rowIndex)
+    public List<?> row(int rowIndex)
     {
         return values.get(rowIndex);
     }
 
-    public List<List<Object>> rows()
+    public List<List<?>> rows()
     {
         return values;
     }
@@ -114,7 +114,7 @@ public class QueryResult
             projectedColumnNames.add(columnNamesIndexes.inverse().get(sqlColumnIndex));
         }
         QueryResultBuilder queryResultBuilder = new QueryResultBuilder(projectedColumnTypes, projectedColumnNames);
-        for (List<Object> valueList : values) {
+        for (List<?> valueList : values) {
             List<Object> projectedValueList = Lists.newArrayList();
             for (int sqlColumnIndex : sqlColumnIndexes) {
                 projectedValueList.add(valueList.get(fromSqlIndex(sqlColumnIndex)));
@@ -190,7 +190,7 @@ public class QueryResult
     {
         private final List<JDBCType> columnTypes = newArrayList();
         private final BiMap<String, Integer> columnNamesIndexes = HashBiMap.create();
-        private final List<List<Object>> values = newArrayList();
+        private final List<List<?>> values = newArrayList();
         private Optional<ResultSet> jdbcResultSet = Optional.empty();
 
         QueryResultBuilder(ResultSetMetaData metaData)
@@ -220,7 +220,7 @@ public class QueryResult
             return addRow(Arrays.asList(rowValues));
         }
 
-        public QueryResultBuilder addRow(List<Object> rowValues)
+        public QueryResultBuilder addRow(List<?> rowValues)
         {
             Preconditions.checkState(rowValues.size() == columnTypes.size(), "expected %s objects", columnTypes.size());
             values.add(newArrayList(rowValues));

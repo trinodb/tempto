@@ -149,7 +149,7 @@ public class SqlQueryConventionBasedTest
             String types = queryResult.getColumnTypes().stream().map(JDBCType::getName).collect(joining("|"));
             writer.write("-- delimiter: |; types: " + types);
             writer.newLine();
-            for (List<Object> row : queryResult.rows()) {
+            for (List<?> row : queryResult.rows()) {
                 writer.write(new QueryAssert.Row(row).toString());
                 writer.newLine();
             }
