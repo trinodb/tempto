@@ -448,7 +448,7 @@ public class QueryAssert
 
         public Row(List<Object> values)
         {
-            this.values = requireNonNull(values, "values is null");
+            this.values = unmodifiableList(new ArrayList<>(requireNonNull(values, "values is null")));
         }
 
         public List<Object> getValues()
