@@ -21,6 +21,7 @@ import io.prestosql.tempto.internal.query.QueryRowMapper;
 
 import java.nio.file.Path;
 import java.sql.JDBCType;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
@@ -70,7 +71,7 @@ public class JdbcDataFileDescriptor
 
         for (String line : sqlSectionParsingResult.getContentLines()) {
             List<String> rowValues = parseLine(line, delimiter, valuesSplitter);
-            values.add(rowMapper.mapToRow(rowValues).getValues());
+            values.add(new ArrayList<>(rowMapper.mapToRow(rowValues).getValues()));
         }
 
         return values;

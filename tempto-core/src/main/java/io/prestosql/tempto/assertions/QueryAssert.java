@@ -171,9 +171,9 @@ public class QueryAssert
      */
     public QueryAssert contains(List<Row> rows)
     {
-        List<List<Object>> missingRows = newArrayList();
+        List<List<?>> missingRows = newArrayList();
         for (Row row : rows) {
-            List<Object> expectedRow = row.getValues();
+            List<?> expectedRow = row.getValues();
 
             if (!containsRow(expectedRow)) {
                 missingRows.add(expectedRow);
@@ -233,8 +233,8 @@ public class QueryAssert
         hasRowsCount(rows.size());
         List<Integer> unequalRowsIndexes = newArrayList();
         for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
-            List<Object> expectedRow = rows.get(rowIndex).getValues();
-            List<Object> actualRow = actual.row(rowIndex);
+            List<?> expectedRow = rows.get(rowIndex).getValues();
+            List<?> actualRow = actual.row(rowIndex);
 
             if (!rowsEqual(expectedRow, actualRow)) {
                 unequalRowsIndexes.add(rowIndex);
@@ -281,7 +281,7 @@ public class QueryAssert
                 .collect(Collectors.toList());
     }
 
-    private String buildContainsMessage(List<List<Object>> missingRows)
+    private String buildContainsMessage(List<List<?>> missingRows)
     {
         StringBuilder msg = new StringBuilder("Could not find rows:");
         appendRows(msg, missingRows);
@@ -290,7 +290,7 @@ public class QueryAssert
         return msg.toString();
     }
 
-    private void appendRows(StringBuilder msg, List<List<Object>> rows)
+    private void appendRows(StringBuilder msg, List<List<?>> rows)
     {
         rows.stream().forEach(row -> msg.append('\n').append(row));
     }
@@ -312,7 +312,7 @@ public class QueryAssert
         return msg.toString();
     }
 
-    private boolean containsRow(List<Object> expectedRow)
+    private boolean containsRow(List<?> expectedRow)
     {
         for (int i = 0; i < actual.getRowsCount(); i++) {
             if (rowsEqual(expectedRow, actual.row(i))) {
@@ -322,13 +322,13 @@ public class QueryAssert
         return false;
     }
 
-    private boolean rowsEqual(List<Object> expectedRow, List<Object> actualRow)
+    private boolean rowsEqual(List<?> expectedRow, List<?> actualRow)
     {
         if (expectedRow.size() != actualRow.size()) {
             return false;
         }
         for (int i = 0; i < expectedRow.size(); ++i) {
-            List<Object> acceptableValues = expectedRow.get(i) instanceof AcceptableValues ?
+            List<?> acceptableValues = expectedRow.get(i) instanceof AcceptableValues ?
                     ((AcceptableValues) expectedRow.get(i)).getValues()
                     : singletonList(expectedRow.get(i));
             Object actualValue = actualRow.get(i);
@@ -340,7 +340,7 @@ public class QueryAssert
         return true;
     }
 
-    private boolean isAnyValueEqual(int column, List<Object> expectedValues, Object actualValue)
+    private boolean isAnyValueEqual(int column, List<?> expectedValues, Object actualValue)
     {
         for (Object expectedValue : expectedValues) {
             if (columnComparators.get(column).compare(actualValue, expectedValue) == 0) {
@@ -439,19 +439,19 @@ public class QueryAssert
 
     public static class Row
     {
-        private final List<Object> values;
+        private final List<?> values;
 
         public Row(Object... values)
         {
             this(newArrayList(values));
         }
 
-        public Row(List<Object> values)
+        public Row(List<?> values)
         {
             this.values = unmodifiableList(new ArrayList<>(requireNonNull(values, "values is null")));
         }
 
-        public List<Object> getValues()
+        public List<?> getValues()
         {
             return values;
         }
@@ -491,14 +491,14 @@ public class QueryAssert
 
     public static class AcceptableValues
     {
-        private final List<Object> values;
+        private final List<?> values;
 
-        public AcceptableValues(List<Object> values)
+        public AcceptableValues(List<?> values)
         {
             this.values = unmodifiableList(new ArrayList<>(requireNonNull(values, "values can not be null")));
         }
 
-        public List<Object> getValues()
+        public List<?> getValues()
         {
             return values;
         }

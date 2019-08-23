@@ -21,6 +21,7 @@ import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.prestosql.tempto.internal.query.QueryRowMapper;
 
 import java.sql.JDBCType;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -71,7 +72,7 @@ public class CassandraTpchDataSource
         QueryRowMapper queryRowMapper = new QueryRowMapper(columnTypes);
         List<String> valuesWithoutFinalBlank = columnValues.subList(0, columnValues.size() - 1);
         List<String> reallocatedList = remapList(valuesWithoutFinalBlank, mapping);
-        return queryRowMapper.mapToRow(reallocatedList).getValues();
+        return new ArrayList<>(queryRowMapper.mapToRow(reallocatedList).getValues());
     }
 
     private static <T> List<T> remapList(List<T> input, List<Integer> mapping)
