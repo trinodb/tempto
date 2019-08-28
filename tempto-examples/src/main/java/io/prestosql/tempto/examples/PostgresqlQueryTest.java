@@ -14,6 +14,7 @@
 package io.prestosql.tempto.examples;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import io.prestosql.tempto.ProductTest;
 import io.prestosql.tempto.Requirement;
@@ -28,12 +29,17 @@ import io.prestosql.tempto.fulfillment.table.TableInstance;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 import io.prestosql.tempto.query.QueryExecutor;
+import io.prestosql.tempto.query.QueryResult;
 import org.testng.annotations.Test;
 
 import javax.inject.Named;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+import java.util.Locale;
 
+import static com.google.common.base.Preconditions.checkState;
 import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
 import static io.prestosql.tempto.assertions.QueryAssert.assertThat;
 import static io.prestosql.tempto.fulfillment.table.ImmutableTablesState.immutableTablesState;
@@ -108,5 +114,28 @@ public class PostgresqlQueryTest
     {
         TableInstance tableInstance = mutableTablesState.get(tableHandle("test_table").inSchema("test_schema"));
         assertThat(queryExecutor.executeQuery("select * from " + tableInstance.getNameInDatabase())).containsOnly(row(1, "x"), row(2, "y"));
+    }
+
+    @Test(groups = {"psql_query"})
+    public void useNewConnection()
+            throws SQLException
+    {
+        String defaultTimeZone = Iterables.getOnlyElement(queryExecutor.executeQuery("SHOW TIME ZONE").column(1));
+        checkState(!defaultTimeZone.toLowerCase(Locale.ENGLISH).contains("/rome"), "Test assumes default zone is not Europe/Rome");
+
+        queryExecutor.inNewConnection(connection -> {
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("SET TIME ZONE 'Europe/Rome'");
+            }
+            try (Statement statement = connection.createStatement()) {
+                assertThat(QueryResult.forResultSet(statement.executeQuery("SHOW TIME ZONE")))
+                        .containsOnly(row("Europe/Rome"));
+            }
+            return null;
+        });
+
+        // Verify default time zone remained intact
+        assertThat(queryExecutor.executeQuery("SHOW TIME ZONE"))
+                .containsOnly(row(defaultTimeZone));
     }
 }

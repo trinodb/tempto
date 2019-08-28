@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.google.common.base.Preconditions.checkState;
 import static io.prestosql.tempto.query.QueryResult.forSingleIntegerValue;
 import static io.prestosql.tempto.query.QueryResult.toSqlIndex;
 import static java.util.Objects.requireNonNull;
@@ -51,18 +52,24 @@ public class JdbcQueryExecutor
         testContext.registerCloseCallback(context -> this.close());
     }
 
-    public void openConnection()
+    private void openConnection()
     {
         closeConnection();
         try {
-            connection = jdbcConnectionsPool.connectionFor(jdbcParamsState);
+            connection = newConnection();
         }
         catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void closeConnection()
+    private Connection newConnection()
+            throws SQLException
+    {
+        return jdbcConnectionsPool.connectionFor(jdbcParamsState);
+    }
+
+    private void closeConnection()
     {
         if (connection != null) {
             try {
@@ -89,6 +96,17 @@ public class JdbcQueryExecutor
             openConnection();
         }
         return connection;
+    }
+
+    @Override
+    public <T> T inNewConnection(ConnectionCallback<T> callback)
+            throws SQLException
+    {
+        checkState(!jdbcParamsState.pooling, "inNewConnection() is not supported when pooling is enabled");
+        requireNonNull(callback, "callback is null");
+        try (Connection connection = newConnection()) {
+            return callback.inConnection(connection);
+        }
     }
 
     private QueryResult execute(String sql, QueryParam... params)

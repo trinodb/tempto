@@ -17,6 +17,7 @@ package io.prestosql.tempto.query;
 import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.JDBCType;
+import java.sql.SQLException;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
@@ -40,7 +41,18 @@ public interface QueryExecutor
     QueryResult executeQuery(String sql, QueryParam... params)
             throws QueryExecutionException;
 
+    /**
+     * @deprecated This method exposes internal state of the query executor.
+     * Use {@link #inNewConnection(ConnectionCallback)} instead.
+     */
+    @Deprecated
     Connection getConnection();
+
+    /**
+     * Executes {@code callback} with a new connection.
+     */
+    <T> T inNewConnection(ConnectionCallback<T> callback)
+            throws SQLException;
 
     void close();
 
@@ -86,5 +98,11 @@ public interface QueryExecutor
                     .add("value", value)
                     .toString();
         }
+    }
+
+    interface ConnectionCallback<T>
+    {
+        T inConnection(Connection connection)
+                throws SQLException;
     }
 }
