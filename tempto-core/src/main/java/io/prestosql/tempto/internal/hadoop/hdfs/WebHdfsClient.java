@@ -213,6 +213,13 @@ public class WebHdfsClient
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public String getPermission(String path)
+    {
+        return (String) getAttributeValue(path, "permission");
+    }
+
+    @Override
     public boolean exist(String path)
     {
         HttpGet readRequest = new HttpGet(buildUri(path, "GETFILESTATUS", emptyMap()));

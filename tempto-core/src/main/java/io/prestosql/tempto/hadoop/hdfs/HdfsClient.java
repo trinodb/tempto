@@ -80,4 +80,6 @@ public interface HdfsClient
     boolean exist(String path);
 
     String getOwner(String path);
+
+    String getPermission(String path);
 }
