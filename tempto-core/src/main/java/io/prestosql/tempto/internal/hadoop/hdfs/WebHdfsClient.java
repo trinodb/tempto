@@ -209,7 +209,7 @@ public class WebHdfsClient
     @SuppressWarnings("unchecked")
     public String getOwner(String path)
     {
-        return ((String) getAttributeValue(path, "owner"));
+        return (String) getAttributeValue(path, "owner");
     }
 
     @Override
