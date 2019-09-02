@@ -35,6 +35,10 @@ public class JdbcConnectionsPool
         }
 
         Connection connection = dataSources.get(jdbcParamsState).getConnection();
+        if (connection == null) {
+            // this should never happen, `javax.sql.DataSource#getConnection()` should not return null
+            throw new IllegalStateException("No connection was created for: " + jdbcParamsState.getName());
+        }
         if (!jdbcParamsState.prepareStatements.isEmpty()) {
             try (Statement statement = connection.createStatement()) {
                 for (String query : jdbcParamsState.prepareStatements) {

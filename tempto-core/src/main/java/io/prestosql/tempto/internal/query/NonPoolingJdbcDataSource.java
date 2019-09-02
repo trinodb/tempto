@@ -26,6 +26,9 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+
 /**
  * DataSource implementation which creates new connection every time getConnection method is called
  */
@@ -46,7 +49,8 @@ class NonPoolingJdbcDataSource
             throws SQLException
     {
         Properties properties = prepareConnectionProperties();
-        return driver.connect(jdbcParamsState.url, properties);
+        Connection connection = driver.connect(jdbcParamsState.url, properties);
+        return requireNonNull(connection, () -> format("connection is null for '%s'", jdbcParamsState.url));
     }
 
     private Properties prepareConnectionProperties()
