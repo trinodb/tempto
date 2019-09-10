@@ -479,6 +479,9 @@ B|ARGENTINA|SOUTH AMERICA|>'''
         def e = thrown(AssertionError)
         e.message == "Query failed with unexpected error message: 'java.lang.RuntimeException: foo bar' \n" +
                 " Expected error message to contain 'dummy'"
+        def suppressed = e.getSuppressed()[0]
+        suppressed.class == QueryExecutionException.class
+        suppressed.message == "java.lang.RuntimeException: foo bar"
     }
 
     def 'QueryExecutionAssert - right error message'()
@@ -499,6 +502,9 @@ B|ARGENTINA|SOUTH AMERICA|>'''
         def e = thrown(AssertionError)
         e.message == "Query failed with unexpected error message: 'java.lang.RuntimeException: foo bar' \n" +
                 " Expected error message to match 'foo'"
+        def suppressed = e.getSuppressed()[0]
+        suppressed.class == QueryExecutionException.class
+        suppressed.message == "java.lang.RuntimeException: foo bar"
     }
 
     def 'QueryExecutionAssert - error message matches'()

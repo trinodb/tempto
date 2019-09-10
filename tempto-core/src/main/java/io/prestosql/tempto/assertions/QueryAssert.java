@@ -410,11 +410,15 @@ public class QueryAssert
             this.executionExceptionOptional = executionExceptionOptional;
         }
 
+        private QueryExecutionException getRequiredFailure()
+        {
+            return executionExceptionOptional
+                    .orElseThrow(() -> new AssertionError("Query did not fail as expected."));
+        }
+
         private String getFailureMessage()
         {
-            QueryExecutionException executionException = executionExceptionOptional
-                    .orElseThrow(() -> new AssertionError("Query did not fail as expected."));
-            return nullToEmpty(executionException.getMessage());
+            return nullToEmpty(getRequiredFailure().getMessage());
         }
 
         public QueryExecutionAssert failsWithMessage(String expectedErrorMessage)
@@ -422,10 +426,12 @@ public class QueryAssert
             String exceptionMessage = getFailureMessage();
             LOGGER.debug("Query failed as expected, with message: {}", exceptionMessage);
             if (!exceptionMessage.contains(expectedErrorMessage)) {
-                throw new AssertionError(format(
+                AssertionError error = new AssertionError(format(
                         "Query failed with unexpected error message: '%s' \n Expected error message to contain '%s'",
                         exceptionMessage,
                         expectedErrorMessage));
+                error.addSuppressed(getRequiredFailure());
+                throw error;
             }
 
             return this;
@@ -437,10 +443,12 @@ public class QueryAssert
             String exceptionMessage = getFailureMessage();
             LOGGER.debug("Query failed as expected, with message: {}", exceptionMessage);
             if (!exceptionMessage.matches(expectedErrorMessagePattern)) {
-                throw new AssertionError(format(
+                AssertionError error = new AssertionError(format(
                         "Query failed with unexpected error message: '%s' \n Expected error message to match '%s'",
                         exceptionMessage,
                         expectedErrorMessagePattern));
+                error.addSuppressed(getRequiredFailure());
+                throw error;
             }
 
             return this;
