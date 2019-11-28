@@ -34,7 +34,7 @@ import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.makeExec
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isRegularFile;
 
-class ConventionTableDefinitionDescriptor
+public class ConventionTableDefinitionDescriptor
 {
     public static class ParsedDDLFile
             extends SqlDescriptor
