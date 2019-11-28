@@ -55,7 +55,6 @@ each test and suite fulfillment process to separate files. To use that configure
 log4j.rootLogger=INFO, TEST_FRAMEWORK_LOGGING_APPENDER
 log4j.appender.TEST_FRAMEWORK_LOGGING_APPENDER=io.prestosql.tempto.logging.TestFrameworkLoggingAppender
 log4j.category.io.prestosql.tempto=DEBUG
-log4j.category.org.reflections=WARN
 ```
 
 With this appender for each test suite run new logs directory is created within /tmp/tempto_logs. Name of directory

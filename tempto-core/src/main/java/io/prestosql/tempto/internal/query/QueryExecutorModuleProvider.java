@@ -21,7 +21,6 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
 import io.prestosql.tempto.query.JdbcConnectionsPool;
 import io.prestosql.tempto.query.JdbcConnectivityParamsState;
@@ -37,7 +36,6 @@ import java.util.Set;
 import static com.google.inject.multibindings.MapBinder.newMapBinder;
 import static com.google.inject.name.Names.named;
 
-@AutoModuleProvider
 public class QueryExecutorModuleProvider
         implements SuiteModuleProvider
 {

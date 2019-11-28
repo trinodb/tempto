@@ -14,75 +14,13 @@
 
 package io.prestosql.tempto.internal;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import org.reflections.Reflections;
-import org.reflections.scanners.FieldAnnotationsScanner;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-import static java.util.Collections.unmodifiableSet;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-import static org.reflections.util.ClasspathHelper.forJavaClassPath;
 
 public final class ReflectionHelper
 {
-    private static final LoadingCache<Class<? extends Annotation>, Set<Field>> FIELDS_ANNOTATED_WITH = CacheBuilder.newBuilder()
-            .build(new CacheLoader<Class<? extends Annotation>, Set<Field>>()
-            {
-                @Override
-                public Set<Field> load(Class<? extends Annotation> key)
-                {
-                    Reflections reflections = new Reflections(forJavaClassPath(),
-                            new FieldAnnotationsScanner(), ReflectionHelper.class.getClassLoader());
-                    return unmodifiableSet(reflections.getFieldsAnnotatedWith(key));
-                }
-            });
-
-    private static final LoadingCache<Class, Set<Class>> SUBTYPES_OF = CacheBuilder.newBuilder()
-            .build(new CacheLoader<Class, Set<Class>>()
-            {
-                @Override
-                @SuppressWarnings("unchecked")
-                public Set<Class> load(Class key)
-                        throws Exception
-                {
-                    Reflections reflections = new Reflections(forJavaClassPath());
-                    return reflections.getSubTypesOf(key);
-                }
-            });
-
-    public static <T> T getStaticFieldValue(Field field)
-    {
-        try {
-            return (T) field.get(null);
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static Set<Field> getFieldsAnnotatedWith(Class<? extends Annotation> annotation)
-    {
-        return FIELDS_ANNOTATED_WITH.getUnchecked(annotation);
-    }
-
-
-    @SuppressWarnings("unchecked")
-    public static <T> Set<Class<? extends T>> getAnnotatedSubTypesOf(Class<T> clazz, Class<? extends Annotation> annotation)
-    {
-        Set<Class<? extends T>> subtypesOf = (Set) SUBTYPES_OF.getUnchecked(clazz);
-        return subtypesOf.stream()
-                .filter(c -> c.getAnnotation(annotation) != null)
-                .collect(toSet());
-    }
-
     public static <T> List<? extends T> instantiate(Collection<Class<? extends T>> classes)
     {
         return classes

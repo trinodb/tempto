@@ -23,7 +23,6 @@ import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.hadoop.hdfs.HdfsClient;
-import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -43,7 +42,6 @@ import static com.google.inject.name.Names.named;
 import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_PASSWORD_KEY;
 import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_URI_KEY;
 
-@AutoModuleProvider
 public class HdfsModuleProvider
         implements SuiteModuleProvider
 {

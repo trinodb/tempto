@@ -19,7 +19,7 @@ import io.prestosql.tempto.fulfillment.command.TestCommandRequirement;
 
 import javax.inject.Inject;
 
-@RequirementFulfiller.AutoTestLevelFulfiller
+@RequirementFulfiller.TestLevelFulfiller
 public class TestCommandFulfiller
         extends CommandFulfiller<TestCommandRequirement>
 {

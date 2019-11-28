@@ -16,7 +16,7 @@ package io.prestosql.tempto.internal.fulfillment.command;
 import io.prestosql.tempto.fulfillment.RequirementFulfiller;
 import io.prestosql.tempto.fulfillment.command.SuiteCommandRequirement;
 
-@RequirementFulfiller.AutoSuiteLevelFulfiller
+@RequirementFulfiller.SuiteLevelFulfiller
 public class SuiteCommandFulfiller
         extends CommandFulfiller<SuiteCommandRequirement>
 {

@@ -16,4 +16,3 @@ log4j.category.org.apache.http=INFO
 log4j.category.com.jayway.jsonpath=WARN
 log4j.category.org.apache.thrift=WARN
 log4j.category.org.apache.hive=WARN
-log4j.category.org.reflections=WARN

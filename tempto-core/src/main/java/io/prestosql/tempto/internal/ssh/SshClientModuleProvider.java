@@ -17,7 +17,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
 import io.prestosql.tempto.ssh.SshClient;
 import io.prestosql.tempto.ssh.SshClientFactory;
@@ -26,7 +25,6 @@ import java.util.Optional;
 
 import static com.google.inject.name.Names.named;
 
-@AutoModuleProvider
 public class SshClientModuleProvider
         implements SuiteModuleProvider
 {

@@ -14,14 +14,12 @@
 
 package io.prestosql.tempto.fulfillment.table.hive.tpcds;
 
-import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository.RepositoryTableDefinition;
 import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
 
 // Table definitions according to: tpc.org/tpc_documents_current_versions/pdf/tpc-ds_v2.3.0.pdf
 // TODO: move to separate module
 public class TpcdsTableDefinitions
 {
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CALL_CENTER =
             HiveTableDefinition.builder("call_center")
                     .setCreateTableDDLTemplate("" +
@@ -62,7 +60,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CATALOG_PAGE =
             HiveTableDefinition.builder("catalog_page")
                     .setCreateTableDDLTemplate("" +
@@ -81,7 +78,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CATALOG_RETURNS =
             HiveTableDefinition.builder("catalog_returns")
                     .setCreateTableDDLTemplate("" +
@@ -118,7 +114,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CATALOG_SALES =
             HiveTableDefinition.builder("catalog_sales")
                     .setCreateTableDDLTemplate("" +
@@ -162,7 +157,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CUSTOMER =
             HiveTableDefinition.builder("customer")
                     .setCreateTableDDLTemplate("" +
@@ -190,7 +184,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CUSTOMER_ADDRESS =
             HiveTableDefinition.builder("customer_address")
                     .setCreateTableDDLTemplate("" +
@@ -213,7 +206,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CUSTOMER_DEMOGRAPHICS =
             HiveTableDefinition.builder("customer_demographics")
                     .setCreateTableDDLTemplate("" +
@@ -232,7 +224,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition DATE_DIM =
             HiveTableDefinition.builder("date_dim")
                     .setCreateTableDDLTemplate("" +
@@ -270,7 +261,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition HOUSEHOLD_DEMOGRAPHICS =
             HiveTableDefinition.builder("household_demographics")
                     .setCreateTableDDLTemplate("" +
@@ -285,7 +275,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition INCOME_BAND =
             HiveTableDefinition.builder("income_band")
                     .setCreateTableDDLTemplate("" +
@@ -298,7 +287,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition INVENTORY =
             HiveTableDefinition.builder("inventory")
                     .setCreateTableDDLTemplate("" +
@@ -312,7 +300,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition ITEM =
             HiveTableDefinition.builder("item")
                     .setCreateTableDDLTemplate("" +
@@ -344,7 +331,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition PROMOTION =
             HiveTableDefinition.builder("promotion")
                     .setCreateTableDDLTemplate("" +
@@ -373,7 +359,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition REASON =
             HiveTableDefinition.builder("reason")
                     .setCreateTableDDLTemplate("" +
@@ -386,7 +371,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition SHIP_MODE =
             HiveTableDefinition.builder("ship_mode")
                     .setCreateTableDDLTemplate("" +
@@ -402,7 +386,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition STORE =
             HiveTableDefinition.builder("store")
                     .setCreateTableDDLTemplate("" +
@@ -441,7 +424,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition STORE_RETURNS =
             HiveTableDefinition.builder("store_returns")
                     .setCreateTableDDLTemplate("" +
@@ -471,7 +453,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition STORE_SALES =
             HiveTableDefinition.builder("store_sales")
                     .setCreateTableDDLTemplate("" +
@@ -504,7 +485,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition TIME_DIM =
             HiveTableDefinition.builder("time_dim")
                     .setCreateTableDDLTemplate("" +
@@ -524,7 +504,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition WAREHOUSE =
             HiveTableDefinition.builder("warehouse")
                     .setCreateTableDDLTemplate("" +
@@ -548,7 +527,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition WEB_PAGE =
             HiveTableDefinition.builder("web_page")
                     .setCreateTableDDLTemplate("" +
@@ -572,7 +550,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition WEB_RETURNS =
             HiveTableDefinition.builder("web_returns")
                     .setCreateTableDDLTemplate("" +
@@ -606,7 +583,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition WEB_SALES =
             HiveTableDefinition.builder("web_sales")
                     .setCreateTableDDLTemplate("" +
@@ -650,7 +626,6 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition WEB_SITE =
             HiveTableDefinition.builder("web_site")
                     .setCreateTableDDLTemplate("" +

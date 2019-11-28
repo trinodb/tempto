@@ -13,11 +13,14 @@
  */
 package io.prestosql.tempto.fulfillment.table;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
 import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
 import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.prestosql.tempto.fulfillment.table.hive.tpcds.TpcdsTableDefinitions;
+import io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
-import io.prestosql.tempto.internal.ReflectionHelper;
+import io.prestosql.tempto.fulfillment.table.jdbc.tpch.JdbcTpchTableDefinitions;
 import io.prestosql.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionDescriptor;
 import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedHiveDataSource;
 import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedRelationalDataSource;
@@ -25,29 +28,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
 import static io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition.hiveTableDefinition;
 import static io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
-import static io.prestosql.tempto.internal.ReflectionHelper.getFieldsAnnotatedWith;
 import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newDirectoryStream;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Stores {@link TableDefinition} mapped by names.
@@ -58,39 +57,47 @@ public class TableDefinitionsRepository
 
     private static final String DATASETS_PATH_PART = "datasets";
 
-    /**
-     * An annotation for {@link TableDefinition} static fields
-     * that should be registered in {@link TableDefinitionsRepository}.
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.FIELD)
-    public @interface RepositoryTableDefinition
-    {
-    }
+    private final static List<TableDefinition> BUILTIN_TABLE_DEFINITIONS = ImmutableList.of(
+            TpcdsTableDefinitions.CALL_CENTER,
+            TpcdsTableDefinitions.CATALOG_PAGE,
+            TpcdsTableDefinitions.CATALOG_RETURNS,
+            TpcdsTableDefinitions.CATALOG_SALES,
+            TpcdsTableDefinitions.CUSTOMER,
+            TpcdsTableDefinitions.CUSTOMER_ADDRESS,
+            TpcdsTableDefinitions.CUSTOMER_DEMOGRAPHICS,
+            TpcdsTableDefinitions.DATE_DIM,
+            TpcdsTableDefinitions.HOUSEHOLD_DEMOGRAPHICS,
+            TpcdsTableDefinitions.INCOME_BAND,
+            TpcdsTableDefinitions.INVENTORY,
+            TpcdsTableDefinitions.ITEM,
+            TpcdsTableDefinitions.PROMOTION,
+            TpcdsTableDefinitions.REASON,
+            TpcdsTableDefinitions.SHIP_MODE,
+            TpcdsTableDefinitions.STORE,
+            TpcdsTableDefinitions.STORE_RETURNS,
+            TpcdsTableDefinitions.STORE_SALES,
+            TpcdsTableDefinitions.TIME_DIM,
+            TpcdsTableDefinitions.WAREHOUSE,
+            TpcdsTableDefinitions.WEB_PAGE,
+            TpcdsTableDefinitions.WEB_RETURNS,
+            TpcdsTableDefinitions.WEB_SALES,
+            TpcdsTableDefinitions.WEB_SITE,
 
-    private static final List<TableDefinition> SCANNED_TABLE_DEFINITIONS;
+            TpchTableDefinitions.CUSTOMER,
+            TpchTableDefinitions.LINE_ITEM,
+            TpchTableDefinitions.NATION,
+            TpchTableDefinitions.ORDERS,
+            TpchTableDefinitions.PART,
+            TpchTableDefinitions.PART_SUPPLIER,
+            TpchTableDefinitions.REGION,
+            TpchTableDefinitions.SUPPLIER,
 
-    private static final TableDefinitionsRepository TABLE_DEFINITIONS_REPOSITORY;
+            JdbcTpchTableDefinitions.NATION);
 
-    static {
-        // ExceptionInInitializerError is not always appropriately logged, lets log exceptions explicitly here
-        try {
-            SCANNED_TABLE_DEFINITIONS =
-                    getFieldsAnnotatedWith(RepositoryTableDefinition.class)
-                            .stream()
-                            .map(ReflectionHelper::<TableDefinition>getStaticFieldValue)
-                            .collect(toList());
+    // TODO find better way to pass extensions
+    public static Supplier<List<TableDefinition>> ADDITIONAL_TABLE_DEFINITIONS = () -> ImmutableList.of();
 
-            TABLE_DEFINITIONS_REPOSITORY = new TableDefinitionsRepository(SCANNED_TABLE_DEFINITIONS);
-            // TODO: since TestNG has no listener that can be run before tests factory, this has to be initialized here
-            TABLE_DEFINITIONS_REPOSITORY.getAllConventionBasedTableDefinitions().stream()
-                    .forEach(TABLE_DEFINITIONS_REPOSITORY::register);
-        }
-        catch (RuntimeException e) {
-            LOGGER.error("Error during TableDefinitionsRepository initialization", e);
-            throw e;
-        }
-    }
+    private static TableDefinitionsRepository TABLE_DEFINITIONS_REPOSITORY;
 
     public static TableDefinition tableDefinition(TableHandle tableHandle)
     {
@@ -99,6 +106,15 @@ public class TableDefinitionsRepository
 
     public static TableDefinitionsRepository tableDefinitionsRepository()
     {
+        if (TABLE_DEFINITIONS_REPOSITORY == null) {
+            TABLE_DEFINITIONS_REPOSITORY = new TableDefinitionsRepository(ImmutableList.<TableDefinition>builder()
+                    .addAll(BUILTIN_TABLE_DEFINITIONS)
+                    .addAll(ADDITIONAL_TABLE_DEFINITIONS.get())
+                    .build());
+            // TODO: since TestNG has no listener that can be run before tests factory, this has to be initialized here
+            TABLE_DEFINITIONS_REPOSITORY.getAllConventionBasedTableDefinitions().stream()
+                    .forEach(TABLE_DEFINITIONS_REPOSITORY::register);
+        }
         return TABLE_DEFINITIONS_REPOSITORY;
     }
 
@@ -141,12 +157,10 @@ public class TableDefinitionsRepository
             LOGGER.debug("No convention table definitions");
             return emptyList();
         }
-        else {
-            return getAllConventionTableDefinitionDescriptors(dataSetsPath.get())
-                    .stream()
-                    .map(TableDefinitionsRepository::tableDefinitionFor)
-                    .collect(toList());
-        }
+        return getAllConventionTableDefinitionDescriptors(dataSetsPath.get())
+                .stream()
+                .map(TableDefinitionsRepository::tableDefinitionFor)
+                .collect(toImmutableList());
     }
 
     private static List<ConventionTableDefinitionDescriptor> getAllConventionTableDefinitionDescriptors(Path dataSetsPath)
@@ -157,7 +171,7 @@ public class TableDefinitionsRepository
             try {
                 return StreamSupport.stream(newDirectoryStream(dataSetsPath, "*.ddl").spliterator(), false)
                         .map(ddlFile -> new ConventionTableDefinitionDescriptor(ddlFile))
-                        .collect(toList());
+                        .collect(toImmutableList());
             }
             catch (IOException e) {
                 throw new RuntimeException(e);

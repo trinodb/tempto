@@ -29,7 +29,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkState;
 import static io.prestosql.tempto.fulfillment.TestStatus.FAILURE;
 
-@RequirementFulfiller.AutoTestLevelFulfiller
+@RequirementFulfiller.TestLevelFulfiller
 public class MutableTablesFulfiller
         extends TableRequirementFulfiller<MutableTableRequirement>
 {

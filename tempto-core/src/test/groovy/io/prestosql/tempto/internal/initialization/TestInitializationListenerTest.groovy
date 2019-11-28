@@ -233,7 +233,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @RequirementFulfiller.AutoTestLevelFulfiller
+    @TestLevelFulfiller
     static class AFulfiller
             extends DummyFulfiller
     {
@@ -244,7 +244,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @RequirementFulfiller.AutoTestLevelFulfiller
+    @TestLevelFulfiller
     static class BFulfiller
             extends DummyFulfiller
     {
@@ -265,7 +265,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @RequirementFulfiller.AutoTestLevelFulfiller
+    @TestLevelFulfiller
     static class CFulfiller
             extends DummyFulfiller
     {

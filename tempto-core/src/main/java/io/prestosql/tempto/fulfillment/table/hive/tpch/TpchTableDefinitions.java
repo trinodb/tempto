@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.fulfillment.table.hive.tpch;
 
-import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository.RepositoryTableDefinition;
 import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
 
 // Table definitions according to: http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.1.pdf
@@ -24,7 +23,6 @@ public class TpchTableDefinitions
 {
     public static final double DEFAULT_SCALE_FACTOR = 1;
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition NATION =
             HiveTableDefinition.builder("nation")
                     .setCreateTableDDLTemplate("" +
@@ -37,7 +35,6 @@ public class TpchTableDefinitions
                     .setDataSource(new TpchDataSource(TpchTable.NATION, DEFAULT_SCALE_FACTOR))
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition REGION =
             HiveTableDefinition.builder("region")
                     .setCreateTableDDLTemplate("" +
@@ -49,7 +46,6 @@ public class TpchTableDefinitions
                     .setDataSource(new TpchDataSource(TpchTable.REGION, DEFAULT_SCALE_FACTOR))
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition PART =
             HiveTableDefinition.builder("part")
                     .setCreateTableDDLTemplate("" +
@@ -67,7 +63,6 @@ public class TpchTableDefinitions
                     .setDataSource(new TpchDataSource(TpchTable.PART, DEFAULT_SCALE_FACTOR))
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition SUPPLIER =
             HiveTableDefinition.builder("supplier")
                     .setCreateTableDDLTemplate("" +
@@ -83,7 +78,6 @@ public class TpchTableDefinitions
                     .setDataSource(new TpchDataSource(TpchTable.SUPPLIER, DEFAULT_SCALE_FACTOR))
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition PART_SUPPLIER =
             HiveTableDefinition.builder("partsupp")
                     .setCreateTableDDLTemplate("" +
@@ -97,7 +91,6 @@ public class TpchTableDefinitions
                     .setDataSource(new TpchDataSource(TpchTable.PART_SUPPLIER, DEFAULT_SCALE_FACTOR))
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition CUSTOMER =
             HiveTableDefinition.builder("customer")
                     .setCreateTableDDLTemplate("" +
@@ -114,7 +107,6 @@ public class TpchTableDefinitions
                     .setDataSource(new TpchDataSource(TpchTable.CUSTOMER, DEFAULT_SCALE_FACTOR))
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition ORDERS =
             HiveTableDefinition.builder("orders")
                     .setCreateTableDDLTemplate("" +
@@ -132,7 +124,6 @@ public class TpchTableDefinitions
                     .setDataSource(new TpchDataSource(TpchTable.ORDERS, DEFAULT_SCALE_FACTOR))
                     .build();
 
-    @RepositoryTableDefinition
     public static final HiveTableDefinition LINE_ITEM =
             HiveTableDefinition.builder("lineitem")
                     .setCreateTableDDLTemplate("" +
