@@ -30,7 +30,7 @@ public interface RequirementFulfiller
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE})
-    @interface AutoSuiteLevelFulfiller
+    @interface SuiteLevelFulfiller
     {}
 
     /**
@@ -38,7 +38,7 @@ public interface RequirementFulfiller
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE})
-    @interface AutoTestLevelFulfiller
+    @interface TestLevelFulfiller
     {}
 
     Set<State> fulfill(Set<Requirement> requirements);

@@ -16,7 +16,6 @@ package io.prestosql.tempto.fulfillment.table.jdbc.tpch;
 
 import com.google.common.collect.ImmutableList;
 import io.airlift.tpch.TpchTable;
-import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository.RepositoryTableDefinition;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 
 import java.sql.JDBCType;
@@ -30,7 +29,6 @@ public class JdbcTpchTableDefinitions
     public static final double DEFAULT_SCALE_FACTOR = 0.01;
     public static final ImmutableList<JDBCType> NATION_TYPES = ImmutableList.of(BIGINT, VARCHAR, BIGINT, VARCHAR);
 
-    @RepositoryTableDefinition
     public static final RelationalTableDefinition NATION =
             relationalTableDefinition("nation_jdbc",
                     "CREATE TABLE %NAME%(" +

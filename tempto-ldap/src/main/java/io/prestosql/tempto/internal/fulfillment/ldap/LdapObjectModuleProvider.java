@@ -17,10 +17,8 @@ package io.prestosql.tempto.internal.fulfillment.ldap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
 
-@AutoModuleProvider
 public class LdapObjectModuleProvider
         implements SuiteModuleProvider
 {

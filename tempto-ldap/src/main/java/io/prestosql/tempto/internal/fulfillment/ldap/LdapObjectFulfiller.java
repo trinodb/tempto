@@ -25,7 +25,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
-@RequirementFulfiller.AutoSuiteLevelFulfiller
+@RequirementFulfiller.SuiteLevelFulfiller
 public class LdapObjectFulfiller<T extends LdapObjectRequirement>
         implements RequirementFulfiller
 {

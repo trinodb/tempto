@@ -16,13 +16,11 @@ package io.prestosql.tempto.internal.initialization.modules;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.TestMethodModuleProvider;
 import io.prestosql.tempto.internal.listeners.TestMetadata;
 import io.prestosql.tempto.internal.listeners.TestMetadataReader;
 import org.testng.ITestResult;
 
-@AutoModuleProvider
 public class TestMethodInfoModuleProvider
         implements TestMethodModuleProvider
 {

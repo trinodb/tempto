@@ -13,6 +13,7 @@
  */
 package io.prestosql.tempto.internal.fulfillment.table;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Key;
@@ -24,25 +25,37 @@ import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.fulfillment.table.ReadOnlyTableManager;
 import io.prestosql.tempto.fulfillment.table.TableManager;
 import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
-import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
+import io.prestosql.tempto.internal.fulfillment.table.cassandra.CassandraTableManager;
+import io.prestosql.tempto.internal.fulfillment.table.hive.HiveTableManager;
+import io.prestosql.tempto.internal.fulfillment.table.jdbc.JdbcTableManager;
 import io.prestosql.tempto.internal.query.JdbcConnectionsConfiguration;
 import io.prestosql.tempto.query.QueryExecutor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.inject.multibindings.MapBinder.newMapBinder;
 import static com.google.inject.name.Names.named;
-import static io.prestosql.tempto.internal.ReflectionHelper.getAnnotatedSubTypesOf;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toMap;
 
-@AutoModuleProvider
 public class TableManagerDispatcherModuleProvider
         implements SuiteModuleProvider
 {
+    private final static List<Class<? extends TableManager>> BUILTIN_TABLE_MANAGERS = ImmutableList.of(
+            CassandraTableManager.class,
+            HiveTableManager.class,
+            JdbcTableManager.class,
+            ReadOnlyTableManager.class);
+
+    // TODO find better way to pass extensions
+    public static Supplier<List<Class<? extends TableManager>>> ADDITIONAL_TABLE_MANAGERS = () -> ImmutableList.of();
+
     public Module getModule(Configuration configuration)
     {
         return new TableManagerModule(configuration);
@@ -107,7 +120,9 @@ public class TableManagerDispatcherModuleProvider
 
         private Map<String, ? extends Class<? extends TableManager>> getTableManagerClassesByType()
         {
-            return getAnnotatedSubTypesOf(TableManager.class, TableManager.Descriptor.class).stream()
+            return Stream.concat(
+                    BUILTIN_TABLE_MANAGERS.stream(),
+                    ADDITIONAL_TABLE_MANAGERS.get().stream())
                     .collect(toMap(
                             tableManagerClass -> tableManagerClass.getAnnotation(TableManager.Descriptor.class).type().toLowerCase(),
                             tableManagerClass -> tableManagerClass));

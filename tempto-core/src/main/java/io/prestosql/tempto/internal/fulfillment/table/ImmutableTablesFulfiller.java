@@ -26,7 +26,7 @@ import io.prestosql.tempto.fulfillment.table.TablesState;
 
 import java.util.List;
 
-@RequirementFulfiller.AutoSuiteLevelFulfiller
+@RequirementFulfiller.SuiteLevelFulfiller
 public class ImmutableTablesFulfiller
         extends TableRequirementFulfiller<ImmutableTableRequirement>
 {

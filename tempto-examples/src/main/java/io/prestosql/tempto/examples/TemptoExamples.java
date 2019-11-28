@@ -14,6 +14,8 @@
 
 package io.prestosql.tempto.examples;
 
+import com.google.common.collect.ImmutableList;
+import io.prestosql.tempto.fulfillment.table.kafka.KafkaTableManager;
 import io.prestosql.tempto.runner.TemptoRunner;
 import io.prestosql.tempto.runner.TemptoRunnerCommandLineParser;
 
@@ -28,6 +30,13 @@ public class TemptoExamples
                 .setTestsPackage("io.prestosql.tempto.examples", false)
                 .setConfigFile(DEFAULT_TEST_CONFIGURATION_LOCATION, true)
                 .build();
-        TemptoRunner.runTempto(parser, args);
+        TemptoRunner.runTempto(
+                parser,
+                args,
+                () -> ImmutableList.of(),
+                () -> ImmutableList.of(),
+                () -> ImmutableList.of(),
+                () -> ImmutableList.of(KafkaTableManager.class),
+                () -> ImmutableList.of());
     }
 }

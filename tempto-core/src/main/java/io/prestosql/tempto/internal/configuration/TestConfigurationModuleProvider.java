@@ -19,7 +19,6 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import java.util.List;
 
 import static com.google.inject.name.Names.named;
 
-@AutoModuleProvider
 public class TestConfigurationModuleProvider
         implements SuiteModuleProvider
 {
