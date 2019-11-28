@@ -16,6 +16,7 @@ package io.prestosql.tempto.internal.initialization;
 
 import com.beust.jcommander.internal.Sets;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -77,6 +78,7 @@ import static io.prestosql.tempto.internal.RequirementFulfillerPriorityHelper.ge
 import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
 import static io.prestosql.tempto.internal.logging.LoggingMdcHelper.cleanLoggingMdc;
 import static io.prestosql.tempto.internal.logging.LoggingMdcHelper.setupLoggingMdcForTest;
+import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -86,15 +88,11 @@ public class TestInitializationListener
 {
     private static final Logger LOGGER = getLogger(TestInitializationListener.class);
 
-    private final static List<Class<? extends RequirementFulfiller>> BUILTIN_SUITE_LEVEL_FULFILLERS = ImmutableList.of(
+    private final static List<Class<? extends RequirementFulfiller>> BUILTIN_FULFILLERS = ImmutableList.of(
             ImmutableTablesFulfiller.class,
-            SuiteCommandFulfiller.class
-    );
-
-    private static final List<Class<? extends RequirementFulfiller>> BUILTIN_TEST_METHOD_LEVEL_FULFILLERS = ImmutableList.of(
+            SuiteCommandFulfiller.class,
             MutableTablesFulfiller.class,
-            TestCommandFulfiller.class
-    );
+            TestCommandFulfiller.class);
 
     private final List<? extends SuiteModuleProvider> suiteModuleProviders;
     private final List<? extends TestMethodModuleProvider> testMethodModuleProviders;
@@ -117,20 +115,29 @@ public class TestInitializationListener
 
     private static List<Class<? extends RequirementFulfiller>> getTestMethodLevelFulfillers()
     {
-        return collectFulfillers(BUILTIN_TEST_METHOD_LEVEL_FULFILLERS, AutoTestLevelFulfiller.class);
+        return collectFulfillers(BUILTIN_FULFILLERS, AutoTestLevelFulfiller.class);
     }
 
     private static List<Class<? extends RequirementFulfiller>> getSuiteLevelFulfillers()
     {
-        return collectFulfillers(BUILTIN_SUITE_LEVEL_FULFILLERS, AutoSuiteLevelFulfiller.class);
+        return collectFulfillers(BUILTIN_FULFILLERS, AutoSuiteLevelFulfiller.class);
     }
 
     static List<Class<? extends RequirementFulfiller>> collectFulfillers(List<Class<? extends RequirementFulfiller>> builtinFulfillers, Class<? extends Annotation> filterAnnotation)
     {
         List<Class<? extends RequirementFulfiller>> allFulfillers = scanForFulfillersAndSort(filterAnnotation);
-        allFulfillers.addAll(getBuiltInFulfillerPosition(allFulfillers), builtinFulfillers);
+        allFulfillers.addAll(getBuiltInFulfillerPosition(allFulfillers), filter(builtinFulfillers, filterAnnotation));
 
         return ImmutableList.copyOf(allFulfillers);
+    }
+
+    private static List<Class<? extends RequirementFulfiller>> filter(List<Class<? extends RequirementFulfiller>> classes, Class<? extends Annotation> filterAnnotation)
+    {
+        return classes.stream()
+                .filter(clazz -> stream(clazz.getAnnotations())
+                        .map(Annotation::annotationType)
+                        .anyMatch(filterAnnotation::equals))
+                .collect(toImmutableList());
     }
 
     private static int getBuiltInFulfillerPosition(List<Class<? extends RequirementFulfiller>> allFulfillers)
