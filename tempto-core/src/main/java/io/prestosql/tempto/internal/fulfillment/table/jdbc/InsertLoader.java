@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 import io.prestosql.tempto.query.QueryExecutor;
 
 import java.sql.JDBCType;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -37,7 +36,6 @@ class InsertLoader
     private final List<JDBCType> columnTypes;
 
     public InsertLoader(QueryExecutor queryExecutor, String tableName, List<JDBCType> columnTypes)
-            throws SQLException
     {
         this.queryExecutor = requireNonNull(queryExecutor, "queryExecutor is null");
         this.tableName = requireNonNull(tableName, "tableName is null");
@@ -46,7 +44,6 @@ class InsertLoader
 
     @Override
     public void load(List<List<Object>> batch)
-            throws SQLException
     {
         for (List<List<Object>> rowsToInsert : partitionBy(batch.iterator(), ROWS_PER_INSERT)) {
             if (rowsToInsert.isEmpty()) {
@@ -102,6 +99,5 @@ class InsertLoader
 
     @Override
     public void close()
-            throws SQLException
     {}
 }

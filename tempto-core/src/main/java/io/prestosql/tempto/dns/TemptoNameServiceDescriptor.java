@@ -35,7 +35,6 @@ public class TemptoNameServiceDescriptor
 
     @Override
     public NameService createNameService()
-            throws Exception
     {
         Configuration configuration = testConfiguration();
         Map hosts = configuration.getSubconfiguration("hosts").asMap();

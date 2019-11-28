@@ -106,7 +106,6 @@ public class SpnegoHttpRequestsExecutor
 
     @Override
     public CloseableHttpResponse execute(HttpUriRequest request)
-            throws IOException
     {
         Subject authenticationSubject = kerberosAuthentication.authenticate();
         return Subject.doAs(authenticationSubject, (PrivilegedAction<CloseableHttpResponse>) () -> {
