@@ -14,23 +14,38 @@
 package io.prestosql.tempto.fulfillment.table;
 
 import com.google.common.collect.MapMaker;
+import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.prestosql.tempto.internal.ReflectionHelper;
-import io.prestosql.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionsProvider;
+import io.prestosql.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionDescriptor;
+import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedHiveDataSource;
+import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedRelationalDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Preconditions.checkState;
+import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition.hiveTableDefinition;
+import static io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
 import static io.prestosql.tempto.internal.ReflectionHelper.getFieldsAnnotatedWith;
+import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
+import static java.nio.file.Files.exists;
+import static java.nio.file.Files.newDirectoryStream;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -40,6 +55,8 @@ import static java.util.stream.Collectors.toList;
 public class TableDefinitionsRepository
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(TableDefinitionsRepository.class);
+
+    private static final String DATASETS_PATH_PART = "datasets";
 
     /**
      * An annotation for {@link TableDefinition} static fields
@@ -66,17 +83,13 @@ public class TableDefinitionsRepository
 
             TABLE_DEFINITIONS_REPOSITORY = new TableDefinitionsRepository(SCANNED_TABLE_DEFINITIONS);
             // TODO: since TestNG has no listener that can be run before tests factory, this has to be initialized here
-            new ConventionTableDefinitionsProvider().registerConventionTableDefinitions(TABLE_DEFINITIONS_REPOSITORY);
+            TABLE_DEFINITIONS_REPOSITORY.getAllConventionBasedTableDefinitions().stream()
+                    .forEach(TABLE_DEFINITIONS_REPOSITORY::register);
         }
         catch (RuntimeException e) {
             LOGGER.error("Error during TableDefinitionsRepository initialization", e);
             throw e;
         }
-    }
-
-    public static <T extends TableDefinition> T registerTableDefinition(T tableDefinition)
-    {
-        return tableDefinitionsRepository().register(tableDefinition);
     }
 
     public static TableDefinition tableDefinition(TableHandle tableHandle)
@@ -119,6 +132,79 @@ public class TableDefinitionsRepository
             return tableDefinitions.get(nameKey);
         }
         throw new IllegalStateException("no table definition for: " + tableHandleKey);
+    }
+
+    private static List<TableDefinition> getAllConventionBasedTableDefinitions()
+    {
+        Optional<Path> dataSetsPath = getConventionsTestsPath(DATASETS_PATH_PART);
+        if (!dataSetsPath.isPresent()) {
+            LOGGER.debug("No convention table definitions");
+            return emptyList();
+        }
+        else {
+            return getAllConventionTableDefinitionDescriptors(dataSetsPath.get())
+                    .stream()
+                    .map(TableDefinitionsRepository::tableDefinitionFor)
+                    .collect(toList());
+        }
+    }
+
+    private static List<ConventionTableDefinitionDescriptor> getAllConventionTableDefinitionDescriptors(Path dataSetsPath)
+    {
+        if (exists(dataSetsPath)) {
+            LOGGER.debug("Data sets configuration for path: {}", dataSetsPath);
+
+            try {
+                return StreamSupport.stream(newDirectoryStream(dataSetsPath, "*.ddl").spliterator(), false)
+                        .map(ddlFile -> new ConventionTableDefinitionDescriptor(ddlFile))
+                        .collect(toList());
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return emptyList();
+    }
+
+    private static TableDefinition tableDefinitionFor(ConventionTableDefinitionDescriptor tableDefinitionDescriptor)
+    {
+        ConventionTableDefinitionDescriptor.ParsedDDLFile parsedDDLFile = tableDefinitionDescriptor.getParsedDDLFile();
+        switch (parsedDDLFile.getTableType()) {
+            case HIVE:
+                return hiveTableDefinitionFor(tableDefinitionDescriptor);
+            case JDBC:
+                return jdbcTableDefinitionFor(tableDefinitionDescriptor);
+            default:
+                throw new IllegalArgumentException("unknown table type: " + parsedDDLFile.getTableType());
+        }
+    }
+
+    private static HiveTableDefinition hiveTableDefinitionFor(ConventionTableDefinitionDescriptor tableDefinitionDescriptor)
+    {
+        HiveDataSource dataSource = new FileBasedHiveDataSource(tableDefinitionDescriptor);
+        return hiveTableDefinition(
+                getTableHandle(tableDefinitionDescriptor),
+                tableDefinitionDescriptor.getParsedDDLFile().getContent(),
+                dataSource);
+    }
+
+    private static TableDefinition jdbcTableDefinitionFor(ConventionTableDefinitionDescriptor tableDefinitionDescriptor)
+    {
+        RelationalDataSource dataSource = new FileBasedRelationalDataSource(tableDefinitionDescriptor);
+        return relationalTableDefinition(
+                getTableHandle(tableDefinitionDescriptor),
+                tableDefinitionDescriptor.getParsedDDLFile().getContent(),
+                dataSource);
+    }
+
+    private static TableHandle getTableHandle(ConventionTableDefinitionDescriptor tableDefinitionDescriptor)
+    {
+        TableHandle tableHandle = tableHandle(tableDefinitionDescriptor.getName());
+        Optional<String> schema = tableDefinitionDescriptor.getParsedDDLFile().getSchema();
+        if (schema.isPresent()) {
+            tableHandle = tableHandle.inSchema(schema.get());
+        }
+        return tableHandle;
     }
 
     private static TableDefinitionRepositoryKey asRepositoryKey(TableHandle tableHandle)
