@@ -25,24 +25,13 @@ import java.util.Set;
 
 public interface RequirementFulfiller
 {
-    int DEFAULT_PRIORITY = 0;
-
     /**
      * Apply annotation to fulfillers which should be evaluated at suite level.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE})
     @interface AutoSuiteLevelFulfiller
-    {
-        /**
-         * With priority you can manage the order of fulfiller execution.
-         * With lower priority fulfiller will {@link RequirementFulfiller#fulfill} sooner
-         * and {@link RequirementFulfiller#cleanup(TestStatus)} later.
-         *
-         * @return priority level
-         */
-        int priority() default DEFAULT_PRIORITY;
-    }
+    {}
 
     /**
      * Apply annotation to fulfillers which should be evaluated at testLevel.
@@ -50,16 +39,7 @@ public interface RequirementFulfiller
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE})
     @interface AutoTestLevelFulfiller
-    {
-        /**
-         * With priority you can manage the order of fulfiller execution.
-         * With lower priority fulfiller will {@link RequirementFulfiller#fulfill} sooner
-         * and {@link RequirementFulfiller#cleanup(TestStatus)} later.
-         *
-         * @return priority level
-         */
-        int priority() default DEFAULT_PRIORITY;
-    }
+    {}
 
     Set<State> fulfill(Set<Requirement> requirements);
 

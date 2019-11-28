@@ -13,13 +13,8 @@
  */
 package io.prestosql.tempto.internal.initialization
 
-import com.google.common.collect.ImmutableList
 import com.google.inject.Inject
-import io.prestosql.tempto.AfterTestWithContext
-import io.prestosql.tempto.BeforeTestWithContext
-import io.prestosql.tempto.Requirement
-import io.prestosql.tempto.RequirementsProvider
-import io.prestosql.tempto.Requires
+import io.prestosql.tempto.*
 import io.prestosql.tempto.configuration.Configuration
 import io.prestosql.tempto.context.State
 import io.prestosql.tempto.context.TestContext
@@ -27,11 +22,7 @@ import io.prestosql.tempto.context.TestContextCloseCallback
 import io.prestosql.tempto.fulfillment.RequirementFulfiller
 import io.prestosql.tempto.fulfillment.TestStatus
 import io.prestosql.tempto.internal.TestSpecificRequirementsResolver
-import org.testng.IResultMap
-import org.testng.ITestClass
-import org.testng.ITestContext
-import org.testng.ITestNGMethod
-import org.testng.ITestResult
+import org.testng.*
 import org.testng.internal.ConstructorOrMethod
 import spock.lang.Specification
 
@@ -41,7 +32,6 @@ import static com.google.common.collect.Iterables.getOnlyElement
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextSet
 import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
-import static io.prestosql.tempto.internal.initialization.TestInitializationListener.collectFulfillers
 
 class TestInitializationListenerTest
         extends Specification
@@ -198,31 +188,6 @@ class TestInitializationListenerTest
         return TestClass.getMethod('testMethodFailed')
     }
 
-    def 'scan for user fulfillers should sort them by their priority'()
-    {
-        when:
-        def fulfillers = collectFulfillers(ImmutableList.of(), RequirementFulfiller.AutoTestLevelFulfiller.class);
-
-        then:
-        fulfillers.size() == 3
-        fulfillers[0] == BFulfiller.class // with priority -1
-        fulfillers[1] == AFulfiller.class // with default priority 0
-        fulfillers[2] == CFulfiller.class // with priority 5
-    }
-
-    def 'user fulfillers can be before system level fulfillers'()
-    {
-        when:
-        def fulfillers = collectFulfillers(ImmutableList.of(BuiltInFulfiller.class), RequirementFulfiller.AutoTestLevelFulfiller.class)
-
-        then:
-        fulfillers.size() == 4
-        fulfillers[0] == BFulfiller.class // with priority -1
-        fulfillers[1] == BuiltInFulfiller.class // built in fulfiller
-        fulfillers[2] == AFulfiller.class // with default priority 0
-        fulfillers[3] == CFulfiller.class // with priority 5
-    }
-
     @Requires(ARequirement)
     static class TestClass
             implements RequirementsProvider
@@ -279,7 +244,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @RequirementFulfiller.AutoTestLevelFulfiller(priority = -1)
+    @RequirementFulfiller.AutoTestLevelFulfiller
     static class BFulfiller
             extends DummyFulfiller
     {
@@ -300,7 +265,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @RequirementFulfiller.AutoTestLevelFulfiller(priority = 5)
+    @RequirementFulfiller.AutoTestLevelFulfiller
     static class CFulfiller
             extends DummyFulfiller
     {
