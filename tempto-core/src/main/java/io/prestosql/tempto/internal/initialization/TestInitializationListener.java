@@ -36,7 +36,6 @@ import io.prestosql.tempto.initialization.AutoModuleProvider;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
 import io.prestosql.tempto.initialization.TestMethodModuleProvider;
 import io.prestosql.tempto.internal.ReflectionInjectorHelper;
-import io.prestosql.tempto.internal.RequirementFulfillerByPriorityComparator;
 import io.prestosql.tempto.internal.TestSpecificRequirementsResolver;
 import io.prestosql.tempto.internal.context.GuiceTestContext;
 import io.prestosql.tempto.internal.context.TestContextStack;
@@ -125,10 +124,10 @@ public class TestInitializationListener
 
     static List<Class<? extends RequirementFulfiller>> collectFulfillers(List<Class<? extends RequirementFulfiller>> builtinFulfillers, Class<? extends Annotation> filterAnnotation)
     {
-        List<Class<? extends RequirementFulfiller>> allFulfillers = scanForFulfillersAndSort(filterAnnotation);
-        allFulfillers.addAll(getBuiltInFulfillerPosition(allFulfillers), filter(builtinFulfillers, filterAnnotation));
-
-        return ImmutableList.copyOf(allFulfillers);
+        return ImmutableList.<Class<? extends RequirementFulfiller>>builder()
+                .addAll(filter(builtinFulfillers, filterAnnotation))
+                .addAll(getAnnotatedSubTypesOf(RequirementFulfiller.class, filterAnnotation))
+                .build();
     }
 
     private static List<Class<? extends RequirementFulfiller>> filter(List<Class<? extends RequirementFulfiller>> classes, Class<? extends Annotation> filterAnnotation)
@@ -138,27 +137,6 @@ public class TestInitializationListener
                         .map(Annotation::annotationType)
                         .anyMatch(filterAnnotation::equals))
                 .collect(toImmutableList());
-    }
-
-    private static int getBuiltInFulfillerPosition(List<Class<? extends RequirementFulfiller>> allFulfillers)
-    {
-        for (int i = 0; i < allFulfillers.size(); i++) {
-            // Insert the built-in fulfillers before priority 0 user fulfillers
-            if (getPriority(allFulfillers.get(i)) >= 0) {
-                return i;
-            }
-        }
-
-        return allFulfillers.size();
-    }
-
-    // package scope due testing
-    static List<Class<? extends RequirementFulfiller>> scanForFulfillersAndSort(Class<? extends Annotation> filterAnnotation)
-    {
-        return getAnnotatedSubTypesOf(RequirementFulfiller.class, filterAnnotation)
-                .stream()
-                .sorted(new RequirementFulfillerByPriorityComparator())
-                .collect(toList());
     }
 
     public static List<? extends SuiteModuleProvider> getSuiteModuleProviders()
