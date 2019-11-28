@@ -115,7 +115,7 @@ public class TableDefinitionsRepository
         if (tableDefinitions.containsKey(tableHandleKey)) {
             return tableDefinitions.get(tableHandleKey);
         }
-        else if (tableDefinitions.containsKey(nameKey)) {
+        if (tableDefinitions.containsKey(nameKey)) {
             return tableDefinitions.get(nameKey);
         }
         throw new IllegalStateException("no table definition for: " + tableHandleKey);

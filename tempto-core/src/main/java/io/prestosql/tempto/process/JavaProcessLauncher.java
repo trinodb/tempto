@@ -42,7 +42,7 @@ public final class JavaProcessLauncher
     }
 
     public Process launch(Class clazz, List<String> arguments)
-            throws IOException, InterruptedException
+            throws IOException
     {
         String className = clazz.getCanonicalName();
         List<String> command = ImmutableList.<String>builder()

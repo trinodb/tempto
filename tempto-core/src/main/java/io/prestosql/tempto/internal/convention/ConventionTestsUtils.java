@@ -92,7 +92,6 @@ public final class ConventionTestsUtils
     }
 
     private static Path copyTestsToTemporaryDirectory(Set<URI> productTestsUris, String child)
-            throws IOException
     {
         Path temporaryTestsPath = temporaryTestsRootPath.get().resolve(child);
         if (!exists(temporaryTestsPath)) {

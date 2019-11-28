@@ -21,7 +21,6 @@ import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
 import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
 import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
@@ -127,7 +126,6 @@ public class TpcdsDataSource
 
         @Override
         public int read()
-                throws IOException
         {
             if (value == null) {
                 if (data.hasNext()) {

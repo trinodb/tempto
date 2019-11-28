@@ -107,8 +107,11 @@ public class TestInitializationListener
 
     public TestInitializationListener()
     {
-        this(getSuiteModuleProviders(), getTestMethodModuleProviders(),
-                getSuiteLevelFulfillers(), getTestMethodLevelFulfillers(),
+        this(
+                getSuiteModuleProviders(),
+                getTestMethodModuleProviders(),
+                getSuiteLevelFulfillers(),
+                getTestMethodLevelFulfillers(),
                 testConfiguration());
     }
 

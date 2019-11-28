@@ -56,12 +56,10 @@ public class ConventionTableDefinitionsProvider
             LOGGER.debug("No convention table definitions");
             return emptyList();
         }
-        else {
-            return getAllConventionTableDefinitionDescriptors(dataSetsPath.get())
-                    .stream()
-                    .map(this::tableDefinitionFor)
-                    .collect(toList());
-        }
+        return getAllConventionTableDefinitionDescriptors(dataSetsPath.get())
+                .stream()
+                .map(this::tableDefinitionFor)
+                .collect(toList());
     }
 
     private List<ConventionTableDefinitionDescriptor> getAllConventionTableDefinitionDescriptors(Path dataSetsPath)
@@ -78,9 +76,7 @@ public class ConventionTableDefinitionsProvider
                 throw new RuntimeException(e);
             }
         }
-        else {
-            return emptyList();
-        }
+        return emptyList();
     }
 
     private TableDefinition tableDefinitionFor(ConventionTableDefinitionDescriptor tableDefinitionDescriptor)

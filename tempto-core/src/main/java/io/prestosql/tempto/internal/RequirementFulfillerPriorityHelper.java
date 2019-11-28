@@ -16,6 +16,8 @@ package io.prestosql.tempto.internal;
 
 import io.prestosql.tempto.fulfillment.RequirementFulfiller;
 
+import static java.lang.String.format;
+
 public class RequirementFulfillerPriorityHelper
 {
     private RequirementFulfillerPriorityHelper() {}
@@ -25,13 +27,13 @@ public class RequirementFulfillerPriorityHelper
         if (c.getAnnotation(RequirementFulfiller.AutoSuiteLevelFulfiller.class) != null) {
             return c.getAnnotation(RequirementFulfiller.AutoSuiteLevelFulfiller.class).priority();
         }
-        else if (c.getAnnotation(RequirementFulfiller.AutoTestLevelFulfiller.class) != null) {
+        if (c.getAnnotation(RequirementFulfiller.AutoTestLevelFulfiller.class) != null) {
             return c.getAnnotation(RequirementFulfiller.AutoTestLevelFulfiller.class).priority();
         }
-        else {
-            throw new RuntimeException(
-                    String.format("Class '%s' is not annotated with '%' or '%s'.",
-                            c.getName(), RequirementFulfiller.AutoSuiteLevelFulfiller.class.getName(), RequirementFulfiller.AutoTestLevelFulfiller.class.getName()));
-        }
+        throw new IllegalStateException(format(
+                "Class '%s' is not annotated with '%' or '%s'.",
+                c.getName(),
+                RequirementFulfiller.AutoSuiteLevelFulfiller.class.getName(),
+                RequirementFulfiller.AutoTestLevelFulfiller.class.getName()));
     }
 }

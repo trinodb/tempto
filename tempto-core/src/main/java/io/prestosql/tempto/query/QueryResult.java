@@ -161,13 +161,11 @@ public class QueryResult
     }
 
     public static QueryResult forSingleIntegerValue(int value)
-            throws SQLException
     {
         return new QueryResult(ImmutableList.of(INTEGER), HashBiMap.create(), ImmutableList.of(ImmutableList.of(value)), Optional.empty());
     }
 
     public static <T> QueryResult forSingleValue(JDBCType type, T value)
-            throws SQLException
     {
         return new QueryResult(ImmutableList.of(type), HashBiMap.create(), ImmutableList.of(ImmutableList.of(value)), Optional.empty());
     }

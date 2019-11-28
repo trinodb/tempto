@@ -151,7 +151,6 @@ public class JSchSshClient
 
     @Override
     public void close()
-            throws IOException
     {
     }
 

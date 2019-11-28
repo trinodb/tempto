@@ -17,7 +17,6 @@ package io.prestosql.tempto.internal.fulfillment.table.hive.tpch;
 import com.google.common.io.ByteSource;
 import io.airlift.tpch.TpchEntity;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
@@ -40,7 +39,6 @@ public class TpchEntityByteSource<T extends TpchEntity>
 
     @Override
     public InputStream openStream()
-            throws IOException
     {
         return this.inputStream;
     }
@@ -61,7 +59,6 @@ public class TpchEntityByteSource<T extends TpchEntity>
         // TODO: implement read(byte[]) if this is slow
         @Override
         public int read()
-                throws IOException
         {
             if (currentLine == null || currentReadLineIndex >= currentLine.length()) {
                 if (rowIterator.hasNext()) {

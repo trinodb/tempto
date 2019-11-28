@@ -38,7 +38,6 @@ public final class ReflectionHelper
             {
                 @Override
                 public Set<Field> load(Class<? extends Annotation> key)
-                        throws Exception
                 {
                     Reflections reflections = new Reflections(forJavaClassPath(),
                             new FieldAnnotationsScanner(), ReflectionHelper.class.getClassLoader());
@@ -73,6 +72,7 @@ public final class ReflectionHelper
     {
         return FIELDS_ANNOTATED_WITH.getUnchecked(annotation);
     }
+
 
     @SuppressWarnings("unchecked")
     public static <T> Set<Class<? extends T>> getAnnotatedSubTypesOf(Class<T> clazz, Class<? extends Annotation> annotation)
