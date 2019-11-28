@@ -15,6 +15,7 @@
 package io.prestosql.tempto.internal.fulfillment.table;
 
 import com.google.inject.Inject;
+import io.prestosql.tempto.fulfillment.RequirementFulfiller;
 import io.prestosql.tempto.fulfillment.TestStatus;
 import io.prestosql.tempto.fulfillment.table.ImmutableTableRequirement;
 import io.prestosql.tempto.fulfillment.table.ImmutableTablesState;
@@ -25,6 +26,7 @@ import io.prestosql.tempto.fulfillment.table.TablesState;
 
 import java.util.List;
 
+@RequirementFulfiller.AutoSuiteLevelFulfiller
 public class ImmutableTablesFulfiller
         extends TableRequirementFulfiller<ImmutableTableRequirement>
 {

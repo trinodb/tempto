@@ -14,10 +14,12 @@
 
 package io.prestosql.tempto.internal.fulfillment.command;
 
+import io.prestosql.tempto.fulfillment.RequirementFulfiller;
 import io.prestosql.tempto.fulfillment.command.TestCommandRequirement;
 
 import javax.inject.Inject;
 
+@RequirementFulfiller.AutoTestLevelFulfiller
 public class TestCommandFulfiller
         extends CommandFulfiller<TestCommandRequirement>
 {
