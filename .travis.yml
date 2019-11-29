@@ -3,6 +3,9 @@ language: java
 jdk: openjdk8
 dist: xenial
 
+git:
+  quiet: true
+
 install: ./gradlew build -x test
 
 script:
