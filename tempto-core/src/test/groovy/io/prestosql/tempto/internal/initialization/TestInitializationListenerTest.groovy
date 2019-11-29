@@ -233,7 +233,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @TestLevelFulfiller
+    @RequirementFulfiller.TestLevelFulfiller
     static class AFulfiller
             extends DummyFulfiller
     {
@@ -244,7 +244,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @TestLevelFulfiller
+    @RequirementFulfiller.TestLevelFulfiller
     static class BFulfiller
             extends DummyFulfiller
     {
@@ -265,7 +265,7 @@ class TestInitializationListenerTest
         }
     }
 
-    @TestLevelFulfiller
+    @RequirementFulfiller.TestLevelFulfiller
     static class CFulfiller
             extends DummyFulfiller
     {
@@ -332,6 +332,11 @@ class TestInitializationListenerTest
 
             EVENTS.add(new Event(fulfillEventName, this))
             return []
+        }
+
+        Set<Requirement> filter(Set<Requirement> requirements)
+        {
+            return requirements;
         }
 
         void cleanup(TestStatus testStatus)
