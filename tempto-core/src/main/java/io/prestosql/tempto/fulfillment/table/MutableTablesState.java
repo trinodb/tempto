@@ -14,6 +14,8 @@
 
 package io.prestosql.tempto.fulfillment.table;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
@@ -23,7 +25,8 @@ public class MutableTablesState
 {
     public static MutableTablesState mutableTablesState()
     {
-        return testContext().getDependency(MutableTablesState.class);
+        return testContext().getOptionalDependency(MutableTablesState.class)
+                .orElse(new MutableTablesState(ImmutableList.of()));
     }
 
     public MutableTablesState(List<TableInstance> tables)

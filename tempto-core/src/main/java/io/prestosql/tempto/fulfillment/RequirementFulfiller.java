@@ -43,5 +43,7 @@ public interface RequirementFulfiller
 
     Set<State> fulfill(Set<Requirement> requirements);
 
+    Set<Requirement> filter(Set<Requirement> requirements);
+
     void cleanup(TestStatus status);
 }

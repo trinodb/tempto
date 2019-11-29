@@ -15,6 +15,7 @@
 package io.prestosql.tempto.internal.fulfillment.command;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableSet;
 import io.prestosql.tempto.Requirement;
 import io.prestosql.tempto.context.State;
 import io.prestosql.tempto.fulfillment.RequirementFulfiller;
@@ -79,6 +80,14 @@ public abstract class CommandFulfiller<T extends CommandRequirement>
         catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Set<Requirement> filter(Set<Requirement> requirements)
+    {
+        return requirements.stream()
+                .filter(requirement -> requirement.getClass().isAssignableFrom(requirementClass))
+                .collect(ImmutableSet.toImmutableSet());
     }
 
     @Override
