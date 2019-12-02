@@ -111,7 +111,7 @@ ext.tempto_runner = project(':tempto-runner')
 ext.tempto_ldap = project(':tempto-ldap')
 ext.tempto_kafka = project(':tempto-kafka')
 ext.expected_result_generator = project(':expected-result-generator')
-ext.tempto_version = '167'
+ext.tempto_version = '168-SNAPSHOT'
 ext.tempto_group = "io.prestosql.tempto"
 ext.isReleaseVersion = !tempto_version.endsWith("SNAPSHOT")
 
