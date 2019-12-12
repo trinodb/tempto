@@ -96,9 +96,7 @@ retry check_presto
 
 # run product tests
 set +e
-run_product_tests "$*" &
-PRODUCT_TESTS_PROCESS_ID=$!
-wait $PRODUCT_TESTS_PROCESS_ID
+run_product_tests "$*"
 EXIT_CODE=$?
 set -e
 
