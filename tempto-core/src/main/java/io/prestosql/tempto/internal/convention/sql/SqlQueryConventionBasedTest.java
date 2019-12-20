@@ -16,13 +16,11 @@ package io.prestosql.tempto.internal.convention.sql;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.prestosql.tempto.Requirement;
 import io.prestosql.tempto.assertions.QueryAssert;
 import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.fulfillment.table.MutableTablesState;
 import io.prestosql.tempto.internal.convention.ConventionBasedTest;
 import io.prestosql.tempto.internal.convention.SqlQueryDescriptor;
 import io.prestosql.tempto.internal.convention.SqlResultDescriptor;
@@ -163,7 +161,9 @@ public class SqlQueryConventionBasedTest
         try {
             Template template = new Template("name", new StringReader(query), new freemarker.template.Configuration());
             Map<String, Object> data = newHashMap();
-            data.put("mutableTables", getMutableTables());
+            Map<String, Map<String, String>> tableNamesPerDatabase = mutableTablesState().getDatabaseNames().stream()
+                    .collect(toMap(databaseName -> databaseName, databaseName -> mutableTablesState().getNameInDatabaseMap(databaseName)));
+            data.put("mutableTables", tableNamesPerDatabase);
 
             Writer writer = new StringWriter();
             template.process(data, writer);
@@ -174,13 +174,6 @@ public class SqlQueryConventionBasedTest
         catch (TemplateException | IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Map<String, Map<String, String>> getMutableTables()
-    {
-        MutableTablesState mutableTablesState = mutableTablesState();
-        return mutableTablesState.getDatabaseNames().stream()
-                        .collect(toMap(databaseName -> databaseName, databaseName -> mutableTablesState.getNameInDatabaseMap(databaseName)));
     }
 
     private List<String> splitQueries(String content)

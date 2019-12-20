@@ -20,7 +20,6 @@ import io.prestosql.tempto.BeforeTestWithContext;
 import io.prestosql.tempto.ProductTest;
 import io.prestosql.tempto.fulfillment.table.ImmutableTablesState;
 import io.prestosql.tempto.fulfillment.table.MutableTablesState;
-import io.prestosql.tempto.query.QueryExecutor;
 import org.testng.annotations.Test;
 
 import javax.inject.Named;
@@ -31,8 +30,7 @@ public class InjectionTest
         extends ProductTest
 {
     @Inject
-    @Named("psql")
-    private QueryExecutor queryExecutor;
+    MutableTablesState mutableTablesState;
 
     @BeforeTestWithContext
     @Inject
@@ -48,7 +46,7 @@ public class InjectionTest
     @Test(groups = "injection")
     public void testInjection()
     {
-        assertThat(queryExecutor).isNotNull();
+        assertThat(mutableTablesState).isNotNull();
     }
 
     @AfterTestWithContext

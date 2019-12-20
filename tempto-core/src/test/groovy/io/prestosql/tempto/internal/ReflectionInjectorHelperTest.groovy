@@ -21,9 +21,6 @@ import com.google.inject.Injector
 import com.google.inject.Key
 import com.google.inject.TypeLiteral
 import io.prestosql.tempto.Requirement
-import io.prestosql.tempto.context.State
-import io.prestosql.tempto.context.TestContext
-import io.prestosql.tempto.context.TestContextCloseCallback
 import io.prestosql.tempto.fulfillment.RequirementFulfiller
 import org.junit.Before
 import org.junit.Ignore
@@ -39,12 +36,12 @@ import static com.google.inject.name.Names.named
 class ReflectionInjectorHelperTest
 {
     private final ReflectionInjectorHelper reflectionInjectorHelper = new ReflectionInjectorHelper()
-    private TestContext testContext;
+    private Injector injector;
 
     @Before
     void setup()
     {
-        Injector injector = createInjector(new AbstractModule() {
+        injector = createInjector(new AbstractModule() {
             @Override
             protected void configure()
             {
@@ -56,47 +53,6 @@ class ReflectionInjectorHelperTest
                 bind(new TypeLiteral<List<String>>() {}).toInstance(strings)
             }
         })
-        testContext = new TestContext() {
-            @Override
-            <T> T getDependency(Class<T> dependencyClass) {
-                return null
-            }
-
-            @Override
-            <T> T getDependency(Class<T> dependencyClass, String dependencyName)
-            {
-                return null
-            }
-
-            @Override
-            <T> Optional<T> getOptionalDependency(Class<T> dependencyClass) {
-                return null
-            }
-
-            @Override
-            <T> Optional<T> getOptionalDependency(Class<T> dependencyClass, String dependencyName) {
-                return null
-            }
-
-            @Override
-            TestContext createChildContext(Iterable<State> states) {
-                return null
-            }
-
-            @Override
-            void registerCloseCallback(TestContextCloseCallback callback) {
-            }
-
-            @Override
-            void injectMembers(Object instance)
-            {
-                injector.injectMembers(instance)
-            }
-
-            @Override
-            void close() {
-            }
-        }
     }
 
     @Test
@@ -109,7 +65,7 @@ class ReflectionInjectorHelperTest
     {
         Method method = getClass().getMethod(methodName, parameterTypes)
 
-        method.invoke(this, reflectionInjectorHelper.getMethodArguments(testContext, method))
+        method.invoke(this, reflectionInjectorHelper.getMethodArguments(injector, method))
     }
 
     @Inject
