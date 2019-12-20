@@ -26,7 +26,6 @@ dependencies {
     compile libraries.slf4j_api
     compile libraries.junit
 
-    runtime tempto_logging_log4j
     runtime libraries.slf4j_log4j
     runtime libraries.postgresql_jdbc
     runtime libraries.presto_jdbc

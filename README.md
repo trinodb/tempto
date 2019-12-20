@@ -46,36 +46,6 @@ For example, typical configuration is:
 
 Tempto uses SLF4J for logging.
 
-### Log file per test
-
-If you are using log4j as your SLF4J backend we provide an appender which allows logging output of
-each test and suite fulfillment process to separate files. To use that configure LOG4J appender as below:
-
-```
-log4j.rootLogger=INFO, TEST_FRAMEWORK_LOGGING_APPENDER
-log4j.appender.TEST_FRAMEWORK_LOGGING_APPENDER=io.prestosql.tempto.logging.TestFrameworkLoggingAppender
-log4j.category.io.prestosql.tempto=DEBUG
-```
-
-With this appender for each test suite run new logs directory is created within /tmp/tempto_logs. Name of directory
-corresponds to time when Tempto is run (e.g. /tmp/tempto_logs/2015-04-22_15-23-09).
-Log messages coming from different tests are logged to separate files.
-
-Example contents of log directory:
-```
-io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesOrc_2019-02-07_15-23-09
-io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesParquetFile_2019-02-07_15-23-09
-io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesRcfile_2019-02-07_15-23-09
-io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectAllDatatypesTextFile_2019-02-07_15-23-09
-io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectBinaryColumnTextFile_2019-02-07_15-23-09
-io.prestosql.tests.hive.TestAllDatatypesFromHiveConnector.testSelectVarcharColumnForOrc_2019-02-07_15-23-09
-SUITE_2015-04-22_15-23-09
-```
-
-If you want to override root location of logs you can use io.prestosql.tempto.root.logs.dir
-```
-java -Dio.prestosql.tempto.root.logs.dir=/my/root/logs/dir ...
-```
 
 ### logging test id
 
