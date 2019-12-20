@@ -16,6 +16,7 @@ package io.prestosql.tempto.fulfillment.table.kafka;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
+import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
 import io.prestosql.tempto.fulfillment.table.TableDefinition;
 import io.prestosql.tempto.fulfillment.table.TableHandle;
@@ -57,6 +58,7 @@ public class KafkaTableManager
     private final String prestoKafkaCatalog;
     private final String zookeeperHost;
     private final Integer zookeeperPort;
+    private final Configuration configuration;
 
     @Inject
     public KafkaTableManager(
@@ -67,13 +69,15 @@ public class KafkaTableManager
             @Named("zookeeper.port") int zookeeperPort,
             @Named("presto_database_name") String prestoDatabaseName,
             @Named("presto_kafka_catalog") String prestoKafkaCatalog,
-            Injector injector)
+            Injector injector,
+            Configuration configuration)
     {
         this.databaseName = requireNonNull(databaseName, "databaseName is null");
         this.brokerHost = requireNonNull(brokerHost, "brokerHost is null");
         this.brokerPort = brokerPort;
         this.zookeeperHost = requireNonNull(zookeeperHost, "zookeeperHost is null");
         this.zookeeperPort = zookeeperPort;
+        this.configuration = requireNonNull(configuration, "configuration is null");
         requireNonNull(injector, "injector is null");
         requireNonNull(prestoDatabaseName, "prestoDatabaseName is null");
         this.prestoQueryExecutor = injector.getInstance(Key.get(QueryExecutor.class, Names.named(prestoDatabaseName)));
@@ -145,6 +149,13 @@ public class KafkaTableManager
         props.put("retries", 0);
         props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
+        for(String key : configuration.getSubconfiguration("broker").listKeys()) {
+            // broker.host and broker.port are already used to configure bootstrap.servers
+            if (key.equals("host") || key.equals("port")) {
+                continue;
+            }
+            props.put(key, configuration.getStringMandatory(key));
+        }
 
         Producer<byte[], byte[]> producer = new KafkaProducer<>(props);
 
