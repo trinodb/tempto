@@ -117,7 +117,7 @@ public class TestInitializationListener
     private final ReflectionInjectorHelper reflectionInjectorHelper = new ReflectionInjectorHelper();
 
     private final Configuration configuration;
-    private Optional<TestContextStack<GuiceTestContext>> suiteTestContextStack = Optional.empty();
+    private Optional<TestContextStack<TestContext>> suiteTestContextStack = Optional.empty();
 
     public TestInitializationListener()
     {
@@ -193,7 +193,7 @@ public class TestInitializationListener
 
         Module suiteModule = combine(combine(getSuiteModules()), bind(suiteLevelFulfillers), bind(testMethodLevelFulfillers));
         GuiceTestContext initSuiteTestContext = new GuiceTestContext(suiteModule);
-        TestContextStack<GuiceTestContext> suiteTextContextStack = new TestContextStack<>();
+        TestContextStack<TestContext> suiteTextContextStack = new TestContextStack<>();
         suiteTextContextStack.push(initSuiteTestContext);
 
         try {
@@ -236,8 +236,8 @@ public class TestInitializationListener
         if (!suiteTestContextStack.isPresent()) {
             throw new SuiteInitializationException("test suite not initialized");
         }
-        GuiceTestContext initTestContext = suiteTestContextStack.get().peek().createChildContext(emptyList(), getTestModules(testResult));
-        TestContextStack<GuiceTestContext> testContextStack = new TestContextStack<>();
+        GuiceTestContext initTestContext = ((GuiceTestContext) suiteTestContextStack.get().peek()).createChildContext(emptyList(), getTestModules(testResult));
+        TestContextStack<TestContext> testContextStack = new TestContextStack<>();
         testContextStack.push(initTestContext);
 
         try {
@@ -251,7 +251,7 @@ public class TestInitializationListener
 
         assertTestContextNotSet();
         pushAllTestContexts(testContextStack);
-        GuiceTestContext topTestContext = testContextStack.peek();
+        TestContext topTestContext = testContextStack.peek();
         topTestContext.injectMembers(testResult.getInstance());
 
         runBeforeWithContextMethods(testResult, topTestContext);
@@ -284,39 +284,39 @@ public class TestInitializationListener
 
         boolean runAfterSucceeded = false;
         try {
-            runAfterWithContextMethods(testResult, (GuiceTestContext) testContext());
+            runAfterWithContextMethods(testResult, testContext());
             runAfterSucceeded = true;
         }
         finally {
-            TestContextStack<GuiceTestContext> testContextStack = (TestContextStack) popAllTestContexts();
+            TestContextStack<TestContext> testContextStack = popAllTestContexts();
             doCleanup(testContextStack, testMethodLevelFulfillers, runAfterSucceeded ? testStatus : FAILURE);
             cleanLoggingMdc();
         }
     }
 
-    private void runBeforeWithContextMethods(ITestResult testResult, GuiceTestContext testContext)
+    private void runBeforeWithContextMethods(ITestResult testResult, TestContext testContext)
     {
         try {
             invokeMethodsAnnotatedWith(BeforeTestWithContext.class, testResult, testContext);
         }
         catch (RuntimeException e) {
-            TestContextStack<GuiceTestContext> testContextStack = (TestContextStack) popAllTestContexts();
+            TestContextStack<TestContext> testContextStack = popAllTestContexts();
             doCleanup(testContextStack, testMethodLevelFulfillers, FAILURE);
             throw e;
         }
     }
 
-    private void runAfterWithContextMethods(ITestResult testResult, GuiceTestContext testContext)
+    private void runAfterWithContextMethods(ITestResult testResult, TestContext testContext)
     {
         invokeMethodsAnnotatedWith(AfterTestWithContext.class, testResult, testContext);
     }
 
-    private void invokeMethodsAnnotatedWith(Class<? extends Annotation> annotationClass, ITestResult testCase, GuiceTestContext testContext)
+    private void invokeMethodsAnnotatedWith(Class<? extends Annotation> annotationClass, ITestResult testCase, TestContext testContext)
     {
         for (Method declaredMethod : testCase.getTestClass().getRealClass().getDeclaredMethods()) {
             if (declaredMethod.getAnnotation(annotationClass) != null) {
                 try {
-                    declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext.getInjector(), declaredMethod));
+                    declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext, declaredMethod));
                 }
                 catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException("error invoking methods annotated with " + annotationClass.getName(), e);
@@ -325,7 +325,7 @@ public class TestInitializationListener
         }
     }
 
-    private void doFulfillment(TestContextStack<GuiceTestContext> testContextStack,
+    private void doFulfillment(TestContextStack<TestContext> testContextStack,
             List<Class<? extends RequirementFulfiller>> fulfillerClasses,
             Set<Requirement> requirements)
     {
@@ -334,10 +334,10 @@ public class TestInitializationListener
         try {
             for (Class<? extends RequirementFulfiller> fulfillerClass : fulfillerClasses) {
                 LOGGER.debug("Fulfilling using {}", fulfillerClass);
-                GuiceTestContext testContext = testContextStack.peek();
+                TestContext testContext = testContextStack.peek();
                 runWithTestContext(testContext, () -> {
                     RequirementFulfiller fulfiller = testContext.getDependency(fulfillerClass);
-                    GuiceTestContext testContextWithNewStates = testContext.createChildContext(fulfiller.fulfill(requirements));
+                    TestContext testContextWithNewStates = testContext.createChildContext(fulfiller.fulfill(requirements));
                     successfulFulfillerClasses.add(fulfillerClass);
                     testContextStack.push(testContextWithNewStates);
                 });
@@ -350,7 +350,7 @@ public class TestInitializationListener
         }
     }
 
-    private void doCleanup(TestContextStack<GuiceTestContext> testContextStack, List<Class<? extends RequirementFulfiller>> fulfillerClasses, TestStatus testStatus)
+    private void doCleanup(TestContextStack<TestContext> testContextStack, List<Class<? extends RequirementFulfiller>> fulfillerClasses, TestStatus testStatus)
     {
         // one base test context plus one test context for each fulfiller
         checkState(testContextStack.size() == fulfillerClasses.size() + 1);
@@ -416,7 +416,7 @@ public class TestInitializationListener
         return ((RequirementsAwareTestNGMethod) testMethod).getRequirements();
     }
 
-    private void setSuiteTestContextStack(TestContextStack<GuiceTestContext> suiteTestContextStack)
+    private void setSuiteTestContextStack(TestContextStack<TestContext> suiteTestContextStack)
     {
         checkState(!this.suiteTestContextStack.isPresent(), "suite fulfillment result already set");
         this.suiteTestContextStack = Optional.of(suiteTestContextStack);

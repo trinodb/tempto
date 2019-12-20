@@ -75,6 +75,8 @@ public interface TestContext
      */
     void registerCloseCallback(TestContextCloseCallback callback);
 
+    void injectMembers(Object instance);
+
     /**
      * Closes this {@link TestContext} and all children {@link TestContext}s.
      */
