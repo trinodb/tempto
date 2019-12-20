@@ -14,6 +14,7 @@
 
 package io.prestosql.tempto.internal.context;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;
@@ -48,7 +50,7 @@ public class GuiceTestContext
     private final List<GuiceTestContext> children = synchronizedList(newArrayList());
     private final Module baseModule;
     private final Map<Key<State>, State> states;
-    private final Injector injector;
+    private final Supplier<Injector> injector;
     private final List<TestContextCloseCallback> closeCallbacks = newArrayList();
 
     public GuiceTestContext(Module... baseModules)
@@ -61,7 +63,7 @@ public class GuiceTestContext
         this.parent = parent;
         this.baseModule = baseModule;
         this.states = states;
-        this.injector = buildInjector();
+        this.injector = Suppliers.memoize(this::buildInjector);
     }
 
     @Override
@@ -78,7 +80,7 @@ public class GuiceTestContext
 
     private <T> T getDependency(Key key)
     {
-        return (T) injector.getInstance(key);
+        return (T) injector.get().getInstance(key);
     }
 
     @Override
@@ -95,7 +97,7 @@ public class GuiceTestContext
 
     public <T> Optional<T> getOptionalDependency(Key key)
     {
-        if (injector.getExistingBinding(key) != null) {
+        if (injector.get().getExistingBinding(key) != null) {
             return Optional.of(getDependency(key));
         }
         else {
@@ -143,7 +145,7 @@ public class GuiceTestContext
     @Override
     public void injectMembers(Object instance)
     {
-        injector.injectMembers(instance);
+        injector.get().injectMembers(instance);
     }
 
     private Key<State> getKeyFor(State state)
@@ -156,7 +158,7 @@ public class GuiceTestContext
         }
     }
 
-    private Injector buildInjector()
+    private synchronized Injector buildInjector()
     {
         return createInjector(combine(baseModule, statesModule(), testContextModule()));
     }
