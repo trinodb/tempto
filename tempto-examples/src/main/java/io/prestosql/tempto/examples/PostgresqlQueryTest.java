@@ -23,6 +23,7 @@ import io.prestosql.tempto.Requires;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.fulfillment.table.ImmutableTableRequirement;
 import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
+import io.prestosql.tempto.fulfillment.table.MutableTablesState;
 import io.prestosql.tempto.fulfillment.table.TableInstance;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
@@ -36,7 +37,6 @@ import java.util.List;
 import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
 import static io.prestosql.tempto.assertions.QueryAssert.assertThat;
 import static io.prestosql.tempto.fulfillment.table.ImmutableTablesState.immutableTablesState;
-import static io.prestosql.tempto.fulfillment.table.MutableTablesState.mutableTablesState;
 import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
 import static io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
 
@@ -46,6 +46,9 @@ public class PostgresqlQueryTest
     @Inject
     @Named("psql")
     private QueryExecutor queryExecutor;
+
+    @Inject
+    private MutableTablesState mutableTablesState;
 
     private static final RelationalTableDefinition TEST_TABLE_DEFINITION;
 
@@ -95,7 +98,7 @@ public class PostgresqlQueryTest
     @Requires(MutableTestJdbcTables.class)
     public void selectFromMutableTable()
     {
-        String tableName = mutableTablesState().get(tableHandle("test_table").withNoSchema()).getNameInDatabase();
+        String tableName = mutableTablesState.get(tableHandle("test_table").withNoSchema()).getNameInDatabase();
         assertThat(queryExecutor.executeQuery("select * from " + tableName)).containsOnly(row(1, "x"), row(2, "y"));
     }
 
@@ -103,7 +106,7 @@ public class PostgresqlQueryTest
     @Requires(MutableTestJdbcTables.class)
     public void selectFromTableInDifferentSchema()
     {
-        TableInstance tableInstance = mutableTablesState().get(tableHandle("test_table").inSchema("test_schema"));
+        TableInstance tableInstance = mutableTablesState.get(tableHandle("test_table").inSchema("test_schema"));
         assertThat(queryExecutor.executeQuery("select * from " + tableInstance.getNameInDatabase())).containsOnly(row(1, "x"), row(2, "y"));
     }
 }

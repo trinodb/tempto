@@ -62,14 +62,6 @@ public abstract class TableRequirementFulfiller<T extends TableRequirement>
         return ImmutableSet.of(createState(tables));
     }
 
-    @Override
-    public Set<Requirement> filter(Set<Requirement> requirements)
-    {
-        return requirements.stream()
-                .filter(requirement -> requirement.getClass().isAssignableFrom(requirementClass))
-                .collect(ImmutableSet.toImmutableSet());
-    }
-
     private String getDatabaseName(T requirement)
     {
         return getTableManager(requirement).getDatabaseName();

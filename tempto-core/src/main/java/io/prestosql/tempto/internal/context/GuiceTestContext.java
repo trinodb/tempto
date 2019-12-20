@@ -140,7 +140,6 @@ public class GuiceTestContext
         }
     }
 
-    @Override
     public void injectMembers(Object instance)
     {
         injector.injectMembers(instance);

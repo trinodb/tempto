@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.internal.fulfillment.ldap;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import io.prestosql.tempto.Requirement;
 import io.prestosql.tempto.context.State;
@@ -44,14 +43,6 @@ public class LdapObjectFulfiller<T extends LdapObjectRequirement>
                 .forEach(ldapObjectEntryManager::addLdapDefinitions);
 
         return newHashSet();
-    }
-
-    @Override
-    public Set<Requirement> filter(Set<Requirement> requirements)
-    {
-        return requirements.stream()
-                .filter(requirement -> requirement.getClass().isAssignableFrom(LdapObjectRequirement.class))
-                .collect(ImmutableSet.toImmutableSet());
     }
 
     @Override
