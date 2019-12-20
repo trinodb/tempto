@@ -140,6 +140,7 @@ public class GuiceTestContext
         }
     }
 
+    @Override
     public void injectMembers(Object instance)
     {
         injector.injectMembers(instance);
@@ -174,10 +175,5 @@ public class GuiceTestContext
         return (Binder binder) -> {
             binder.bind(TestContext.class).toInstance(this);
         };
-    }
-
-    public Injector getInjector()
-    {
-        return injector;
     }
 }

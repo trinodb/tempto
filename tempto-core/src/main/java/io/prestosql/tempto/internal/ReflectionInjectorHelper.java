@@ -16,6 +16,7 @@ package io.prestosql.tempto.internal;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import io.prestosql.tempto.context.TestContext;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -33,12 +34,12 @@ public class ReflectionInjectorHelper
 {
     private static InjectAnnotation INJECT_ANNOTATION = new InjectAnnotation();
 
-    public Object[] getMethodArguments(Injector injector, Method method)
+    public Object[] getMethodArguments(TestContext testContext, Method method)
     {
         if (isAnnotatedWithInject(method)) {
             Parameter[] parameters = method.getParameters();
             Object instance = createInstanceWithFields(parameters);
-            injector.injectMembers(instance);
+            testContext.injectMembers(instance);
             return readFieldValues(instance);
         }
         else {
