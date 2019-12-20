@@ -345,7 +345,12 @@ public class TestInitializationListener
         }
         catch (RuntimeException e) {
             LOGGER.debug("error during fulfillment", e);
-            doCleanup(testContextStack, successfulFulfillerClasses, FAILURE);
+            try {
+                doCleanup(testContextStack, successfulFulfillerClasses, FAILURE);
+            }
+            catch (RuntimeException cleanupException) {
+                e.addSuppressed(cleanupException);
+            }
             throw e;
         }
     }
