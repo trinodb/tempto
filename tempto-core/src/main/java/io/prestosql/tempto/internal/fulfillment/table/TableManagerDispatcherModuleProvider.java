@@ -105,9 +105,11 @@ public class TableManagerDispatcherModuleProvider
                             // we bind matching QueryExecutor to be visible by TableManager without @Named annotation
                             bind(QueryExecutor.class).to(Key.get(QueryExecutor.class, named(database)));
                         }
-                        databaseConfiguration.listKeys().forEach(key ->
-                                databaseConfiguration.getString(key).ifPresent(value ->
-                                        bind(Key.get(String.class, named(key))).toInstance(value)));
+                        databaseConfiguration.listKeys().forEach(key -> {
+                            bind(Key.get(Configuration.class, named(key))).toInstance(databaseConfiguration.getSubconfiguration(key));
+                            databaseConfiguration.getString(key).ifPresent(value ->
+                                    bind(Key.get(String.class, named(key))).toInstance(value));
+                        });
                         bind(Key.get(String.class, named("databaseName"))).toInstance(database);
                         bind(tableManagerKey).to(tableManagerClass);
                         expose(tableManagerKey);
