@@ -2,6 +2,7 @@ value:
   default: ${not.exisiting.key:-default_value}
   both: global
   global: global
+  "with.dot": 1
 
 resolve:
   both: ${value.both}

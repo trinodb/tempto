@@ -90,28 +90,14 @@ public class MapConfiguration
         }
 
         List<String> keyParts = KeyUtils.splitKey(key);
-        Iterator<String> keyPartsIterator = keyParts.iterator();
-
-        Map<String, Object> currentMap = map;
-        while (keyPartsIterator.hasNext()) {
-            String keyPart = keyPartsIterator.next();
-            Object currentObject = currentMap.get(keyPart);
-            if (currentObject == null) {
-                return empty();
-            }
-            if (!keyPartsIterator.hasNext()) {
-                return Optional.of(currentObject);
-            }
-            else {
-                if (currentObject instanceof Map) {
-                    currentMap = (Map<String, Object>) currentObject;
-                }
-                else {
-                    return empty();
-                }
+        for (int prefixLength = 1; prefixLength < keyParts.size(); prefixLength++) {
+            String prefix = joinKey(keyParts.subList(0, prefixLength));
+            if (map.get(prefix) instanceof Map) {
+                String remainingKey = joinKey(keyParts.subList(prefixLength, keyParts.size()));
+                return new MapConfiguration((Map<String, Object>) map.get(prefix)).getObject(remainingKey);
             }
         }
-        return empty();
+        return Optional.empty();
     }
 
     @Override
