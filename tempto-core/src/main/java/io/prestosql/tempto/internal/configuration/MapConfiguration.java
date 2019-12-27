@@ -122,6 +122,12 @@ public class MapConfiguration
         return acc;
     }
 
+    @Override
+    public Set<String> listPrefixes()
+    {
+        return map.keySet();
+    }
+
     private void listKeys(Map<String, Object> map, String currentPrefix, Set<String> acc)
     {
         for (Map.Entry<String, Object> entry : map.entrySet()) {

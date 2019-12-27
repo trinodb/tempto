@@ -166,20 +166,6 @@ class AbstractConfigurationTest
         e.message == 'could not find value for key a.b.c'
     }
 
-    def 'test list key prefixes'()
-    {
-        when:
-        configuration.listKeys() >> [
-                'a.b.c',
-                'a.b.d',
-                'b',
-                'b.a.c.d',
-        ]
-
-        then:
-        configuration.listKeyPrefixes(2) == ['a.b', 'b', 'b.a'] as Set
-    }
-
     private void setupGetObject(String key, Object value)
     {
         configuration.get(key) >> Optional.ofNullable(value)

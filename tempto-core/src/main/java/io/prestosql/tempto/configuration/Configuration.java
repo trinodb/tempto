@@ -68,23 +68,17 @@ public interface Configuration
     Set<String> listKeys();
 
     /**
-     * Lists configuration key prefixes of at most given length
+     * Lists configuration key prefixes of length=1
      * <p>
      * E.g. for configuration with keys:
      * a.b.c
      * a.d.e
      * b
      * <p>
-     * listKeyPrefixes(1) would return ["a", "b"]
+     * listPrefixes() would return ["a", "b"]
      * <p>
-     * and
-     * <p>
-     * listKeyPrefixes(2) would return ["a.b", "a.d", "b"]
-     *
-     * @param prefixesLength Max size of prefix to list
-     * @return List of prefixes
      */
-    Set<String> listKeyPrefixes(int prefixesLength);
+    Set<String> listPrefixes();
 
     /**
      * Returns configuration containing all keys starting with given prefix.

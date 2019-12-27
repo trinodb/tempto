@@ -45,6 +45,12 @@ public class EmptyConfiguration
     }
 
     @Override
+    public Set<String> listPrefixes()
+    {
+        return Collections.emptySet();
+    }
+
+    @Override
     public Configuration getSubconfiguration(String keyPrefix)
     {
         return emptyConfiguration();

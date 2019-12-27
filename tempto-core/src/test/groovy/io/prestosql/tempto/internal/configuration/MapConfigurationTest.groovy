@@ -71,10 +71,10 @@ class MapConfigurationTest
         subConfigurationA.getString('b.d') == Optional.of('ela')
         subConfigurationAB.getString('c') == Optional.of('ala')
         subConfigurationAB.getString('d') == Optional.of('ela')
-        subConfigurationA.listKeyPrefixes(1) == ['b', 'e', 'list1'] as Set
-        subConfigurationX.listKeyPrefixes(1) == ['y'] as Set
+        subConfigurationA.listPrefixes() == ['b', 'e', 'list1'] as Set
+        subConfigurationX.listPrefixes() == ['y'] as Set
         subConfigurationX.getSubconfiguration('y') == emptyConfiguration()
-        subConfigurationXY.listKeyPrefixes(1) == [] as Set
+        subConfigurationXY.listPrefixes() == [] as Set
         !subConfigurationA.isList('e')
         subConfigurationA.getString('e') == Optional.of('tola')
         subConfigurationA.getStringOrList('e') == ['tola']

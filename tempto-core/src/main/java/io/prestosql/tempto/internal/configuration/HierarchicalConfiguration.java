@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -65,6 +66,14 @@ public class HierarchicalConfiguration
         return configurations.stream()
                 .flatMap(configuration -> configuration.listKeys().stream())
                 .collect(toSet());
+    }
+
+    @Override
+    public Set<String> listPrefixes()
+    {
+        return configurations.stream()
+                .flatMap(configuration -> configuration.listPrefixes().stream())
+                .collect(toImmutableSet());
     }
 
     @Override

@@ -45,7 +45,7 @@ public class ConfigurationVariableResolver
 
     private Map<String, Object> resolveVariables(Configuration configuration, StrSubstitutor strSubstitutor)
     {
-        return configuration.listKeyPrefixes(1)
+        return configuration.listPrefixes()
                 .stream()
                 .map(prefix -> resolveConfigurationEntry(configuration, prefix, strSubstitutor))
                 .collect(Collectors.toMap(entry -> entry.getLeft(), entry -> entry.getRight()));

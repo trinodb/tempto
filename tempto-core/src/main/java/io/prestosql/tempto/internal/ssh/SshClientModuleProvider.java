@@ -52,7 +52,7 @@ public class SshClientModuleProvider
                 identity.ifPresent(identityValue -> sshClientFactory.addIdentity(identityValue));
                 bind(SshClientFactory.class).toInstance(sshClientFactory);
 
-                for (String role : rolesConfiguration.listKeyPrefixes(1)) {
+                for (String role : rolesConfiguration.listPrefixes()) {
                     Configuration roleConfiguration = rolesConfiguration.getSubconfiguration(role);
                     String host = roleConfiguration.getStringMandatory(HOST_KEY);
                     int port = roleConfiguration.getInt(PORT_KEY).orElse(22);

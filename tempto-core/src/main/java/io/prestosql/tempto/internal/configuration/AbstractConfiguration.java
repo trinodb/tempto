@@ -161,15 +161,6 @@ public abstract class AbstractConfiguration
                 .orElseGet(ImmutableList::of);
     }
 
-    @Override
-    public Set<String> listKeyPrefixes(int prefixesLength)
-    {
-        Set<String> keys = listKeys();
-        return keys.stream()
-                .map(key -> KeyUtils.getKeyPrefix(key, prefixesLength))
-                .collect(toSet());
-    }
-
     private <T> Optional<T> checkValueOfTypeOrParseIfNeeded(String key, Optional<Object> optionalValue, Class<T> expectedClass, Parser<T> parser)
     {
         if (optionalValue.isPresent()) {

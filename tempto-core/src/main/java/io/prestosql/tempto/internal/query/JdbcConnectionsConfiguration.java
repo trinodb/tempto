@@ -44,7 +44,7 @@ public class JdbcConnectionsConfiguration
 
     public Set<String> getDefinedJdcbConnectionNames()
     {
-        return configuration.getSubconfiguration(DATABASES_CONFIGURATION_SECTION).listKeyPrefixes(1).stream()
+        return configuration.getSubconfiguration(DATABASES_CONFIGURATION_SECTION).listPrefixes().stream()
                 .filter(databaseName -> getDatabaseConnectionSubConfiguration(databaseName).getString(JDBC_DRIVER_CLASS).isPresent())
                 .collect(toImmutableSet());
     }

@@ -141,9 +141,9 @@ public abstract class DelegateConfiguration
     }
 
     @Override
-    public Set<String> listKeyPrefixes(int prefixesLength)
+    public Set<String> listPrefixes()
     {
-        return getDelegate().listKeyPrefixes(prefixesLength);
+        return getDelegate().listPrefixes();
     }
 
     @Override
