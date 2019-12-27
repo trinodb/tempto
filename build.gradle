@@ -90,7 +90,6 @@ ext.libraries = [
         jsch                 : "com.jcraft:jsch:${versions.jsch}",
         mina_sshd            : "org.apache.sshd:apache-sshd:${versions.mina_sshd}",
         postgresql_jdbc      : "org.postgresql:postgresql:9.4-1201-jdbc41",
-        commons_cli          : "commons-cli:commons-cli:1.2",
         freemarker           : "org.freemarker:freemarker:${versions.freemarker}",
         joda                 : "joda-time:joda-time:2.4",
         objenesis            : "org.objenesis:objenesis:${versions.objenesis}",
