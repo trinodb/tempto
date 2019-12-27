@@ -53,31 +53,22 @@ public class KafkaTableManager
 {
     private final String databaseName;
     private final QueryExecutor prestoQueryExecutor;
-    private final String brokerHost;
-    private final Integer brokerPort;
+    private final Configuration brokerConfiguration;
+    private final Configuration zookeeperConfiguration;
     private final String prestoKafkaCatalog;
-    private final String zookeeperHost;
-    private final Integer zookeeperPort;
-    private final Configuration configuration;
 
     @Inject
     public KafkaTableManager(
             @Named("databaseName") String databaseName,
-            @Named("broker.host") String brokerHost,
-            @Named("broker.port") int brokerPort,
-            @Named("zookeeper.host") String zookeeperHost,
-            @Named("zookeeper.port") int zookeeperPort,
+            @Named("broker") Configuration brokerConfiguration,
+            @Named("zookeeper") Configuration zookeeperConfiguration,
             @Named("presto_database_name") String prestoDatabaseName,
             @Named("presto_kafka_catalog") String prestoKafkaCatalog,
-            Injector injector,
-            Configuration configuration)
+            Injector injector)
     {
         this.databaseName = requireNonNull(databaseName, "databaseName is null");
-        this.brokerHost = requireNonNull(brokerHost, "brokerHost is null");
-        this.brokerPort = brokerPort;
-        this.zookeeperHost = requireNonNull(zookeeperHost, "zookeeperHost is null");
-        this.zookeeperPort = zookeeperPort;
-        this.configuration = requireNonNull(configuration, "configuration is null");
+        this.brokerConfiguration = requireNonNull(brokerConfiguration, "brokerConfiguration is null");
+        this.zookeeperConfiguration = requireNonNull(zookeeperConfiguration, "zookeeperConfiguration is null");
         requireNonNull(injector, "injector is null");
         requireNonNull(prestoDatabaseName, "prestoDatabaseName is null");
         this.prestoQueryExecutor = injector.getInstance(Key.get(QueryExecutor.class, Names.named(prestoDatabaseName)));
@@ -144,17 +135,16 @@ public class KafkaTableManager
         // create instance for properties to access producer configs
         Properties props = new Properties();
 
-        props.put("bootstrap.servers", brokerHost + ":" + brokerPort);
+        props.put("bootstrap.servers", brokerConfiguration.getStringMandatory("host") + ":" + brokerConfiguration.getIntMandatory("port"));
         props.put("acks", "all");
         props.put("retries", 0);
         props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
-        for(String key : configuration.getSubconfiguration("broker").listKeys()) {
-            // broker.host and broker.port are already used to configure bootstrap.servers
+        for (String key : brokerConfiguration.listKeys()) {
             if (key.equals("host") || key.equals("port")) {
                 continue;
             }
-            props.put(key, configuration.getStringMandatory(key));
+            props.put(key, brokerConfiguration.getStringMandatory(key));
         }
 
         Producer<byte[], byte[]> producer = new KafkaProducer<>(props);
@@ -179,7 +169,7 @@ public class KafkaTableManager
     {
         int sessionTimeOutInMs = 15_000;
         int connectionTimeOutInMs = 10_000;
-        String zookeeperHosts = zookeeperHost + ":" + zookeeperPort;
+        String zookeeperHosts = zookeeperConfiguration.getStringMandatory("host") + ":" + zookeeperConfiguration.getIntMandatory("port");
 
         ZkClient zkClient = new ZkClient(zookeeperHosts,
                 sessionTimeOutInMs,
