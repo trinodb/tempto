@@ -12,7 +12,6 @@
  * limitations under the License.
  */
 include 'tempto-core'
-include 'tempto-logging-log4j'
 include 'tempto-examples'
 include 'expected-result-generator'
 include 'tempto-runner'
