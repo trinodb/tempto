@@ -39,7 +39,7 @@ public final class ReflectionHelper
         }
     }
 
-    private static <T> T instantiate(Class<? extends T> clazz)
+    public static <T> T instantiate(Class<? extends T> clazz)
     {
         try {
             return clazz.newInstance();

@@ -15,12 +15,10 @@ package io.prestosql.tempto.fulfillment.table;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import io.prestosql.tempto.TemptoPlugin;
 import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
 import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
-import io.prestosql.tempto.fulfillment.table.hive.tpcds.TpcdsTableDefinitions;
-import io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
-import io.prestosql.tempto.fulfillment.table.jdbc.tpch.JdbcTpchTableDefinitions;
 import io.prestosql.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionDescriptor;
 import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedHiveDataSource;
 import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedRelationalDataSource;
@@ -35,7 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.ServiceLoader;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -58,46 +57,6 @@ public class TableDefinitionsRepository
 
     private static final String DATASETS_PATH_PART = "datasets";
 
-    private final static List<TableDefinition> BUILTIN_TABLE_DEFINITIONS = ImmutableList.of(
-            TpcdsTableDefinitions.CALL_CENTER,
-            TpcdsTableDefinitions.CATALOG_PAGE,
-            TpcdsTableDefinitions.CATALOG_RETURNS,
-            TpcdsTableDefinitions.CATALOG_SALES,
-            TpcdsTableDefinitions.CUSTOMER,
-            TpcdsTableDefinitions.CUSTOMER_ADDRESS,
-            TpcdsTableDefinitions.CUSTOMER_DEMOGRAPHICS,
-            TpcdsTableDefinitions.DATE_DIM,
-            TpcdsTableDefinitions.HOUSEHOLD_DEMOGRAPHICS,
-            TpcdsTableDefinitions.INCOME_BAND,
-            TpcdsTableDefinitions.INVENTORY,
-            TpcdsTableDefinitions.ITEM,
-            TpcdsTableDefinitions.PROMOTION,
-            TpcdsTableDefinitions.REASON,
-            TpcdsTableDefinitions.SHIP_MODE,
-            TpcdsTableDefinitions.STORE,
-            TpcdsTableDefinitions.STORE_RETURNS,
-            TpcdsTableDefinitions.STORE_SALES,
-            TpcdsTableDefinitions.TIME_DIM,
-            TpcdsTableDefinitions.WAREHOUSE,
-            TpcdsTableDefinitions.WEB_PAGE,
-            TpcdsTableDefinitions.WEB_RETURNS,
-            TpcdsTableDefinitions.WEB_SALES,
-            TpcdsTableDefinitions.WEB_SITE,
-
-            TpchTableDefinitions.CUSTOMER,
-            TpchTableDefinitions.LINE_ITEM,
-            TpchTableDefinitions.NATION,
-            TpchTableDefinitions.ORDERS,
-            TpchTableDefinitions.PART,
-            TpchTableDefinitions.PART_SUPPLIER,
-            TpchTableDefinitions.REGION,
-            TpchTableDefinitions.SUPPLIER,
-
-            JdbcTpchTableDefinitions.NATION);
-
-    // TODO find better way to pass extensions
-    public static Supplier<List<TableDefinition>> ADDITIONAL_TABLE_DEFINITIONS = () -> ImmutableList.of();
-
     private static TableDefinitionsRepository TABLE_DEFINITIONS_REPOSITORY;
 
     public static TableDefinition tableDefinition(TableHandle tableHandle)
@@ -108,12 +67,13 @@ public class TableDefinitionsRepository
     public static TableDefinitionsRepository tableDefinitionsRepository()
     {
         if (TABLE_DEFINITIONS_REPOSITORY == null) {
-            TABLE_DEFINITIONS_REPOSITORY = new TableDefinitionsRepository(ImmutableList.<TableDefinition>builder()
-                    .addAll(BUILTIN_TABLE_DEFINITIONS)
-                    .addAll(ADDITIONAL_TABLE_DEFINITIONS.get())
-                    // TODO: since TestNG has no listener that can be run before tests factory, this has to be initialized here
-                    .addAll(getAllConventionBasedTableDefinitions())
-                    .build());
+            List<TemptoPlugin> plugins = ImmutableList.copyOf(ServiceLoader.load(TemptoPlugin.class).iterator());
+            List<TableDefinition> tables = Stream.concat(
+                    plugins.stream()
+                    .flatMap(plugin -> plugin.getTables().stream()),
+                    getAllConventionBasedTableDefinitions().stream())
+                    .collect(toImmutableList());
+            TABLE_DEFINITIONS_REPOSITORY = new TableDefinitionsRepository(tables);
         }
         return TABLE_DEFINITIONS_REPOSITORY;
     }

@@ -16,14 +16,6 @@ package io.prestosql.tempto.runner;
 
 import com.google.common.base.Joiner;
 import io.prestosql.tempto.dns.TemptoNameServiceDescriptor;
-import io.prestosql.tempto.fulfillment.RequirementFulfiller;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
-import io.prestosql.tempto.initialization.TestMethodModuleProvider;
-import io.prestosql.tempto.internal.fulfillment.table.TableManagerDispatcherModuleProvider;
-import io.prestosql.tempto.internal.initialization.TestInitializationListener;
 import io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +26,6 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY;
@@ -57,25 +48,11 @@ public class TemptoRunner
     private final TemptoRunnerCommandLineParser parser;
     private final TemptoRunnerOptions options;
 
-    public static void runTempto(
-            TemptoRunnerCommandLineParser parser,
-            String[] args,
-            Supplier<List<Class<? extends TestMethodModuleProvider>>> additionalTestModules,
-            Supplier<List<Class<? extends SuiteModuleProvider>>> additionalSuiteModules,
-            Supplier<List<Class<? extends RequirementFulfiller>>> additionalFulfillersSupplier,
-            Supplier<List<Class<? extends TableManager>>> additionalTableManagers,
-            Supplier<List<TableDefinition>> additionalTableDefinitions)
+    public static void runTempto(TemptoRunnerCommandLineParser parser, String[] args)
     {
         TemptoRunnerOptions options = parser.parseCommandLine(args);
         try {
-            TemptoRunner.runTempto(
-                    parser,
-                    options,
-                    additionalTestModules,
-                    additionalSuiteModules,
-                    additionalFulfillersSupplier,
-                    additionalTableManagers,
-                    additionalTableDefinitions);
+            TemptoRunner.runTempto(parser, options);
         }
         catch (TemptoRunnerCommandLineParser.ParsingException e) {
             System.err.println("Could not parse command line. " + e.getMessage());
@@ -85,20 +62,8 @@ public class TemptoRunner
         }
     }
 
-    public static void runTempto(
-            TemptoRunnerCommandLineParser parser,
-            TemptoRunnerOptions options,
-            Supplier<List<Class<? extends TestMethodModuleProvider>>> additionalTestModules,
-            Supplier<List<Class<? extends SuiteModuleProvider>>> additionalSuiteModules,
-            Supplier<List<Class<? extends RequirementFulfiller>>> additionalFulfillersSupplier,
-            Supplier<List<Class<? extends TableManager>>> additionalTableManagers,
-            Supplier<List<TableDefinition>> additionalTableDefinitions)
+    public static void runTempto(TemptoRunnerCommandLineParser parser, TemptoRunnerOptions options)
     {
-        TestInitializationListener.ADDITIONAL_TEST_MODULES = additionalTestModules;
-        TestInitializationListener.ADDITIONAL_SUITE_MODULES = additionalSuiteModules;
-        TestInitializationListener.ADDITIONAL_FULFILLERS_SUPPLIER = additionalFulfillersSupplier;
-        TableDefinitionsRepository.ADDITIONAL_TABLE_DEFINITIONS = additionalTableDefinitions;
-        TableManagerDispatcherModuleProvider.ADDITIONAL_TABLE_MANAGERS = additionalTableManagers;
         new TemptoRunner(parser, options).run();
     }
 

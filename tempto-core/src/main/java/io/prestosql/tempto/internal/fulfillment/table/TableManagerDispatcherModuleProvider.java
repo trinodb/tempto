@@ -21,22 +21,19 @@ import com.google.inject.Module;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import io.prestosql.tempto.TemptoPlugin;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.fulfillment.table.ReadOnlyTableManager;
 import io.prestosql.tempto.fulfillment.table.TableManager;
 import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
-import io.prestosql.tempto.internal.fulfillment.table.cassandra.CassandraTableManager;
-import io.prestosql.tempto.internal.fulfillment.table.hive.HiveTableManager;
-import io.prestosql.tempto.internal.fulfillment.table.jdbc.JdbcTableManager;
 import io.prestosql.tempto.internal.query.JdbcConnectionsConfiguration;
 import io.prestosql.tempto.query.QueryExecutor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.inject.multibindings.MapBinder.newMapBinder;
@@ -47,15 +44,6 @@ import static java.util.stream.Collectors.toMap;
 public class TableManagerDispatcherModuleProvider
         implements SuiteModuleProvider
 {
-    private final static List<Class<? extends TableManager>> BUILTIN_TABLE_MANAGERS = ImmutableList.of(
-            CassandraTableManager.class,
-            HiveTableManager.class,
-            JdbcTableManager.class,
-            ReadOnlyTableManager.class);
-
-    // TODO find better way to pass extensions
-    public static Supplier<List<Class<? extends TableManager>>> ADDITIONAL_TABLE_MANAGERS = () -> ImmutableList.of();
-
     public Module getModule(Configuration configuration)
     {
         return new TableManagerModule(configuration);
@@ -123,9 +111,9 @@ public class TableManagerDispatcherModuleProvider
 
         private Map<String, ? extends Class<? extends TableManager>> getTableManagerClassesByType()
         {
-            return Stream.concat(
-                    BUILTIN_TABLE_MANAGERS.stream(),
-                    ADDITIONAL_TABLE_MANAGERS.get().stream())
+            List<TemptoPlugin> plugins = ImmutableList.copyOf(ServiceLoader.load(TemptoPlugin.class).iterator());
+            return plugins.stream()
+                    .flatMap(plugin -> plugin.getTableManagers().stream())
                     .collect(toMap(
                             tableManagerClass -> tableManagerClass.getAnnotation(TableManager.Descriptor.class).type().toLowerCase(),
                             tableManagerClass -> tableManagerClass));
