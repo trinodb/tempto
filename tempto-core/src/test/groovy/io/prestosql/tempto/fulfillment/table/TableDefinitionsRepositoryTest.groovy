@@ -13,7 +13,6 @@
  */
 package io.prestosql.tempto.fulfillment.table
 
-import com.google.common.collect.ImmutableList;
 import spock.lang.Specification
 
 import static TableHandle.tableHandle;
@@ -33,13 +32,8 @@ class TableDefinitionsRepositoryTest
         def sampleInSchema = Mock(TableDefinition)
         sampleInSchema.tableHandle >> tableHandle("sample").inSchema('schema')
 
-        def repository = new TableDefinitionsRepository()
-
         when:
-        repository.register(tpchCustomer)
-        repository.register(tpcdsCustomer)
-        repository.register(noSchemaSample)
-        repository.register(sampleInSchema)
+        def repository = new TableDefinitionsRepository([tpchCustomer, tpcdsCustomer, noSchemaSample, sampleInSchema])
 
         then:
         repository.get(tableHandle("noSchemaSample")) == noSchemaSample
