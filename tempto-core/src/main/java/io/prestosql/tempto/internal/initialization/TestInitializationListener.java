@@ -23,6 +23,7 @@ import com.google.inject.Singleton;
 import io.prestosql.tempto.AfterTestWithContext;
 import io.prestosql.tempto.BeforeTestWithContext;
 import io.prestosql.tempto.Requirement;
+import io.prestosql.tempto.TemptoPlugin;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.context.TestContext;
 import io.prestosql.tempto.fulfillment.RequirementFulfiller;
@@ -33,20 +34,11 @@ import io.prestosql.tempto.fulfillment.table.TableManager;
 import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
 import io.prestosql.tempto.initialization.SuiteModuleProvider;
 import io.prestosql.tempto.initialization.TestMethodModuleProvider;
+import io.prestosql.tempto.internal.ReflectionHelper;
 import io.prestosql.tempto.internal.ReflectionInjectorHelper;
 import io.prestosql.tempto.internal.TestSpecificRequirementsResolver;
-import io.prestosql.tempto.internal.configuration.TestConfigurationModuleProvider;
 import io.prestosql.tempto.internal.context.GuiceTestContext;
 import io.prestosql.tempto.internal.context.TestContextStack;
-import io.prestosql.tempto.internal.fulfillment.command.SuiteCommandFulfiller;
-import io.prestosql.tempto.internal.fulfillment.command.TestCommandFulfiller;
-import io.prestosql.tempto.internal.fulfillment.table.ImmutableTablesFulfiller;
-import io.prestosql.tempto.internal.fulfillment.table.MutableTablesFulfiller;
-import io.prestosql.tempto.internal.fulfillment.table.TableManagerDispatcherModuleProvider;
-import io.prestosql.tempto.internal.hadoop.hdfs.HdfsModuleProvider;
-import io.prestosql.tempto.internal.initialization.modules.TestMethodInfoModuleProvider;
-import io.prestosql.tempto.internal.query.QueryExecutorModuleProvider;
-import io.prestosql.tempto.internal.ssh.SshClientModuleProvider;
 import org.slf4j.Logger;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -58,10 +50,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static com.beust.jcommander.internal.Lists.newArrayList;
 import static com.google.common.base.Preconditions.checkState;
@@ -76,11 +68,9 @@ import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testConte
 import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
 import static io.prestosql.tempto.fulfillment.TestStatus.FAILURE;
 import static io.prestosql.tempto.fulfillment.TestStatus.SUCCESS;
-import static io.prestosql.tempto.internal.ReflectionHelper.instantiate;
 import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
 import static io.prestosql.tempto.internal.logging.LoggingMdcHelper.cleanLoggingMdc;
 import static io.prestosql.tempto.internal.logging.LoggingMdcHelper.setupLoggingMdcForTest;
-import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -88,27 +78,6 @@ public class TestInitializationListener
         implements ITestListener
 {
     private static final Logger LOGGER = getLogger(TestInitializationListener.class);
-
-    private final static List<Class<? extends RequirementFulfiller>> BUILTIN_FULFILLERS = ImmutableList.of(
-            ImmutableTablesFulfiller.class,
-            SuiteCommandFulfiller.class,
-            MutableTablesFulfiller.class,
-            TestCommandFulfiller.class);
-
-    private final static List<Class<? extends SuiteModuleProvider>> BUILTIN_SUITE_MODULES = ImmutableList.of(
-            HdfsModuleProvider.class,
-            QueryExecutorModuleProvider.class,
-            SshClientModuleProvider.class,
-            TableManagerDispatcherModuleProvider.class,
-            TestConfigurationModuleProvider.class);
-
-    private final static List<Class<? extends TestMethodModuleProvider>> BUILTIN_TEST_MODULES = ImmutableList.of(
-            TestMethodInfoModuleProvider.class);
-
-    // TODO find better way to pass extensions
-    public static Supplier<List<Class<? extends RequirementFulfiller>>> ADDITIONAL_FULFILLERS_SUPPLIER = ImmutableList::of;
-    public static Supplier<List<Class<? extends SuiteModuleProvider>>> ADDITIONAL_SUITE_MODULES = ImmutableList::of;
-    public static Supplier<List<Class<? extends TestMethodModuleProvider>>> ADDITIONAL_TEST_MODULES = ImmutableList::of;
 
     private final List<? extends SuiteModuleProvider> suiteModuleProviders;
     private final List<? extends TestMethodModuleProvider> testMethodModuleProviders;
@@ -121,58 +90,32 @@ public class TestInitializationListener
 
     public TestInitializationListener()
     {
+        this(ImmutableList.copyOf(ServiceLoader.load(TemptoPlugin.class).iterator()));
+    }
+
+    private TestInitializationListener(List<TemptoPlugin> plugins)
+    {
         this(
-                getSuiteModuleProviders(),
-                getTestMethodModuleProviders(),
-                getSuiteLevelFulfillers(),
-                getTestMethodLevelFulfillers(),
+                plugins.stream()
+                        .flatMap(plugin -> plugin.getSuiteModules().stream())
+                        .map(ReflectionHelper::instantiate)
+                        .collect(toImmutableList()),
+                plugins.stream()
+                        .flatMap(plugin -> plugin.getTestModules().stream())
+                        .map(ReflectionHelper::instantiate)
+                        .collect(toImmutableList()),
+                plugins.stream()
+                        .flatMap(plugin -> plugin.getFulfillers().stream())
+                        .filter(clazz -> clazz.isAnnotationPresent(SuiteLevelFulfiller.class))
+                        .collect(toImmutableList()),
+                plugins.stream()
+                        .flatMap(plugin -> plugin.getFulfillers().stream())
+                        .filter(clazz -> clazz.isAnnotationPresent(TestLevelFulfiller.class))
+                        .collect(toImmutableList()),
                 testConfiguration());
     }
 
-    private static List<Class<? extends RequirementFulfiller>> getTestMethodLevelFulfillers()
-    {
-        return collectFulfillers(TestLevelFulfiller.class);
-    }
-
-    private static List<Class<? extends RequirementFulfiller>> getSuiteLevelFulfillers()
-    {
-        return collectFulfillers(SuiteLevelFulfiller.class);
-    }
-
-    private static List<Class<? extends RequirementFulfiller>> collectFulfillers(Class<? extends Annotation> filterAnnotation)
-    {
-        return ImmutableList.<Class<? extends RequirementFulfiller>>builder()
-                .addAll(filter(BUILTIN_FULFILLERS, filterAnnotation))
-                .addAll(filter(ADDITIONAL_FULFILLERS_SUPPLIER.get(), filterAnnotation))
-                .build();
-    }
-
-    private static List<Class<? extends RequirementFulfiller>> filter(List<Class<? extends RequirementFulfiller>> classes, Class<? extends Annotation> filterAnnotation)
-    {
-        return classes.stream()
-                .filter(clazz -> stream(clazz.getAnnotations())
-                        .map(Annotation::annotationType)
-                        .anyMatch(filterAnnotation::equals))
-                .collect(toImmutableList());
-    }
-
-    public static List<? extends SuiteModuleProvider> getSuiteModuleProviders()
-    {
-        return instantiate(ImmutableList.<Class<? extends SuiteModuleProvider>>builder()
-                .addAll(BUILTIN_SUITE_MODULES)
-                .addAll(ADDITIONAL_SUITE_MODULES.get())
-                .build());
-    }
-
-    public static List<? extends TestMethodModuleProvider> getTestMethodModuleProviders()
-    {
-        return instantiate(ImmutableList.<Class<? extends TestMethodModuleProvider>>builder()
-                .addAll(BUILTIN_TEST_MODULES)
-                .addAll(ADDITIONAL_TEST_MODULES.get())
-                .build());
-    }
-
-    public TestInitializationListener(
+    TestInitializationListener(
             List<? extends SuiteModuleProvider> suiteModuleProviders,
             List<? extends TestMethodModuleProvider> testMethodModuleProviders,
             List<Class<? extends RequirementFulfiller>> suiteLevelFulfillers,

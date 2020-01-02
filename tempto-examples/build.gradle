@@ -40,6 +40,7 @@ jar {
 
 shadowJar {
     version = ''
+    mergeServiceFiles()
 }
 
 build.dependsOn.add([shadowJar])
