@@ -20,6 +20,7 @@ import io.prestosql.tempto.context.State
 import io.prestosql.tempto.context.TestContext
 import io.prestosql.tempto.context.TestContextCloseCallback
 import io.prestosql.tempto.fulfillment.RequirementFulfiller
+import io.prestosql.tempto.fulfillment.RequirementFulfiller.TestLevelFulfiller
 import io.prestosql.tempto.fulfillment.TestStatus
 import io.prestosql.tempto.internal.TestSpecificRequirementsResolver
 import org.testng.*
