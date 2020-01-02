@@ -14,7 +14,7 @@
 package io.prestosql.tempto.fulfillment.table;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.MapMaker;
+import com.google.common.collect.ImmutableMap;
 import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
 import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
 import io.prestosql.tempto.fulfillment.table.hive.tpcds.TpcdsTableDefinitions;
@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -110,31 +111,24 @@ public class TableDefinitionsRepository
             TABLE_DEFINITIONS_REPOSITORY = new TableDefinitionsRepository(ImmutableList.<TableDefinition>builder()
                     .addAll(BUILTIN_TABLE_DEFINITIONS)
                     .addAll(ADDITIONAL_TABLE_DEFINITIONS.get())
+                    // TODO: since TestNG has no listener that can be run before tests factory, this has to be initialized here
+                    .addAll(getAllConventionBasedTableDefinitions())
                     .build());
-            // TODO: since TestNG has no listener that can be run before tests factory, this has to be initialized here
-            TABLE_DEFINITIONS_REPOSITORY.getAllConventionBasedTableDefinitions().stream()
-                    .forEach(TABLE_DEFINITIONS_REPOSITORY::register);
         }
         return TABLE_DEFINITIONS_REPOSITORY;
     }
 
-    private final Map<TableDefinitionRepositoryKey, TableDefinition> tableDefinitions = new MapMaker().makeMap();
+    private final Map<TableDefinitionRepositoryKey, TableDefinition> tableDefinitions;
 
-    public TableDefinitionsRepository()
+    private TableDefinitionsRepository(Collection<TableDefinition> tableDefinitions)
     {
-    }
-
-    public TableDefinitionsRepository(Collection<TableDefinition> tableDefinitions)
-    {
-        tableDefinitions.stream().forEach(this::register);
-    }
-
-    public <T extends TableDefinition> T register(T tableDefinition)
-    {
-        TableDefinitionRepositoryKey repositoryKey = asRepositoryKey(tableDefinition.getTableHandle());
-        checkState(!tableDefinitions.containsKey(repositoryKey), "duplicated table definition: %s", repositoryKey);
-        tableDefinitions.put(repositoryKey, tableDefinition);
-        return tableDefinition;
+        Map<TableDefinitionRepositoryKey, TableDefinition> definitions = new HashMap<>();
+        for (TableDefinition tableDefinition : tableDefinitions) {
+            TableDefinitionRepositoryKey repositoryKey = asRepositoryKey(tableDefinition.getTableHandle());
+            checkState(!definitions.containsKey(repositoryKey), "duplicated table definition: %s", repositoryKey);
+            definitions.put(repositoryKey, tableDefinition);
+        }
+        this.tableDefinitions = ImmutableMap.copyOf(definitions);
     }
 
     public TableDefinition get(TableHandle tableHandle)
