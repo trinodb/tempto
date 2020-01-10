@@ -117,10 +117,6 @@ ext.nexusUsername = 'setup_nexusUsername_in_gradle.properties'
 ext.nexusPassword = 'setup_nexusPassword_in_gradle.properties'
 ext.skipSigning = false
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-}
-
 subprojects {
     // project information
     version = tempto_version
