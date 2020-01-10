@@ -14,6 +14,7 @@
 
 package io.prestosql.tempto.internal.configuration;
 
+import com.google.common.collect.ImmutableMap;
 import io.prestosql.tempto.configuration.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
 
 public class YamlConfiguration
         extends DelegateConfiguration
@@ -43,8 +45,13 @@ public class YamlConfiguration
 
     private MapConfiguration loadConfiguration(String yamlString)
     {
+        requireNonNull(yamlString, "yamlString is null");
         Yaml yaml = new Yaml();
         Object loadedYaml = yaml.load(yamlString);
+        if (loadedYaml == null) {
+            // Empty input, or only comments
+            return new MapConfiguration(ImmutableMap.of());
+        }
         checkArgument(loadedYaml instanceof Map, "yaml does not evaluate to map object; got %s", loadedYaml.getClass().getName());
         Map<String, Object> loadedYamlMap = (Map<String, Object>) loadedYaml;
         return new MapConfiguration(loadedYamlMap);

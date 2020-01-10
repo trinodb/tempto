@@ -46,4 +46,24 @@ list:
         configuration.getStringList('list') == ['element1', 'element2']
         configuration.getStringOrList('list') == ['element1', 'element2']
     }
+
+    def createEmpty()
+    {
+        setup:
+        def configuration = new YamlConfiguration("");
+
+        expect:
+        configuration.listKeys() == [] as Set
+        configuration.getString('missing') == Optional.empty()
+    }
+
+    def createFromAllComments()
+    {
+        setup:
+        def configuration = new YamlConfiguration("# comment");
+
+        expect:
+        configuration.listKeys() == [] as Set
+        configuration.getString('missing') == Optional.empty()
+    }
 }
