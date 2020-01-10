@@ -15,6 +15,7 @@
 package io.prestosql.tempto.assertions;
 
 import org.assertj.core.api.AbstractListAssert;
+import org.assertj.core.api.ObjectAssert;
 
 import java.util.List;
 
@@ -24,5 +25,5 @@ import java.util.List;
  */
 public interface ColumnValuesAssert<T>
 {
-    void assertColumnValues(AbstractListAssert<?, ? extends List<? extends T>, T> columnAssert);
+    void assertColumnValues(AbstractListAssert<?, ? extends List<? extends T>, T, ObjectAssert<T>> columnAssert);
 }
