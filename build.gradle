@@ -157,6 +157,7 @@ configure(subprojects - expected_result_generator - tempto_examples) {
 
     signing {
         required { isReleaseVersion && !skipSigning }
+        useGpgCmd()
         sign configurations.archives
     }
 
