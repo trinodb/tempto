@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.internal.initialization;
 
-import com.beust.jcommander.internal.Sets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.inject.Binder;
@@ -48,6 +47,8 @@ import org.testng.ITestResult;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
@@ -55,7 +56,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
-import static com.beust.jcommander.internal.Lists.newArrayList;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Lists.reverse;
@@ -272,7 +272,7 @@ public class TestInitializationListener
             List<Class<? extends RequirementFulfiller>> fulfillerClasses,
             Set<Requirement> requirements)
     {
-        List<Class<? extends RequirementFulfiller>> successfulFulfillerClasses = newArrayList();
+        List<Class<? extends RequirementFulfiller>> successfulFulfillerClasses = new ArrayList<>();
 
         try {
             for (Class<? extends RequirementFulfiller> fulfillerClass : fulfillerClasses) {
@@ -349,7 +349,7 @@ public class TestInitializationListener
     {
         // we cannot assume that context contains RequirementsAwareTestNGMethod instances here
         // as interceptor is for some reason called after onStart() which uses this method.
-        Set<Requirement> allTestsRequirements = Sets.newHashSet();
+        Set<Requirement> allTestsRequirements = new HashSet<>();
         for (ITestNGMethod iTestNGMethod : context.getAllTestMethods()) {
             Set<Set<Requirement>> requirementsSets = new TestSpecificRequirementsResolver(configuration).resolve(iTestNGMethod);
             for (Set<Requirement> requirementsSet : requirementsSets) {
