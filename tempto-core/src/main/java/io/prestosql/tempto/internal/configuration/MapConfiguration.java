@@ -14,10 +14,10 @@
 
 package io.prestosql.tempto.internal.configuration;
 
-import com.beust.jcommander.internal.Sets;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.configuration.KeyUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -101,7 +101,7 @@ public class MapConfiguration
     @Override
     public Set<String> listKeys()
     {
-        Set<String> acc = Sets.newHashSet();
+        Set<String> acc = new HashSet<>();
         listKeys(map, null, acc);
         return acc;
     }
