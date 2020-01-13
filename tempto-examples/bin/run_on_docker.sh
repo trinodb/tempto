@@ -41,7 +41,7 @@ function check_presto() {
 function run_product_tests() {
   CONFIG_FILE=${CONFIG_FILE:-tempto-configuration.yaml}
   ${DOCKER_COMPOSE} run --rm -T runner \
-    java -jar /workspace/build/libs/tempto-examples-all.jar \
+    java -jar /workspace/target/tempto-examples-${TEMPTO_VERSION}-executable.jar \
     --config ${CONFIG_FILE},/workspace/docker/tempto-configuration-docker-local.yaml \
     $*
 }
@@ -77,6 +77,8 @@ function termination_handler(){
 
 SCRIPT_DIR=$(dirname $(absolutepath "$0"))
 DOCKER_COMPOSE="docker-compose -f ${SCRIPT_DIR}/../docker/docker-compose.yml"
+
+source "${SCRIPT_DIR}/../target/classes/tempto.env"
 
 # check docker and docker compose installation
 docker-compose version
