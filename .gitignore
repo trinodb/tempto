@@ -1,29 +1,21 @@
-# Build files
-.gradle/
-gradle.properties
-build/
-
-# Ignore IntelliJ files
-.idea/
-out/
 *.iml
-*.eml
-
-*.pyc
-
-# vi temp files
-[._]*.s[a-w][a-z]
-[._]s[a-w][a-z]
-
-# tests logging output
-tempto_logs
-
-# test reports
+*.ipr
+*.iws
+target/
+pom.xml.versionsBackup
+test-output/
 test-reports/
-
-# python packaging artifacts
-dist/
-
-# etc
-*.log
-*.orig
+tempto_logs/
+.idea
+.DS_Store
+.classpath
+.settings
+.project
+temp-testng-customsuite.xml
+test-output
+.externalToolBuilders
+*~
+benchmark_outputs
+*.pyc
+*.class
+.checkstyle
