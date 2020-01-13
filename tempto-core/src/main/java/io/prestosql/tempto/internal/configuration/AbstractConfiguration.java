@@ -17,16 +17,13 @@ package io.prestosql.tempto.internal.configuration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.configuration.KeyUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toSet;
 
 public abstract class AbstractConfiguration
         implements Configuration

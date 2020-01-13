@@ -18,7 +18,6 @@ import com.beust.jcommander.internal.Sets;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.configuration.KeyUtils;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,7 +25,6 @@ import java.util.Set;
 
 import static io.prestosql.tempto.configuration.KeyUtils.joinKey;
 import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration;
-import static java.util.Optional.empty;
 
 /**
  * <p>

@@ -15,7 +15,6 @@
 package io.prestosql.tempto.internal;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import io.prestosql.tempto.context.TestContext;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
