@@ -20,9 +20,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Optional;
-
-import static java.nio.charset.Charset.defaultCharset;
 
 /**
  * HDFS client.
@@ -58,18 +57,18 @@ public interface HdfsClient
 
     void loadFile(String path, OutputStream outputStream);
 
+    default String loadFile(String path, Charset charset)
+    {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        loadFile(path, output);
+        return new String(output.toByteArray(), charset);
+    }
+
     void setXAttr(String path, String key, String value);
 
     void removeXAttr(String path, String key);
 
     Optional<String> getXAttr(String path, String key);
-
-    default String loadFile(String path)
-    {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        loadFile(path, output);
-        return new String(output.toByteArray(), defaultCharset());
-    }
 
     /**
      * @param path File to be examined
