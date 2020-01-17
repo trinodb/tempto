@@ -14,6 +14,7 @@
 
 package io.prestosql.tempto.fulfillment.table.hive.tpch;
 
+import io.airlift.tpch.TpchEntity;
 import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
 import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
 import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
@@ -50,8 +51,7 @@ public class TpchDataSource
     @Override
     public Collection<RepeatableContentProducer> data()
     {
-        @SuppressWarnings("unchecked")
-        Iterable<? extends io.airlift.tpch.TpchEntity> tableDataGenerator = table.getTpchTableEntity().createGenerator(scaleFactor, 1, 1);
+        Iterable<? extends TpchEntity> tableDataGenerator = table.entity().createGenerator(scaleFactor, 1, 1);
         return singleton(() -> new TpchEntityByteSource<>(tableDataGenerator).openStream());
     }
 

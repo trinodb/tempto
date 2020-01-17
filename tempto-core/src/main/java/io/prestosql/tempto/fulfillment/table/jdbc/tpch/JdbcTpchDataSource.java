@@ -16,7 +16,7 @@ package io.prestosql.tempto.fulfillment.table.jdbc.tpch;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import io.airlift.tpch.TpchEntity;
-import io.airlift.tpch.TpchTable;
+import io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTable;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.prestosql.tempto.internal.query.QueryRowMapper;
 
@@ -24,9 +24,9 @@ import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.collect.Streams.stream;
 import static java.util.Objects.requireNonNull;
 
 public class JdbcTpchDataSource
@@ -50,9 +50,7 @@ public class JdbcTpchDataSource
     @Override
     public Iterator<List<Object>> getDataRows()
     {
-        @SuppressWarnings("unchecked")
-        Iterable<? extends TpchEntity> tableDataGenerator = table.createGenerator(scaleFactor, 1, 1);
-        return StreamSupport.stream(tableDataGenerator.spliterator(), false)
+        return stream(table.entity().createGenerator(scaleFactor, 1, 1))
                 .map(this::tpchEntityToObjects)
                 .iterator();
     }

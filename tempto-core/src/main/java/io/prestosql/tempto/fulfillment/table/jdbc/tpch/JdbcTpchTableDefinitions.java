@@ -15,7 +15,7 @@
 package io.prestosql.tempto.fulfillment.table.jdbc.tpch;
 
 import com.google.common.collect.ImmutableList;
-import io.airlift.tpch.TpchTable;
+import io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTable;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 
 import java.sql.JDBCType;
