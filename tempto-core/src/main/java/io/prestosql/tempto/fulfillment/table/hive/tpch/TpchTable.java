@@ -29,15 +29,15 @@ public enum TpchTable
     LINE_ITEM(io.airlift.tpch.TpchTable.LINE_ITEM),
     PART_SUPPLIER(io.airlift.tpch.TpchTable.PART_SUPPLIER);
 
-    private final io.airlift.tpch.TpchTable airliftTpchTableEntity;
+    private final io.airlift.tpch.TpchTable<?> entity;
 
-    TpchTable(io.airlift.tpch.TpchTable airliftTpchTableEntity)
+    TpchTable(io.airlift.tpch.TpchTable<?> entity)
     {
-        this.airliftTpchTableEntity = airliftTpchTableEntity;
+        this.entity = entity;
     }
 
-    public io.airlift.tpch.TpchTable getTpchTableEntity()
+    public io.airlift.tpch.TpchTable<?> entity()
     {
-        return airliftTpchTableEntity;
+        return entity;
     }
 }
