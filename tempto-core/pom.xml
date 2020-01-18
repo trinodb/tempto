@@ -52,19 +52,13 @@
         </dependency>
 
         <dependency>
-            <groupId>io.airlift.tpch</groupId>
+            <groupId>io.prestosql.tpch</groupId>
             <artifactId>tpch</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.teradata.tpcds</groupId>
+            <groupId>io.prestosql.tpcds</groupId>
             <artifactId>tpcds</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.findbugs</groupId>
-                    <artifactId>annotations</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

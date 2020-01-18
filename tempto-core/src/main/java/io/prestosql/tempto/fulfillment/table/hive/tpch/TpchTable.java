@@ -16,27 +16,27 @@ package io.prestosql.tempto.fulfillment.table.hive.tpch;
 
 /**
  * Enum containing names of all TPCH tables. Moreover it holds reference to
- * {@link io.airlift.tpch.TpchTable} entity which is used for generating data.
+ * {@link io.prestosql.tpch.TpchTable} entity which is used for generating data.
  */
 public enum TpchTable
 {
-    NATION(io.airlift.tpch.TpchTable.NATION),
-    REGION(io.airlift.tpch.TpchTable.REGION),
-    PART(io.airlift.tpch.TpchTable.PART),
-    ORDERS(io.airlift.tpch.TpchTable.ORDERS),
-    CUSTOMER(io.airlift.tpch.TpchTable.CUSTOMER),
-    SUPPLIER(io.airlift.tpch.TpchTable.SUPPLIER),
-    LINE_ITEM(io.airlift.tpch.TpchTable.LINE_ITEM),
-    PART_SUPPLIER(io.airlift.tpch.TpchTable.PART_SUPPLIER);
+    NATION(io.prestosql.tpch.TpchTable.NATION),
+    REGION(io.prestosql.tpch.TpchTable.REGION),
+    PART(io.prestosql.tpch.TpchTable.PART),
+    ORDERS(io.prestosql.tpch.TpchTable.ORDERS),
+    CUSTOMER(io.prestosql.tpch.TpchTable.CUSTOMER),
+    SUPPLIER(io.prestosql.tpch.TpchTable.SUPPLIER),
+    LINE_ITEM(io.prestosql.tpch.TpchTable.LINE_ITEM),
+    PART_SUPPLIER(io.prestosql.tpch.TpchTable.PART_SUPPLIER);
 
-    private final io.airlift.tpch.TpchTable<?> entity;
+    private final io.prestosql.tpch.TpchTable<?> entity;
 
-    TpchTable(io.airlift.tpch.TpchTable<?> entity)
+    TpchTable(io.prestosql.tpch.TpchTable<?> entity)
     {
         this.entity = entity;
     }
 
-    public io.airlift.tpch.TpchTable<?> entity()
+    public io.prestosql.tpch.TpchTable<?> entity()
     {
         return entity;
     }
