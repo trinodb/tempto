@@ -14,11 +14,11 @@
 
 package io.prestosql.tempto.fulfillment.table.hive.tpcds;
 
-import com.teradata.tpcds.Table;
+import io.prestosql.tpcds.Table;
 
 /**
  * Enum containing names of all TPCDS tables. Moreover it holds reference to
- * {@link com.teradata.tpcds.Table} entity which is used for generating data.
+ * {@link Table} entity which is used for generating data.
  */
 public enum TpcdsTable
 {
