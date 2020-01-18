@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.kerberos;
 
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -85,7 +84,7 @@ public class KerberosAuthentication
             return loginContext.getSubject();
         }
         catch (LoginException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 }

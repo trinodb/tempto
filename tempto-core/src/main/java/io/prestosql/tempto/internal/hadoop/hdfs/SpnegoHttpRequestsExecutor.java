@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.internal.hadoop.hdfs;
 
-import com.google.common.base.Throwables;
 import com.google.inject.Inject;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
@@ -39,6 +38,7 @@ import org.apache.http.protocol.HttpContext;
 import javax.security.auth.Subject;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.security.Principal;
 import java.security.PrivilegedAction;
 import java.util.Optional;
@@ -113,7 +113,7 @@ public class SpnegoHttpRequestsExecutor
                 return httpClient.execute(request, spnegoAwareHttpContext);
             }
             catch (IOException e) {
-                throw Throwables.propagate(e);
+                throw new UncheckedIOException(e);
             }
         });
     }

@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.query;
 
-import com.google.common.base.Throwables;
 import io.prestosql.tempto.context.TestContext;
 import org.slf4j.Logger;
 
@@ -59,7 +58,7 @@ public class JdbcQueryExecutor
             connection = jdbcConnectionsPool.connectionFor(jdbcParamsState);
         }
         catch (SQLException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 

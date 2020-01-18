@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.internal.fulfillment.table.jdbc;
 
-import com.google.common.base.Throwables;
 import com.google.inject.Inject;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State;
@@ -194,7 +193,7 @@ public class JdbcTableManager
             }
         }
         catch (SQLException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 
