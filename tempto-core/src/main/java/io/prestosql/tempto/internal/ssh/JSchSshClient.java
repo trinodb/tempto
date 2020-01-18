@@ -14,7 +14,6 @@
 package io.prestosql.tempto.internal.ssh;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Throwables;
 import com.google.common.io.ByteStreams;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
@@ -26,6 +25,7 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -99,8 +99,11 @@ public class JSchSshClient
 
             sendSCPFile(file, channel, in, out);
         }
-        catch (JSchException | IOException exception) {
-            Throwables.propagate(exception);
+        catch (JSchException e) {
+            throw new RuntimeException(e);
+        }
+        catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
         finally {
             if (session != null) { session.disconnect(); }

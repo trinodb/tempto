@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.internal.hadoop.hdfs;
 
-import com.google.common.base.Throwables;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Scopes;
@@ -94,7 +93,7 @@ public class SimpleHttpRequestsExecutor
             return uriBuilder.build();
         }
         catch (URISyntaxException e) {
-            throw Throwables.propagate(e);
+            throw new IllegalArgumentException(e);
         }
     }
 }

@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.internal.query;
 
-import com.google.common.base.Throwables;
 import io.prestosql.tempto.kerberos.KerberosAuthentication;
 import io.prestosql.tempto.query.JdbcConnectivityParamsState;
 
@@ -31,6 +30,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Throwables.propagateIfPossible;
 
 public class KerberosJdbcDataSource
         implements DataSource
@@ -61,8 +61,8 @@ public class KerberosJdbcDataSource
                     (PrivilegedExceptionAction<Connection>) () -> driver.connect(jdbcUrl, new Properties()));
         }
         catch (PrivilegedActionException e) {
-            Throwables.propagateIfPossible(e.getCause(), SQLException.class);
-            throw Throwables.propagate(e);
+            propagateIfPossible(e.getCause(), SQLException.class);
+            throw new RuntimeException(e);
         }
     }
 

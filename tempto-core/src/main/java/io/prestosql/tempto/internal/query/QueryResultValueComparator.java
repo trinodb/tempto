@@ -14,7 +14,6 @@
 
 package io.prestosql.tempto.internal.query;
 
-import com.google.common.base.Throwables;
 import com.google.common.math.DoubleMath;
 import com.google.common.primitives.UnsignedBytes;
 import io.prestosql.tempto.configuration.Configuration;
@@ -143,7 +142,7 @@ public class QueryResultValueComparator
             elementComparator = comparatorForType(JDBCType.valueOf(actualArray.getBaseType()), configuration);
         }
         catch (SQLException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
         return elementComparator;
     }
@@ -154,7 +153,7 @@ public class QueryResultValueComparator
             return Arrays.asList((Object[]) array.getArray());
         }
         catch (SQLException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 

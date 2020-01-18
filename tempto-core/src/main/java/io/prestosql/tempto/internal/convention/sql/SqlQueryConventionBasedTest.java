@@ -15,7 +15,6 @@
 package io.prestosql.tempto.internal.convention.sql;
 
 import com.google.common.base.Splitter;
-import com.google.common.base.Throwables;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.prestosql.tempto.Requirement;
@@ -33,6 +32,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -129,7 +129,7 @@ public class SqlQueryConventionBasedTest
                 dumpResults(queryResult, path);
             }
             catch (IOException e) {
-                throw Throwables.propagate(e);
+                throw new UncheckedIOException(e);
             }
         });
     }
