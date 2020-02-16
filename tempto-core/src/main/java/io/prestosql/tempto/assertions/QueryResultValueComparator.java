@@ -24,6 +24,7 @@ import java.sql.JDBCType;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -98,8 +99,9 @@ class QueryResultValueComparator
             case TIME_WITH_TIMEZONE:
                 return timeEqual(actual, expected);
             case TIMESTAMP:
-            case TIMESTAMP_WITH_TIMEZONE:
                 return timestampEqual(actual, expected);
+            case TIMESTAMP_WITH_TIMEZONE:
+                return timestampWithTimezoneEqual(actual, expected);
             case ARRAY:
                 return arrayEqual(actual, expected);
             default:
@@ -243,6 +245,17 @@ class QueryResultValueComparator
     private boolean timestampEqual(Object actual, Object expected)
     {
         if (actual instanceof Timestamp && expected instanceof Timestamp) {
+            return actual.equals(expected);
+        }
+        return false;
+    }
+
+    private boolean timestampWithTimezoneEqual(Object actual, Object expected)
+    {
+        if (actual instanceof Timestamp && expected instanceof Timestamp) {
+            return actual.equals(expected);
+        }
+        if (actual instanceof ZonedDateTime && expected instanceof ZonedDateTime) {
             return actual.equals(expected);
         }
         return false;
