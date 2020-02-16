@@ -17,7 +17,6 @@ package io.prestosql.tempto.assertions;
 import com.google.common.base.Joiner;
 import io.prestosql.tempto.configuration.Configuration;
 import io.prestosql.tempto.internal.convention.SqlResultDescriptor;
-import io.prestosql.tempto.internal.query.QueryResultValueComparator;
 import io.prestosql.tempto.internal.query.QueryRowMapper;
 import io.prestosql.tempto.query.QueryExecutionException;
 import io.prestosql.tempto.query.QueryExecutor;
@@ -31,7 +30,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,7 +57,7 @@ public class QueryAssert
 
     private static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#0.00000000000");
 
-    private final List<Comparator<Object>> columnComparators;
+    private final List<ValueComparator> columnComparators;
     private final List<JDBCType> columnTypes;
 
     private QueryAssert(QueryResult actual)
@@ -274,7 +272,7 @@ public class QueryAssert
         return this;
     }
 
-    private static List<Comparator<Object>> getComparators(QueryResult queryResult)
+    private static List<ValueComparator> getComparators(QueryResult queryResult)
     {
         Configuration configuration = testConfiguration();
         return queryResult.getColumnTypes().stream()
@@ -353,7 +351,7 @@ public class QueryAssert
     private boolean isAnyValueEqual(int column, List<?> expectedValues, Object actualValue)
     {
         for (Object expectedValue : expectedValues) {
-            if (columnComparators.get(column).compare(actualValue, expectedValue) == 0) {
+            if (columnComparators.get(column).test(actualValue, expectedValue)) {
                 return true;
             }
         }
