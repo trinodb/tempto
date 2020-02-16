@@ -12,10 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.query;
+package io.prestosql.tempto.assertions;
 
 import com.google.common.math.DoubleMath;
-import com.google.common.primitives.UnsignedBytes;
 import io.prestosql.tempto.configuration.Configuration;
 
 import java.math.BigDecimal;
@@ -26,7 +25,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +36,8 @@ import static java.util.Objects.requireNonNull;
  * This comparator should only be used for equality comparison. It tries to "non-strictly"
  * compare values by upcasting numerical values to long/double.
  */
-public class QueryResultValueComparator
-        implements Comparator<Object>
+class QueryResultValueComparator
+        implements ValueComparator
 {
     public static final String FLOAT_TOLERANCE_CONFIGURATION_KEY = "tests.assert.float_tolerance";
 
@@ -58,13 +56,13 @@ public class QueryResultValueComparator
     }
 
     @Override
-    public int compare(Object actual, Object expected)
+    public boolean test(Object actual, Object expected)
     {
         if (isNull(actual) && isNull(expected)) {
-            return 0;
+            return true;
         }
         if (isNull(actual) != isNull(expected)) {
-            return -1;
+            return false;
         }
         switch (type) {
             case CHAR:
@@ -109,10 +107,10 @@ public class QueryResultValueComparator
         }
     }
 
-    private int arrayEqual(Object actual, Object expected)
+    private boolean arrayEqual(Object actual, Object expected)
     {
         if (!(actual instanceof Array && expected instanceof List)) {
-            return -1;
+            return false;
         }
         Array actualArray = (Array) actual;
         QueryResultValueComparator elementComparator;
@@ -121,18 +119,17 @@ public class QueryResultValueComparator
         List expectedList = (List) expected;
 
         if (actualList.size() != expectedList.size()) {
-            return -1;
+            return false;
         }
 
         for (int i = 0; i < actualList.size(); ++i) {
             Object actualValue = actualList.get(i);
             Object expectedValue = expectedList.get(i);
-            int compareResult = elementComparator.compare(actualValue, expectedValue);
-            if (compareResult != 0) {
-                return compareResult;
+            if (!elementComparator.test(actualValue, expectedValue)) {
+                return false;
             }
         }
-        return 0;
+        return true;
     }
 
     private QueryResultValueComparator comparatorForArrayElements(Array actualArray)
@@ -157,54 +154,54 @@ public class QueryResultValueComparator
         }
     }
 
-    private int stringsEqual(Object actual, Object expected)
+    private boolean stringsEqual(Object actual, Object expected)
     {
         if (actual instanceof String && expected instanceof String) {
-            return ((String) actual).compareTo((String) expected);
+            return actual.equals(expected);
         }
-        return -1;
+        return false;
     }
 
-    private int binaryEqual(Object actual, Object expected)
+    private boolean binaryEqual(Object actual, Object expected)
     {
         if (actual instanceof byte[] && expected instanceof byte[]) {
-            return UnsignedBytes.lexicographicalComparator().compare((byte[]) actual, (byte[]) expected);
+            return Arrays.equals(((byte[]) actual), ((byte[]) expected));
         }
-        return -1;
+        return false;
     }
 
-    private int booleanEqual(Object actual, Object expected)
+    private boolean booleanEqual(Object actual, Object expected)
     {
         if (actual instanceof Boolean && expected instanceof Boolean) {
-            return ((Boolean) actual).compareTo((Boolean) expected);
+            return actual.equals(expected);
         }
-        return -1;
+        return false;
     }
 
-    private int longEqual(Object actual, Object expected)
+    private boolean longEqual(Object actual, Object expected)
     {
         if (!(isLongOrNarrower(actual) && isLongOrNarrower(expected))) {
-            return -1;
+            return false;
         }
         Long actualLong = ((Number) actual).longValue();
         Long expectedLong = ((Number) expected).longValue();
-        return actualLong.compareTo(expectedLong);
+        return actualLong.equals(expectedLong);
     }
 
-    private int integerEqual(Object actual, Object expected)
+    private boolean integerEqual(Object actual, Object expected)
     {
         if (!(isIntegerOrNarrower(actual) && isIntegerOrNarrower(expected))) {
-            return -1;
+            return false;
         }
         Integer actualInteger = ((Number) actual).intValue();
         Integer expectedInteger = ((Number) expected).intValue();
-        return actualInteger.compareTo(expectedInteger);
+        return actualInteger.equals(expectedInteger);
     }
 
-    private int floatingEqual(Object actual, Object expected)
+    private boolean floatingEqual(Object actual, Object expected)
     {
         if (!(isFloatingPointValue(actual) && isFloatingPointValue(expected))) {
-            return -1;
+            return false;
         }
 
         double expectedDouble = getDoubleValue(expected);
@@ -213,39 +210,42 @@ public class QueryResultValueComparator
         if (configTolerance.isPresent()) {
             tolerance = Math.abs(configTolerance.get() * expectedDouble);
         }
-        return DoubleMath.fuzzyCompare(getDoubleValue(actual), expectedDouble, tolerance);
+        return DoubleMath.fuzzyCompare(getDoubleValue(actual), expectedDouble, tolerance) == 0;
     }
 
-    private int bigDecimalEqual(Object actual, Object expected)
+    private boolean bigDecimalEqual(Object actual, Object expected)
     {
         if (actual instanceof BigDecimal && expected instanceof BigDecimal) {
-            return ((BigDecimal) actual).compareTo((BigDecimal) expected);
+            // BigDecimal should be check for equality using compareTo()
+            return ((BigDecimal) actual).compareTo((BigDecimal) expected) == 0;
         }
-        return -1;
+        return false;
     }
 
-    private int dateEqual(Object actual, Object expected)
+    private boolean dateEqual(Object actual, Object expected)
     {
         if (actual instanceof Date && expected instanceof Date) {
-            return ((Date) actual).compareTo((Date) expected);
+            // Date.compareTo may not be equivalent to equals() TODO which one should be used?
+            return ((Date) actual).compareTo((Date) expected) == 0;
         }
-        return -1;
+        return false;
     }
 
-    private int timeEqual(Object actual, Object expected)
+    private boolean timeEqual(Object actual, Object expected)
     {
         if (actual instanceof Time && expected instanceof Time) {
-            return ((Time) actual).compareTo((Time) expected);
+            // Time.compareTo may not be equivalent to equals() TODO which one should be used?
+            return ((Time) actual).compareTo((Time) expected) == 0;
         }
-        return -1;
+        return false;
     }
 
-    private int timestampEqual(Object actual, Object expected)
+    private boolean timestampEqual(Object actual, Object expected)
     {
         if (actual instanceof Timestamp && expected instanceof Timestamp) {
-            return ((Timestamp) actual).compareTo((Timestamp) expected);
+            return actual.equals(expected);
         }
-        return -1;
+        return false;
     }
 
     private static boolean isLongOrNarrower(Object value)
