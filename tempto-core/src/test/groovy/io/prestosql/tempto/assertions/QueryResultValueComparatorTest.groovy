@@ -21,6 +21,7 @@ import spock.lang.Unroll
 import java.sql.Date
 import java.sql.Time
 import java.sql.Timestamp
+import java.time.ZonedDateTime
 
 import static java.sql.JDBCType.BIGINT
 import static java.sql.JDBCType.BINARY
@@ -121,6 +122,10 @@ class QueryResultValueComparatorTest
 
         TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | Timestamp.valueOf("2015-02-15 10:10:10") | true
         TIMESTAMP_WITH_TIMEZONE | Timestamp.valueOf("2015-02-15 10:10:10") | Timestamp.valueOf("2015-02-15 10:10:10") | true
+        TIMESTAMP_WITH_TIMEZONE | ZonedDateTime.parse("2015-02-15T10:10:10Z") | ZonedDateTime.parse("2015-02-15T10:10:10Z") | true
+        TIMESTAMP_WITH_TIMEZONE | ZonedDateTime.parse("2015-02-15T10:10:10+01:00") | ZonedDateTime.parse("2015-02-15T10:10:10+01:00") | true
+        TIMESTAMP_WITH_TIMEZONE | ZonedDateTime.parse("2015-02-15T11:10:10+02:00") | ZonedDateTime.parse("2015-02-15T10:10:10+01:00") | false // same point in time, different zone
+        TIMESTAMP_WITH_TIMEZONE | ZonedDateTime.parse("2015-02-15T10:10:10+02:00") | ZonedDateTime.parse("2015-02-15T10:10:10+01:00") | false // same local time, different zone
         TIMESTAMP               | Timestamp.valueOf("2015-02-16 10:10:10") | Timestamp.valueOf("2015-02-15 10:10:10") | false
         TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | Timestamp.valueOf("2015-02-16 10:10:10") | false
         TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | "a"                                      | false
