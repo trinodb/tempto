@@ -81,10 +81,6 @@ ssh:
       port: 22
       user: ${USER_B}
 
-hosts:
-  localhost_alias: localhost
-  teradata_alias: teradata.com
-
 list:
   string:
     - ala
