@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Lists.newArrayList;
@@ -130,6 +131,15 @@ public class QueryResult
     public Optional<ResultSet> getJdbcResultSet()
     {
         return jdbcResultSet;
+    }
+
+    @Override
+    public String toString()
+    {
+        return toStringHelper(this)
+                .add("columnTypes", columnTypes)
+                .add("values", values)
+                .toString();
     }
 
     /**
