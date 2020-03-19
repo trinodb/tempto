@@ -152,7 +152,9 @@ public class TemptoRunnerOptions
 
     public Set<String> getValues(String option)
     {
-        return getValue(option).map(v -> ImmutableSet.copyOf(Splitter.on(',').omitEmptyStrings().trimResults().split(v))).orElse(ImmutableSet.<String>of());
+        return getValue(option)
+                .map(v -> ImmutableSet.copyOf(Splitter.on(',').omitEmptyStrings().trimResults().splitToList(v)))
+                .orElse(ImmutableSet.of());
     }
 
     public Optional<String> getValue(String option)
