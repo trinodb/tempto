@@ -14,10 +14,12 @@
 
 package io.prestosql.tempto.examples;
 
+import io.prestosql.tempto.another.examples.MultiplePackagesTest;
 import io.prestosql.tempto.runner.TemptoRunner;
 import io.prestosql.tempto.runner.TemptoRunnerCommandLineParser;
 
 import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.DEFAULT_TEST_CONFIGURATION_LOCATION;
+import static org.testng.Assert.assertTrue;
 
 public class TemptoExamples
 {
@@ -25,9 +27,13 @@ public class TemptoExamples
     {
         TemptoRunnerCommandLineParser parser = TemptoRunnerCommandLineParser
                 .builder("tempto examples")
-                .setTestsPackage("io.prestosql.tempto.examples", false)
+                .setTestsPackage("io.prestosql.tempto.examples,io.prestosql.tempto.another.examples", false)
                 .setConfigFile(DEFAULT_TEST_CONFIGURATION_LOCATION, true)
                 .build();
         TemptoRunner.runTempto(parser, args);
+
+        if (parser.parseCommandLine(args).getTestGroups().isEmpty()) {
+            assertTrue(MultiplePackagesTest.called.get(), "Tests from io.prestosql.tempto.another.examples were not called");
+        }
     }
 }
