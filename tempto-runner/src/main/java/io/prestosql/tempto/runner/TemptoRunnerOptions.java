@@ -105,9 +105,9 @@ public class TemptoRunnerOptions
         return getValue(REPORT_DIR.getLongOpt()).get();
     }
 
-    public String getTestsPackage()
+    public Set<String> getTestsPackage()
     {
-        return getValue(PACKAGE.getLongOpt()).get();
+        return getValues(PACKAGE.getLongOpt());
     }
 
     public String getConfigFiles()

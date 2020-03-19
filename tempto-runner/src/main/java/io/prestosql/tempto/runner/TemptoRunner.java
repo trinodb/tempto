@@ -26,6 +26,7 @@ import org.testng.xml.XmlTest;
 
 import java.util.List;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Lists.newArrayList;
 import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY;
 import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_DIR_KEY;
@@ -120,8 +121,9 @@ public class TemptoRunner
         testSuite.setFileName("tempto-tests");
         XmlTest test = new XmlTest(testSuite);
         test.setName("all");
-        XmlPackage testPackage = new XmlPackage(options.getTestsPackage());
-        List<XmlPackage> testPackages = newArrayList(testPackage);
+        List<XmlPackage> testPackages = options.getTestsPackage().stream()
+                .map(XmlPackage::new)
+                .collect(toImmutableList());
         test.setPackages(testPackages);
         XmlClass conventionBasedTestsClass = new XmlClass("io.prestosql.tempto.internal.convention.ConventionBasedTestFactory");
         List<XmlClass> classes = newArrayList(conventionBasedTestsClass);
