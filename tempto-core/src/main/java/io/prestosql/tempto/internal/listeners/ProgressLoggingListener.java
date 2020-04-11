@@ -52,7 +52,7 @@ public class ProgressLoggingListener
     public void onStart(ITestContext context)
     {
         startTime = currentTimeMillis();
-        LOGGER.info("Starting tests running");
+        LOGGER.info("Starting tests");
     }
 
     @Override
