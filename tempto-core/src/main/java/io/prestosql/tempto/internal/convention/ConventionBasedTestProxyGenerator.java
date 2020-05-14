@@ -82,7 +82,10 @@ public class ConventionBasedTestProxyGenerator
 
     private String generatedClassName(ConventionBasedTest conventionBasedTest)
     {
-        List<String> testNameParts = Splitter.on('.').splitToList(conventionBasedTest.getTestName());
+        List<String> testNameParts = Splitter.on('.').omitEmptyStrings().splitToList(conventionBasedTest.getTestName());
+        if (testNameParts.size() == 1) {
+            return testPackage;
+        }
         return testPackage + "." + toJavaSymbol(testNameParts.get(testNameParts.size() - 2));
     }
 
