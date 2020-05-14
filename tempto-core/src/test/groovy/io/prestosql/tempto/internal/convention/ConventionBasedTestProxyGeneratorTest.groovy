@@ -87,6 +87,11 @@ class ConventionBasedTestProxyGeneratorTest
 
         where:
         testName                       | expectedClassName                 | expectedMethodName
+        'a'                            | 'io.prestosql.tempto'             | 'a'
+        '.a'                           | 'io.prestosql.tempto'             | 'a'
+        'a.b'                          | 'io.prestosql.tempto.a'           | 'b'
+        '.a.b'                         | 'io.prestosql.tempto.a'           | 'b'
+        'a.b.c'                        | 'io.prestosql.tempto.b'           | 'c'
         'a.b.c.d'                      | 'io.prestosql.tempto.c'           | 'd'
         'a.b.9c.1d'                    | 'io.prestosql.tempto._9c'         | '_1d'
         'a.b.ala ma kota.a-kot-ma ale' | 'io.prestosql.tempto.ala_ma_kota' | 'a_kot_ma_ale'
