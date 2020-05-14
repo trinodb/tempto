@@ -15,7 +15,6 @@
 package io.prestosql.tempto.internal.convention;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import io.prestosql.tempto.Requirement;
 import io.prestosql.tempto.configuration.Configuration;
@@ -63,7 +62,7 @@ public class ConventionBasedTestProxyGenerator
             DynamicType.Unloaded<ConventionBasedTestProxy> dynamicType = new ByteBuddy()
                     .subclass(ConventionBasedTestProxy.class)
                     .name(className)
-                    .defineMethod(methodName, void.class, ImmutableList.of(), Visibility.PUBLIC)
+                    .defineMethod(methodName, void.class, Visibility.PUBLIC)
                     .intercept(MethodCall.invoke(ConventionBasedTestProxy.class.getMethod("test")))
                     .annotateMethod(testAnnotationImpl)
                     .make();

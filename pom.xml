@@ -164,7 +164,7 @@
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
-                <version>0.7-rc2</version>
+                <version>1.10.10</version>
             </dependency>
 
             <dependency>
