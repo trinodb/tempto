@@ -15,6 +15,7 @@
 package io.prestosql.tempto.internal.listeners;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.testng.IMethodSelector;
 import org.testng.IMethodSelectorContext;
@@ -27,6 +28,7 @@ import java.util.Set;
 import static com.google.common.collect.Iterables.indexOf;
 import static com.google.common.collect.Sets.intersection;
 import static java.lang.System.getProperty;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -56,7 +58,7 @@ public class TestNameGroupNameMethodSelector
 
     private final Optional<Set<String>> testNamesToRun;
     private final Optional<Set<String>> testGroupsToRun;
-    private final Optional<Set<String>> testGroupsToExclude;
+    private final Set<String> testGroupsToExclude;
 
     private static final Splitter LIST_SYSTEM_PROPERTY_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 
@@ -64,18 +66,22 @@ public class TestNameGroupNameMethodSelector
 
     public TestNameGroupNameMethodSelector()
     {
-        this(getListSystemProperty(TEST_NAMES_TO_RUN_PROPERTY),
-                getListSystemProperty(TEST_GROUPS_TO_RUN_PROPERTY),
-                getListSystemProperty(TEST_GROUPS_TO_EXCLUDE_PROPERTY),
+        this(getOptionalSystemProperty(TEST_NAMES_TO_RUN_PROPERTY),
+                getOptionalSystemProperty(TEST_GROUPS_TO_RUN_PROPERTY),
+                getSetSystemProperty(TEST_GROUPS_TO_EXCLUDE_PROPERTY),
                 new TestMetadataReader());
     }
 
-    public TestNameGroupNameMethodSelector(Optional<Set<String>> testNamesToRun, Optional<Set<String>> testGroupsToRun, Optional<Set<String>> testGroupsToExclude, TestMetadataReader testMetadataReader)
+    public TestNameGroupNameMethodSelector(
+            Optional<Set<String>> testNamesToRun,
+            Optional<Set<String>> testGroupsToRun,
+            Set<String> testGroupsToExclude,
+            TestMetadataReader testMetadataReader)
     {
-        this.testNamesToRun = testNamesToRun;
-        this.testGroupsToRun = testGroupsToRun;
-        this.testGroupsToExclude = testGroupsToExclude;
-        this.testMetadataReader = testMetadataReader;
+        this.testNamesToRun = requireNonNull(testNamesToRun, "testNamesToRun is null");
+        this.testGroupsToRun = requireNonNull(testGroupsToRun, "testGroupsToRun is null");
+        this.testGroupsToExclude = ImmutableSet.copyOf(requireNonNull(testGroupsToExclude, "testGroupsToExclude is null"));
+        this.testMetadataReader = requireNonNull(testMetadataReader, "testMetadataReader is null");
     }
 
     @Override
@@ -89,27 +95,17 @@ public class TestNameGroupNameMethodSelector
 
     private boolean includeBasedOnTestName(TestMetadata testMetadata)
     {
-        if (!testNamesToRun.isPresent()) {
-            return true;
-        }
-
-        return indexOf(testNamesToRun.get(), testName -> testMetadata.testName.contains(testName)) != -1;
+        return testNamesToRun.map(strings -> indexOf(strings, testMetadata.testName::contains) != -1).orElse(true);
     }
 
     private boolean includeBasedOnGroups(TestMetadata testMetadata)
     {
-        if (!testGroupsToRun.isPresent()) {
-            return true;
-        }
-        return !intersection(testMetadata.testGroups, testGroupsToRun.get()).isEmpty();
+        return testGroupsToRun.map(strings -> !intersection(testMetadata.testGroups, strings).isEmpty()).orElse(true);
     }
 
     private boolean excludeBasedOnGroups(TestMetadata testMetadata)
     {
-        if (!testGroupsToExclude.isPresent()) {
-            return false;
-        }
-        return !intersection(testMetadata.testGroups, testGroupsToExclude.get()).isEmpty();
+        return !intersection(testMetadata.testGroups, testGroupsToExclude).isEmpty();
     }
 
     @Override
@@ -117,7 +113,15 @@ public class TestNameGroupNameMethodSelector
     {
     }
 
-    private static Optional<Set<String>> getListSystemProperty(String testNamesToRunProperty)
+    private static Set<String> getSetSystemProperty(String testNamesToRunProperty)
+    {
+        String property = getProperty(testNamesToRunProperty);
+        return property == null ?
+                ImmutableSet.of() :
+                Sets.newHashSet(LIST_SYSTEM_PROPERTY_SPLITTER.split(property));
+    }
+
+    private static Optional<Set<String>> getOptionalSystemProperty(String testNamesToRunProperty)
     {
         String property = getProperty(testNamesToRunProperty);
         return ofNullable(property)
