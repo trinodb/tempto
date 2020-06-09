@@ -34,6 +34,7 @@ class TestNameGroupNameMethodSelectorTest
         metadataReader.readTestMetadata(_) >> new TestMetadata(testGroups as Set, testName)
         def testSelector = new TestNameGroupNameMethodSelector(
                 asSetOptional(allowedTestNames),
+                asSet(excludedTestNames),
                 asSetOptional(allowedTestGroups),
                 asSet(excludedTestGroups),
                 metadataReader)
@@ -42,21 +43,27 @@ class TestNameGroupNameMethodSelectorTest
         testSelector.includeMethod(Mock(IMethodSelectorContext), Mock(ITestNGMethod), true) == expected
 
         where:
-        testName    | testGroups   | allowedTestNames | allowedTestGroups | excludedTestGroups | expected
-        'abc'       | ['g1', 'g2'] | null             | null              | null               | true
-        'abc'       | ['g1', 'g2'] | ['abc']          | null              | null               | true
-        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | null              | null               | true
-        'abc'       | ['g1', 'g2'] | null             | ['g1']            | null               | true
-        'abc'       | ['g1', 'g2'] | null             | ['g1', 'g3']      | null               | true
-        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | ['g1', 'g3']      | null               | true
-        'p.q.r.abc' | []           | ['abc']          | null              | null               | true
-        'p.q.r.abc' | []           | ['r.abc']        | null              | null               | true
-        'p.q.r.abc' | []           | ['p.q.r.abc']    | null              | null               | true
-        'p.q.r.abc' | []           | ['bc']           | null              | null               | true
-        'p.q.r.abc' | []           | ['xbc']          | null              | null               | false
-        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | ['g1', 'g3']      | ['g1']             | false
-        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | ['g1', 'g3']      | ['g2']             | false
-        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | ['g1', 'g3']      | ['g5']             | true
+        testName    | testGroups   | allowedTestNames | excludedTestNames | allowedTestGroups | excludedTestGroups | expected
+        'abc'       | ['g1', 'g2'] | null             | null              | null              | null               | true
+        'abc'       | ['g1', 'g2'] | ['abc']          | null              | null              | null               | true
+        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | null              | null              | null               | true
+        'abc'       | ['g1', 'g2'] | null             | null              | ['g1']            | null               | true
+        'abc'       | ['g1', 'g2'] | null             | null              | ['g1', 'g3']      | null               | true
+        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | null              | ['g1', 'g3']      | null               | true
+        'p.q.r.abc' | []           | ['abc']          | null              | null              | null               | true
+        'p.q.r.abc' | []           | ['r.abc']        | null              | null              | null               | true
+        'p.q.r.abc' | []           | ['p.q.r.abc']    | null              | null              | null               | true
+        'p.q.r.abc' | []           | ['bc']           | null              | null              | null               | true
+        'p.q.r.abc' | []           | ['xbc']          | null              | null              | null               | false
+        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | null              | ['g1', 'g3']      | ['g1']             | false
+        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | null              | ['g1', 'g3']      | ['g2']             | false
+        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | ['qwe']           | ['g1', 'g3']      | ['g5']             | true
+        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | ['ab']            | ['g1', 'g3']      | ['g5']             | true
+        'abc'       | ['g1', 'g2'] | null             | ['abc']           | ['g1', 'g3']      | ['g5']             | false
+        'abc'       | ['g1', 'g2'] | ['xyz', 'abc']   | ['abc']           | ['g1', 'g3']      | ['g5']             | false
+        'p.q.r.abc' | ['g1', 'g2'] | null             | ['p.q.r.xyz']     | ['g1', 'g3']      | ['g5']             | true
+        'p.q.r.abc' | ['g1', 'g2'] | null             | ['p.q.r.ab']      | ['g1', 'g3']      | ['g5']             | true
+        'p.q.r.abc' | ['g1', 'g2'] | null             | ['p.q.r.abc']     | ['g1', 'g3']      | ['g5']             | false
     }
 
     private Optional<Set<String>> asSetOptional(List<String> strings)
