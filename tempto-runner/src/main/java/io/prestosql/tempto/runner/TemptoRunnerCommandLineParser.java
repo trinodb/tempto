@@ -40,6 +40,7 @@ import static io.prestosql.tempto.runner.TemptoRunnerOptions.CONFIG_FILES;
 import static io.prestosql.tempto.runner.TemptoRunnerOptions.CONVENTION_TESTS_DIR;
 import static io.prestosql.tempto.runner.TemptoRunnerOptions.DUMP_CONVENTION_RESULTS;
 import static io.prestosql.tempto.runner.TemptoRunnerOptions.EXCLUDED_GROUPS;
+import static io.prestosql.tempto.runner.TemptoRunnerOptions.EXCLUDED_TESTS;
 import static io.prestosql.tempto.runner.TemptoRunnerOptions.GROUPS;
 import static io.prestosql.tempto.runner.TemptoRunnerOptions.HELP;
 import static io.prestosql.tempto.runner.TemptoRunnerOptions.PACKAGE;
@@ -180,6 +181,7 @@ public class TemptoRunnerCommandLineParser
             addOption(PACKAGE);
             addOption(REPORT_DIR);
             addOption(TESTS);
+            addOption(EXCLUDED_TESTS);
             addOption(HELP);
             addOption(DUMP_CONVENTION_RESULTS);
             addOption(THREAD_COUNT);

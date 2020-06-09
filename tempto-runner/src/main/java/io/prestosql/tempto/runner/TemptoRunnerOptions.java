@@ -76,6 +76,13 @@ public class TemptoRunnerOptions
             .hasArg()
             .build();
 
+    public static final Option EXCLUDED_TESTS = Option.builder("e")
+            .longOpt("excluded-tests")
+            .desc("Test name suffix to be excluded")
+            .valueSeparator(',')
+            .hasArg()
+            .build();
+
     public static final Option HELP = Option.builder("h")
             .longOpt("help")
             .build();
@@ -133,6 +140,11 @@ public class TemptoRunnerOptions
     public Set<String> getTests()
     {
         return getValues(TESTS.getLongOpt());
+    }
+
+    public Set<String> getExcludedTests()
+    {
+        return getValues(EXCLUDED_TESTS.getLongOpt());
     }
 
     public boolean isHelpRequested()

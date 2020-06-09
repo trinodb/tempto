@@ -33,6 +33,7 @@ import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.CONVE
 import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY;
 import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_EXCLUDE_PROPERTY;
 import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_RUN_PROPERTY;
+import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_EXCLUDE_PROPERTY;
 import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
 import static java.util.Collections.singletonList;
 
@@ -108,6 +109,9 @@ public class TemptoRunner
         }
         if (!options.getTests().isEmpty()) {
             System.setProperty(TEST_NAMES_TO_RUN_PROPERTY, Joiner.on(',').join(options.getTests()));
+        }
+        if (!options.getExcludedTests().isEmpty()) {
+            System.setProperty(TEST_NAMES_TO_EXCLUDE_PROPERTY, Joiner.on(',').join(options.getExcludedTests()));
         }
         testNG.addMethodSelector(METHOD_SELECTOR_CLASS_NAME, METHOD_SELECTOR_PRIORITY);
     }

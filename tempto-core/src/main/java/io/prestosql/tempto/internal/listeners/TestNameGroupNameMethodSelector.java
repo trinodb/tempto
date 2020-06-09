@@ -44,19 +44,24 @@ import static java.util.Optional.ofNullable;
  * <li>{@value #TEST_GROUPS_TO_RUN_PROPERTY} - should contain comma separated list of groups from which tests should be run
  * <li>{@value #TEST_GROUPS_TO_EXCLUDE_PROPERTY} - should contain comma separated list of groups from which tests should be excluded
  * <li>{@value #TEST_NAMES_TO_RUN_PROPERTY} - should contain comma separated list of test names to be run
+ * <li>{@value #TEST_NAMES_TO_EXCLUDE_PROPERTY} - should contain comma separated list of test names to be excluded
  * </ul>
  * <p>
  * <p>
- * TestName matching is done by verifying if value from system property is suffix of actual test name in question
+ * For inclusion, test name matching is done by verifying if value from system property is suffix of actual test name in question.
+ * When excluding tests, an exact match is performed, i.e. the fully qualified class name must be provided (and exact method name,
+ * when excluding individual methods).
  */
 public class TestNameGroupNameMethodSelector
         implements IMethodSelector
 {
     public static final String TEST_NAMES_TO_RUN_PROPERTY = "io.prestosql.tempto.tests";
+    public static final String TEST_NAMES_TO_EXCLUDE_PROPERTY = "io.prestosql.tempto.exclude_tests";
     public static final String TEST_GROUPS_TO_RUN_PROPERTY = "io.prestosql.tempto.groups";
     public static final String TEST_GROUPS_TO_EXCLUDE_PROPERTY = "io.prestosql.tempto.exclude_groups";
 
     private final Optional<Set<String>> testNamesToRun;
+    private final Set<String> testNamesToExclude;
     private final Optional<Set<String>> testGroupsToRun;
     private final Set<String> testGroupsToExclude;
 
@@ -67,6 +72,7 @@ public class TestNameGroupNameMethodSelector
     public TestNameGroupNameMethodSelector()
     {
         this(getOptionalSystemProperty(TEST_NAMES_TO_RUN_PROPERTY),
+                getSetSystemProperty(TEST_NAMES_TO_EXCLUDE_PROPERTY),
                 getOptionalSystemProperty(TEST_GROUPS_TO_RUN_PROPERTY),
                 getSetSystemProperty(TEST_GROUPS_TO_EXCLUDE_PROPERTY),
                 new TestMetadataReader());
@@ -74,11 +80,13 @@ public class TestNameGroupNameMethodSelector
 
     public TestNameGroupNameMethodSelector(
             Optional<Set<String>> testNamesToRun,
+            Set<String> testNamesToExclude,
             Optional<Set<String>> testGroupsToRun,
             Set<String> testGroupsToExclude,
             TestMetadataReader testMetadataReader)
     {
         this.testNamesToRun = requireNonNull(testNamesToRun, "testNamesToRun is null");
+        this.testNamesToExclude = ImmutableSet.copyOf(requireNonNull(testNamesToExclude, "testNamesToExclude is null"));
         this.testGroupsToRun = requireNonNull(testGroupsToRun, "testGroupsToRun is null");
         this.testGroupsToExclude = ImmutableSet.copyOf(requireNonNull(testGroupsToExclude, "testGroupsToExclude is null"));
         this.testMetadataReader = requireNonNull(testMetadataReader, "testMetadataReader is null");
@@ -89,6 +97,7 @@ public class TestNameGroupNameMethodSelector
     {
         TestMetadata testMetadata = testMetadataReader.readTestMetadata(method);
         return includeBasedOnTestName(testMetadata) &&
+                !excludeBasedOnName(testMetadata) &&
                 includeBasedOnGroups(testMetadata) &&
                 !excludeBasedOnGroups(testMetadata);
     }
@@ -96,6 +105,11 @@ public class TestNameGroupNameMethodSelector
     private boolean includeBasedOnTestName(TestMetadata testMetadata)
     {
         return testNamesToRun.map(strings -> indexOf(strings, testMetadata.testName::contains) != -1).orElse(true);
+    }
+
+    private boolean excludeBasedOnName(TestMetadata testMetadata)
+    {
+        return testNamesToExclude.contains(testMetadata.testName);
     }
 
     private boolean includeBasedOnGroups(TestMetadata testMetadata)
