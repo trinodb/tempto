@@ -32,10 +32,11 @@ class TestNameGroupNameMethodSelectorTest
     {
         setup:
         metadataReader.readTestMetadata(_) >> new TestMetadata(testGroups as Set, testName)
-        def testSelector = new TestNameGroupNameMethodSelector(asSetOptional(allowedTestNames),
+        def testSelector = new TestNameGroupNameMethodSelector(
+                asSetOptional(allowedTestNames),
                 asSetOptional(allowedTestGroups),
-                asSetOptional(excludedTestGroups),
-                metadataReader);
+                asSet(excludedTestGroups),
+                metadataReader)
 
         expect:
         testSelector.includeMethod(Mock(IMethodSelectorContext), Mock(ITestNGMethod), true) == expected
@@ -65,6 +66,16 @@ class TestNameGroupNameMethodSelectorTest
         }
         else {
             return Optional.of(strings as Set);
+        }
+    }
+
+    private static Set<String> asSet(List<String> strings)
+    {
+        if (strings == null) {
+            return []
+        }
+        else {
+            return strings as Set
         }
     }
 }
