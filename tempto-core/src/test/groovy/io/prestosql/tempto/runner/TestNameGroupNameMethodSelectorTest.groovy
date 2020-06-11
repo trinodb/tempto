@@ -64,6 +64,7 @@ class TestNameGroupNameMethodSelectorTest
         'p.q.r.abc' | ['g1', 'g2'] | null             | ['p.q.r.xyz']     | ['g1', 'g3']      | ['g5']             | true
         'p.q.r.abc' | ['g1', 'g2'] | null             | ['p.q.r.ab']      | ['g1', 'g3']      | ['g5']             | true
         'p.q.r.abc' | ['g1', 'g2'] | null             | ['p.q.r.abc']     | ['g1', 'g3']      | ['g5']             | false
+        'p.q.r.abc' | ['g1', 'g2'] | null             | ['p.q.r']         | ['g1', 'g3']      | ['g5']             | false
     }
 
     private Optional<Set<String>> asSetOptional(List<String> strings)

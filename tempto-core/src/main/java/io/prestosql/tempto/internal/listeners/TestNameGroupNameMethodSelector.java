@@ -109,7 +109,7 @@ public class TestNameGroupNameMethodSelector
 
     private boolean excludeBasedOnName(TestMetadata testMetadata)
     {
-        return testNamesToExclude.contains(testMetadata.testName);
+        return testNamesToExclude.stream().anyMatch(exclusion -> matches(testMetadata.testName, exclusion));
     }
 
     private boolean includeBasedOnGroups(TestMetadata testMetadata)
@@ -120,6 +120,14 @@ public class TestNameGroupNameMethodSelector
     private boolean excludeBasedOnGroups(TestMetadata testMetadata)
     {
         return !intersection(testMetadata.testGroups, testGroupsToExclude).isEmpty();
+    }
+
+    private static boolean matches(String testName, String exclusion)
+    {
+        if (testName.equals(exclusion)) {
+            return true;
+        }
+        return testName.startsWith(exclusion) && testName.lastIndexOf('.') == exclusion.length();
     }
 
     @Override
