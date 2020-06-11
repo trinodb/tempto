@@ -14,7 +14,7 @@ install:
 
 script:
   - mvn install -B
-  - ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -x failing -e io.prestosql.tempto.examples.ExclusionTest.failingTest
+  - ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -x failing -e io.prestosql.tempto.examples.ExclusionTest.failingTest,io.prestosql.tempto.examples.AnotherExclusionTest
   - CONFIG_FILE=tempto-configuration-read-only.yaml ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -g in_memory
   - CONFIG_FILE=tempto-configuration-no-db.yaml ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -g ssh
   - CONFIG_FILE=tempto-configuration-invalid-ssh-and-psql.yaml ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -g in_memory
