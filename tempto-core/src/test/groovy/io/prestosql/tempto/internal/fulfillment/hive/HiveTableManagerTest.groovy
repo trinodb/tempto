@@ -16,6 +16,7 @@ package io.prestosql.tempto.internal.fulfillment.hive
 
 import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource
 import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition
+import io.prestosql.tempto.internal.fulfillment.table.TableName
 import io.prestosql.tempto.internal.fulfillment.table.TableNameGenerator
 import io.prestosql.tempto.internal.fulfillment.table.hive.HiveTableManager
 import io.prestosql.tempto.internal.fulfillment.table.hive.HiveThriftClient
@@ -37,7 +38,13 @@ class HiveTableManagerTest
     QueryExecutor queryExecutor = Mock()
     HdfsDataSourceWriter dataSourceWriter = Mock()
     TableNameGenerator tableNameGenerator = Mock()
-    HiveThriftClient hiveThriftClient = Mock()
+    HiveThriftClient hiveThriftClient = new HiveThriftClient("localhost", 1) {
+        @Override
+        String getLocation(TableName tableName)
+        {
+            return MUTABLE_TABLES_PATH + tableName.getNameInDatabase()
+        }
+    }
     HiveTableManager tableManager
 
     void setup()
@@ -46,7 +53,7 @@ class HiveTableManagerTest
         connection.getSchema() >> "schema"
         queryExecutor.getConnection() >> connection
         tableNameGenerator.generateMutableTableNameInDatabase(_) >> 'nation_randomSuffix'
-        tableManager = new HiveTableManager(queryExecutor, dataSourceWriter, tableNameGenerator, hiveThriftClient, ROOT_PATH, "database", "/user/hive/warehouse/", false, false);
+        tableManager = new HiveTableManager(queryExecutor, dataSourceWriter, tableNameGenerator, hiveThriftClient, ROOT_PATH, "database", false, false);
     }
 
     def 'should create hive immutable table'()

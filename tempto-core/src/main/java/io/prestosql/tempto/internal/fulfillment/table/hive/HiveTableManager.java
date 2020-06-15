@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -53,7 +55,6 @@ public class HiveTableManager
     private final String testDataBasePath;
     private final HiveThriftClient hiveThriftClient;
     private final String databaseName;
-    private final String hiveDatabasePath;
     private final boolean injectStatsForImmutableTables;
     private final boolean injectStatsForMutableTables;
 
@@ -64,7 +65,6 @@ public class HiveTableManager
             TableNameGenerator tableNameGenerator,
             @Named("tests.hdfs.path") String testDataBasePath,
             @Named("databaseName") String databaseName,
-            @Named("path") String databasePath,
             @Named("inject_stats_for_immutable_tables") boolean injectStatsForImmutableTables,
             @Named("inject_stats_for_mutable_tables") boolean injectStatsForMutableTables,
             @Named("metastore.host") String thriftHost,
@@ -77,7 +77,6 @@ public class HiveTableManager
                 new HiveThriftClient(thriftHost, parseInt(thriftPort)),
                 testDataBasePath,
                 databaseName,
-                databasePath,
                 injectStatsForImmutableTables,
                 injectStatsForMutableTables);
     }
@@ -89,7 +88,6 @@ public class HiveTableManager
             HiveThriftClient hiveThriftClient,
             String testDataBasePath,
             String databaseName,
-            String databasePath,
             boolean injectStatsForImmutableTables,
             boolean injectStatsForMutableTables)
     {
@@ -99,11 +97,6 @@ public class HiveTableManager
         this.queryExecutor = checkNotNull(queryExecutor, "queryExecutor is null");
         this.hdfsDataSourceWriter = checkNotNull(hdfsDataSourceWriter, "hdfsDataSourceWriter is null");
         this.testDataBasePath = checkNotNull(testDataBasePath, "testDataBasePath is null");
-        checkNotNull(databasePath, "databasePath");
-        if (!databasePath.endsWith("/")) {
-            databasePath += "/";
-        }
-        this.hiveDatabasePath = databasePath;
         this.injectStatsForImmutableTables = injectStatsForImmutableTables;
         this.injectStatsForMutableTables = injectStatsForMutableTables;
     }
@@ -187,13 +180,21 @@ public class HiveTableManager
 
     private String getMutableTableHdfsPath(TableName tableName, Optional<Integer> partitionId)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append(hiveDatabasePath);
-        sb.append(tableName.getNameInDatabase());
-        if (partitionId.isPresent()) {
-            sb.append("/partition_").append(partitionId.get());
+        String location = hiveThriftClient.getLocation(tableName);
+        if (location.startsWith("hdfs://")) {
+            try {
+                URI uri = new URI(location);
+                location = uri.getPath();
+            }
+            catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return sb.toString();
+
+        if (partitionId.isPresent()) {
+            location += "/partition_" + partitionId.get();
+        }
+        return location;
     }
 
     private void createTable(HiveTableDefinition tableDefinition, TableName tableName, Optional<String> tableDataPath)
