@@ -89,7 +89,6 @@ class HiveTableManagerTest
     def 'should create hive mutable table created not partitioned'()
     {
         setup:
-        def expectedTableLocation = MUTABLE_TABLES_PATH + "nation_randomSuffix"
         def expectedTableName = "nation"
         def expectedTableNameInDatabase = "nation_randomSuffix"
 
