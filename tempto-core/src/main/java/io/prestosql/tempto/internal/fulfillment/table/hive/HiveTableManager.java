@@ -111,6 +111,16 @@ public class HiveTableManager
     @Override
     public HiveTableInstance createImmutable(HiveTableDefinition tableDefinition, TableHandle tableHandle)
     {
+        try {
+            return doCreateImmutable(tableDefinition, tableHandle);
+        }
+        catch (RuntimeException e) {
+            throw new RuntimeException("Failed to create table " + tableHandle, e);
+        }
+    }
+
+    private HiveTableInstance doCreateImmutable(HiveTableDefinition tableDefinition, TableHandle tableHandle)
+    {
         checkState(!tableDefinition.isPartitioned(), "Partitioning not supported for immutable tables");
         TableName tableName = createImmutableTableName(tableHandle);
         LOGGER.debug("creating immutable table {}", tableHandle.getName());
@@ -130,6 +140,16 @@ public class HiveTableManager
 
     @Override
     public HiveTableInstance createMutable(HiveTableDefinition tableDefinition, State state, TableHandle tableHandle)
+    {
+        try {
+            return doCreateMutable(tableDefinition, state, tableHandle);
+        }
+        catch (RuntimeException e) {
+            throw new RuntimeException("Failed to create table " + tableHandle, e);
+        }
+    }
+
+    private HiveTableInstance doCreateMutable(HiveTableDefinition tableDefinition, State state, TableHandle tableHandle)
     {
         TableName tableName = createMutableTableName(tableHandle);
         LOGGER.debug("creating mutable table {}", tableName);
