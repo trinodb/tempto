@@ -25,6 +25,7 @@ import io.prestosql.tempto.internal.fulfillment.table.TableName;
 import io.prestosql.tempto.internal.fulfillment.table.TableNameGenerator;
 import io.prestosql.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter;
 import io.prestosql.tempto.query.QueryExecutor;
+import io.prestosql.tempto.query.QueryResult;
 import org.slf4j.Logger;
 
 import javax.inject.Named;
@@ -32,11 +33,16 @@ import javax.inject.Singleton;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Verify.verify;
+import static com.google.common.collect.Iterables.getOnlyElement;
 import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
 import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.PREPARED;
 import static java.lang.Integer.parseInt;
@@ -200,7 +206,21 @@ public class HiveTableManager
 
     private String getMutableTableHdfsPath(TableName tableName, Optional<Integer> partitionId)
     {
-        String location = hiveThriftClient.getLocation(tableName);
+        QueryResult queryResult = queryExecutor.executeQuery("SHOW CREATE TABLE " + tableName.getNameInDatabase());
+
+        // result spans multiple rows
+        StringBuilder value = new StringBuilder();
+        for (List<?> row : queryResult.rows()) {
+            value.append(getOnlyElement(row));
+        }
+
+        Pattern locationPattern = Pattern.compile("LOCATION\\s+'([^']+)'");
+        Matcher matcher = locationPattern.matcher(value);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("Cant get table location from result of SHOW CREATE TABLE: " + value);
+        }
+        String location = matcher.group(1);
+        verify(!matcher.find(), "Expected only single match of LOCATION in result of SHOW CREATE TABLE");
         if (location.startsWith("hdfs://")) {
             try {
                 URI uri = new URI(location);

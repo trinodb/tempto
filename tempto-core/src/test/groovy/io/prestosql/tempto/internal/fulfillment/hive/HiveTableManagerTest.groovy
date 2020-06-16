@@ -22,9 +22,11 @@ import io.prestosql.tempto.internal.fulfillment.table.hive.HiveTableManager
 import io.prestosql.tempto.internal.fulfillment.table.hive.HiveThriftClient
 import io.prestosql.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter
 import io.prestosql.tempto.query.QueryExecutor
+import io.prestosql.tempto.query.QueryResult
 import spock.lang.Specification
 
 import java.sql.Connection
+import java.sql.JDBCType
 
 import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
 import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
@@ -38,13 +40,7 @@ class HiveTableManagerTest
     QueryExecutor queryExecutor = Mock()
     HdfsDataSourceWriter dataSourceWriter = Mock()
     TableNameGenerator tableNameGenerator = Mock()
-    HiveThriftClient hiveThriftClient = new HiveThriftClient("localhost", 1) {
-        @Override
-        String getLocation(TableName tableName)
-        {
-            return MUTABLE_TABLES_PATH + tableName.getNameInDatabase()
-        }
-    }
+    HiveThriftClient hiveThriftClient = Mock()
     HiveTableManager tableManager
 
     void setup()
@@ -78,9 +74,12 @@ class HiveTableManagerTest
     def 'should create hive mutable table loaded not partitioned'()
     {
         setup:
+
         def expectedTableLocation = "/user/hive/warehouse/nation_randomSuffix"
         def expectedTableName = "nation"
         def expectedTableNameInDatabase = "nation_randomSuffix"
+        queryExecutor.executeQuery("SHOW CREATE TABLE nation_randomSuffix") >>
+                QueryResult.forSingleValue(JDBCType.VARCHAR, "CRATE TABLE NATION(....) LOCATION '/user/hive/warehouse/nation_randomSuffix'")
 
         when:
         def tableDefinition = getNationHiveTableDefinition()
@@ -117,6 +116,8 @@ class HiveTableManagerTest
         def expectedTableLocation = MUTABLE_TABLES_PATH + expectedTableNameInDatabase
         def expectedPartition0Location = "${expectedTableLocation}/partition_0"
         def expectedPartition1Location = "${expectedTableLocation}/partition_1"
+        queryExecutor.executeQuery("SHOW CREATE TABLE nation_randomSuffix") >>
+                QueryResult.forSingleValue(JDBCType.VARCHAR, "CRATE TABLE NATION(....) LOCATION '/user/hive/warehouse/nation_randomSuffix'")
 
         when:
         def tableDefinition = getPartitionedNationHiveTableDefinition()
@@ -140,6 +141,8 @@ class HiveTableManagerTest
         def expectedTableLocation = MUTABLE_TABLES_PATH + expectedTableNameInDatabase
         def expectedPartition0Location = "${expectedTableLocation}/partition_0"
         def expectedPartition1Location = "${expectedTableLocation}/partition_1"
+        queryExecutor.executeQuery("SHOW CREATE TABLE nation_randomSuffix") >>
+                QueryResult.forSingleValue(JDBCType.VARCHAR, "CRATE TABLE NATION(....) LOCATION '/user/hive/warehouse/nation_randomSuffix'")
 
         when:
         def tableDefinition = getPartitionedNationHiveTableDefinition()
