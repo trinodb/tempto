@@ -84,18 +84,6 @@ public class HiveThriftClient
         client = new ThriftHiveMetastore.Client(protocol);
     }
 
-    public String getLocation(TableName tableName)
-    {
-        open();
-        try {
-            Table table = client.get_table(getSchema(tableName), tableName.getSchemalessNameInDatabase());
-            return table.getSd().getLocation();
-        }
-        catch (TException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     void setStatistics(TableName tableName, TableStatistics tableStatistics)
     {
         open();
