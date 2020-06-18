@@ -91,12 +91,7 @@ public class ProgressLoggingListener
     private void logTestEnd(ITestResult testCase, String outcome)
     {
         long executionTime = currentTimeMillis() - testStartTime;
-        if (executionTime < 1000) {
-            LOGGER.info(outcome);
-        }
-        else {
-            LOGGER.info("{}     /    {} took {}", outcome, formatTestName(testCase), formatDuration(executionTime));
-        }
+        LOGGER.info("{}     /    {} took {}", outcome, formatTestName(testCase), formatDuration(executionTime));
     }
 
     @Override
