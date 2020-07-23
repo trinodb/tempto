@@ -13,6 +13,7 @@
  */
 package io.prestosql.tempto.fulfillment.table.kafka;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
@@ -25,12 +26,10 @@ import io.prestosql.tempto.fulfillment.table.TableManager;
 import io.prestosql.tempto.internal.fulfillment.table.TableName;
 import io.prestosql.tempto.query.QueryExecutor;
 import io.prestosql.tempto.query.QueryResult;
-import kafka.admin.AdminUtils;
-import kafka.admin.RackAwareMode;
-import kafka.utils.ZKStringSerializer$;
-import kafka.utils.ZkUtils;
-import org.I0Itec.zkclient.ZkClient;
-import org.I0Itec.zkclient.ZkConnection;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.KafkaAdminClient;
+import org.apache.kafka.clients.admin.ListTopicsResult;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -41,7 +40,7 @@ import javax.inject.Singleton;
 
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.function.Consumer;
+import java.util.Set;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
@@ -101,53 +100,36 @@ public class KafkaTableManager
 
     private void deleteTopic(String topic)
     {
-        withZookeeper(zkUtils -> {
-            if (AdminUtils.topicExists(zkUtils, topic)) {
-                AdminUtils.deleteTopic(zkUtils, topic);
+        AdminClient kafkaAdminClient = KafkaAdminClient.create(getKafkaProperties());
 
-                for (int checkTry = 0; checkTry < 5; ++checkTry) {
-                    if (!AdminUtils.topicExists(zkUtils, topic)) {
-                        return;
-                    }
-                    try {
-                        Thread.sleep(1_000);
-                    }
-                    catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        throw new RuntimeException("could not delete topic " + topic);
-                    }
-                }
-                throw new RuntimeException("could not delete topic " + topic);
+        try {
+            ListTopicsResult topics = kafkaAdminClient.listTopics();
+            Set<String> names = topics.names().get();
+
+            if (names.contains(topic)) {
+                kafkaAdminClient.deleteTopics(ImmutableList.of(topic)).all().get();
             }
-        });
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Could not delete topic " + topic, e);
+        }
     }
 
     private void createTopic(String topic, int partitionsCount, int replicationLevel)
     {
-        withZookeeper(zkUtils -> {
-            Properties topicConfiguration = new Properties();
-            AdminUtils.createTopic(zkUtils, topic, partitionsCount, replicationLevel, topicConfiguration, RackAwareMode.Disabled$.MODULE$);
-        });
+        AdminClient kafkaAdminClient = KafkaAdminClient.create(getKafkaProperties());
+
+        try {
+            kafkaAdminClient.createTopics(ImmutableList.of(new NewTopic(topic, partitionsCount, toShortExact(replicationLevel)))).all().get();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void insertDataIntoTopic(String topic, KafkaDataSource dataSource)
     {
-        // create instance for properties to access producer configs
-        Properties props = new Properties();
-
-        props.put("bootstrap.servers", brokerConfiguration.getStringMandatory("host") + ":" + brokerConfiguration.getIntMandatory("port"));
-        props.put("acks", "all");
-        props.put("retries", 0);
-        props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
-        for (String key : brokerConfiguration.listKeys()) {
-            if (key.equals("host") || key.equals("port")) {
-                continue;
-            }
-            props.put(key, brokerConfiguration.getStringMandatory(key));
-        }
-
-        Producer<byte[], byte[]> producer = new KafkaProducer<>(props);
+        Producer<byte[], byte[]> producer = new KafkaProducer<>(getKafkaProperties());
 
         Iterator<KafkaMessage> messages = dataSource.getMessages();
         while (messages.hasNext()) {
@@ -165,23 +147,23 @@ public class KafkaTableManager
         }
     }
 
-    private void withZookeeper(Consumer<ZkUtils> routine)
-    {
-        int sessionTimeOutInMs = 15_000;
-        int connectionTimeOutInMs = 10_000;
-        String zookeeperHosts = zookeeperConfiguration.getStringMandatory("host") + ":" + zookeeperConfiguration.getIntMandatory("port");
 
-        ZkClient zkClient = new ZkClient(zookeeperHosts,
-                sessionTimeOutInMs,
-                connectionTimeOutInMs,
-                ZKStringSerializer$.MODULE$);
-        try {
-            ZkUtils zkUtils = new ZkUtils(zkClient, new ZkConnection(zookeeperHosts), false);
-            routine.accept(zkUtils);
+    private Properties getKafkaProperties()
+    {
+        Properties props = new Properties();
+
+        props.put("bootstrap.servers", brokerConfiguration.getStringMandatory("host") + ":" + brokerConfiguration.getIntMandatory("port"));
+        props.put("acks", "all");
+        props.put("retries", 0);
+        props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
+        for (String key : brokerConfiguration.listKeys()) {
+            if (key.equals("host") || key.equals("port")) {
+                continue;
+            }
+            props.put(key, brokerConfiguration.getStringMandatory(key));
         }
-        finally {
-            zkClient.close();
-        }
+        return props;
     }
 
     @Override
@@ -212,5 +194,14 @@ public class KafkaTableManager
     public Class<? extends TableDefinition> getTableDefinitionClass()
     {
         return KafkaTableDefinition.class;
+    }
+
+    private static short toShortExact(int value)
+    {
+        if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
+            throw new ArithmeticException("short overflow");
+        }
+
+        return (short) value;
     }
 }
