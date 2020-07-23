@@ -42,6 +42,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
+import static com.google.common.primitives.Shorts.checkedCast;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
@@ -53,21 +54,18 @@ public class KafkaTableManager
     private final String databaseName;
     private final QueryExecutor prestoQueryExecutor;
     private final Configuration brokerConfiguration;
-    private final Configuration zookeeperConfiguration;
     private final String prestoKafkaCatalog;
 
     @Inject
     public KafkaTableManager(
             @Named("databaseName") String databaseName,
             @Named("broker") Configuration brokerConfiguration,
-            @Named("zookeeper") Configuration zookeeperConfiguration,
             @Named("presto_database_name") String prestoDatabaseName,
             @Named("presto_kafka_catalog") String prestoKafkaCatalog,
             Injector injector)
     {
         this.databaseName = requireNonNull(databaseName, "databaseName is null");
         this.brokerConfiguration = requireNonNull(brokerConfiguration, "brokerConfiguration is null");
-        this.zookeeperConfiguration = requireNonNull(zookeeperConfiguration, "zookeeperConfiguration is null");
         requireNonNull(injector, "injector is null");
         requireNonNull(prestoDatabaseName, "prestoDatabaseName is null");
         this.prestoQueryExecutor = injector.getInstance(Key.get(QueryExecutor.class, Names.named(prestoDatabaseName)));
@@ -100,9 +98,7 @@ public class KafkaTableManager
 
     private void deleteTopic(String topic)
     {
-        AdminClient kafkaAdminClient = KafkaAdminClient.create(getKafkaProperties());
-
-        try {
+        try (AdminClient kafkaAdminClient = getAdminClient()) {
             ListTopicsResult topics = kafkaAdminClient.listTopics();
             Set<String> names = topics.names().get();
 
@@ -117,10 +113,8 @@ public class KafkaTableManager
 
     private void createTopic(String topic, int partitionsCount, int replicationLevel)
     {
-        AdminClient kafkaAdminClient = KafkaAdminClient.create(getKafkaProperties());
-
-        try {
-            kafkaAdminClient.createTopics(ImmutableList.of(new NewTopic(topic, partitionsCount, toShortExact(replicationLevel)))).all().get();
+        try (AdminClient kafkaAdminClient = getAdminClient()) {
+            kafkaAdminClient.createTopics(ImmutableList.of(new NewTopic(topic, partitionsCount, checkedCast(replicationLevel)))).all().get();
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -196,12 +190,8 @@ public class KafkaTableManager
         return KafkaTableDefinition.class;
     }
 
-    private static short toShortExact(int value)
+    private AdminClient getAdminClient()
     {
-        if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
-            throw new ArithmeticException("short overflow");
-        }
-
-        return (short) value;
+        return KafkaAdminClient.create(getKafkaProperties());
     }
 }
