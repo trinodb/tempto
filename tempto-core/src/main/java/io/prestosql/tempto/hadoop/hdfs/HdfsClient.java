@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -57,6 +58,8 @@ public interface HdfsClient
 
     void loadFile(String path, OutputStream outputStream);
 
+    List<String> listDirectory(String path);
+
     default String loadFile(String path, Charset charset)
     {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -80,5 +83,13 @@ public interface HdfsClient
 
     String getOwner(String path);
 
+    void setOwner(String path, String owner);
+
+    String getGroup(String path);
+
+    void setGroup(String path, String group);
+
     String getPermission(String path);
+
+    void setPermission(String path, String octalPermissions);
 }

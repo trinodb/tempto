@@ -13,6 +13,7 @@
  */
 package io.prestosql.tempto.examples;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import io.prestosql.tempto.ProductTest;
 import io.prestosql.tempto.hadoop.hdfs.HdfsClient;
@@ -35,5 +36,29 @@ public class HdfsClientTest
         assertThat(hdfsClient.exist(defaultPath)).isTrue();
         assertThat(hdfsClient.getOwner(defaultPath)).isEqualTo("hive");
         assertThat(hdfsClient.getPermission(defaultPath)).isEqualTo("1777");
+
+    }
+
+    @Inject
+    @Test(groups = "hdfs")
+    public void testMetadataOperations() {
+        String testPath = "/user/hive/warehouse/test_metadata";
+        hdfsClient.createDirectory(testPath);
+
+        hdfsClient.setPermission(testPath, "0700");
+        assertThat(hdfsClient.getPermission(testPath)).isEqualTo("700");
+        // reset permission for following testcases
+        hdfsClient.setPermission(testPath, "0777");
+
+        hdfsClient.setOwner(testPath, "kenny");
+        assertThat(hdfsClient.getOwner(testPath)).isEqualTo("kenny");
+
+        hdfsClient.setGroup(testPath, "orangepeople");
+        assertThat(hdfsClient.getGroup(testPath)).isEqualTo("orangepeople");
+
+        hdfsClient.createDirectory(testPath + "/a");
+        hdfsClient.createDirectory(testPath + "/b");
+        hdfsClient.createDirectory(testPath + "/c");
+        assertThat(hdfsClient.listDirectory(testPath)).containsAll(ImmutableList.of("a", "b", "c"));
     }
 }
