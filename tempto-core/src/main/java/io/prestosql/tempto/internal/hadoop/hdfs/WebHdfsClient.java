@@ -16,6 +16,7 @@ package io.prestosql.tempto.internal.hadoop.hdfs;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -47,6 +48,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
@@ -182,6 +184,27 @@ public class WebHdfsClient
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<String> listDirectory(String path)
+    {
+        HttpGet request = new HttpGet(buildUri(path, "LISTSTATUS", emptyMap()));
+        try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != SC_OK) {
+                throw invalidStatusException("LISTSTATUS", path, request, response);
+            }
+            Map<String, Object> responseObject = deserializeJsonResponse(response);
+            List<Map<String, Object>> fileStatuses = (List<Map<String, Object>>) ((Map<String, Object>) responseObject.get("FileStatuses")).get("FileStatus");
+            return fileStatuses.stream()
+                    .map(entry -> (String) entry.get("pathSuffix"))
+                    .collect(toImmutableList());
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not list: " + path + " , user: " + username, e);
+        }
+    }
+
     private Object getAttributeValue(String path, String attribute)
     {
         HttpGet readRequest = new HttpGet(buildUri(path, "GETFILESTATUS", emptyMap()));
@@ -213,10 +236,59 @@ public class WebHdfsClient
     }
 
     @Override
+    public void setOwner(String path, String owner) {
+        HttpPut request = new HttpPut(buildUri(path, "SETOWNER", ImmutableMap.of("owner", owner)));
+        try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
+            if (response.getStatusLine().getStatusCode() != SC_OK) {
+                throw invalidStatusException("SETPERMISSION", path, request, response);
+            }
+            logger.debug("Set owner for {} to {}, username: {}", path, owner, username);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not set owner for path: " + path + " in hdfs to " + owner + ", user: " + username, e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public String getGroup(String path)
+    {
+        return (String) getAttributeValue(path, "group");
+    }
+
+    @Override
+    public void setGroup(String path, String group) {
+        HttpPut request = new HttpPut(buildUri(path, "SETOWNER", ImmutableMap.of("group", group)));
+        try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
+            if (response.getStatusLine().getStatusCode() != SC_OK) {
+                throw invalidStatusException("SETPERMISSION", path, request, response);
+            }
+            logger.debug("Set group for {} to {}, username: {}", path, group, username);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not set group for path: " + path + " in hdfs to " + group + ", user: " + username, e);
+        }
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public String getPermission(String path)
     {
         return (String) getAttributeValue(path, "permission");
+    }
+
+    @Override
+    public void setPermission(String path, String octalPermissions) {
+        HttpPut request = new HttpPut(buildUri(path, "SETPERMISSION", ImmutableMap.of("permission", octalPermissions)));
+        try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
+            if (response.getStatusLine().getStatusCode() != SC_OK) {
+                throw invalidStatusException("SETPERMISSION", path, request, response);
+            }
+            logger.debug("Set permission for {} to {}, username: {}", path, octalPermissions, username);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not set permissions for path: " + path + " in hdfs to " + octalPermissions + ", user: " + username, e);
+        }
     }
 
     @Override
