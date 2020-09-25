@@ -19,6 +19,7 @@ import io.prestosql.tempto.testmarkers.WithTestGroups;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -28,14 +29,23 @@ public class TestMetadataReader
 {
     public TestMetadata readTestMetadata(ITestResult testResult)
     {
-        return readTestMetadata(testResult.getMethod());
+        return new TestMetadata(
+                readTestGroups(testResult.getMethod()),
+                readTestName(testResult.getMethod()),
+                readTestParameters(testResult));
     }
 
     public TestMetadata readTestMetadata(ITestNGMethod testMethod)
     {
         return new TestMetadata(
                 readTestGroups(testMethod),
-                readTestName(testMethod));
+                readTestName(testMethod),
+                null);
+    }
+
+    private Object[] readTestParameters(ITestResult testResult)
+    {
+        return testResult.getParameters();
     }
 
     private Set<String> readTestGroups(ITestNGMethod method)
