@@ -113,7 +113,18 @@ public class ProgressLoggingListener
     {
         TestMetadata testMetadata = testMetadataReader.readTestMetadata(testCase);
         String testGroups = Joiner.on(", ").join(testMetadata.testGroups);
-        return format("%s (Groups: %s)", testMetadata.testName, testGroups);
+        String testParameters = formatTestParameters(testMetadata.testParameters);
+
+        return format("%s%s (Groups: %s)", testMetadata.testName, testParameters, testGroups);
+    }
+
+    private String formatTestParameters(Object[] testParameters)
+    {
+        if (testParameters.length == 0) {
+            return "";
+        }
+
+        return format(" [%s]", Joiner.on(", ").join(testParameters));
     }
 
     private static String formatDuration(long durationInMillis)
