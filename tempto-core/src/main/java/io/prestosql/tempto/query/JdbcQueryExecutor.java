@@ -23,9 +23,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 import static io.prestosql.tempto.query.QueryResult.forSingleIntegerValue;
 import static io.prestosql.tempto.query.QueryResult.toSqlIndex;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -94,13 +96,16 @@ public class JdbcQueryExecutor
     private QueryResult execute(String sql, QueryParam... params)
             throws QueryExecutionException
     {
+        requireNonNull(sql, "sql is null");
+        requireNonNull(params, "params is null");
+
         if (connection == null) {
             openConnection();
         }
 
         sql = removeTrailingSemicolon(sql);
 
-        LOGGER.debug("executing on {} query {} with params {}", jdbcUrl, sql, params);
+        LOGGER.debug("executing on {} query [{}] with params: {}", jdbcUrl, sql, asList(params));
 
         try {
             if (params.length == 0) {
