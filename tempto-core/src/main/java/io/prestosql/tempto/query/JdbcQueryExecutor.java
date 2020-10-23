@@ -123,6 +123,7 @@ public class JdbcQueryExecutor
     private QueryResult executeQueryNoParams(String sql)
             throws SQLException
     {
+        requireNonNull(sql, "sql is null");
         try (Statement statement = getConnection().createStatement()) {
             if (statement.execute(sql)) {
                 return QueryResult.forResultSet(statement.getResultSet());
@@ -131,12 +132,18 @@ public class JdbcQueryExecutor
                 return forSingleIntegerValue(statement.getUpdateCount());
             }
         }
+        catch (Throwable e) {
+            e.addSuppressed(new Exception("Query: " + sql));
+            throw e;
+        }
     }
 
     // TODO - remove this method as soon as Presto supports prepared statements
     private QueryResult executeQueryWithParams(String sql, QueryParam[] params)
             throws SQLException
     {
+        requireNonNull(sql, "sql is null");
+        requireNonNull(params, "params is null");
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             setQueryParams(statement, params);
 
@@ -146,6 +153,10 @@ public class JdbcQueryExecutor
             else {
                 return forSingleIntegerValue(statement.getUpdateCount());
             }
+        }
+        catch (Throwable e) {
+            e.addSuppressed(new Exception("Query: " + sql));
+            throw e;
         }
     }
 
