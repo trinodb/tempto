@@ -180,7 +180,7 @@ public class QueryAssert
         }
 
         if (!missingRows.isEmpty()) {
-            failWithMessage(buildContainsMessage(missingRows));
+            failWithMessage("%s", buildContainsMessage(missingRows));
         }
 
         return this;
@@ -241,7 +241,7 @@ public class QueryAssert
         }
 
         if (!unequalRowsIndexes.isEmpty()) {
-            failWithMessage(buildContainsExactlyErrorMessage(unequalRowsIndexes, rows));
+            failWithMessage("%s", buildContainsExactlyErrorMessage(unequalRowsIndexes, rows));
         }
 
         return this;

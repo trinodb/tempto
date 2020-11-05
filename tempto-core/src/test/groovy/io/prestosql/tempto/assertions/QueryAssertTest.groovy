@@ -312,6 +312,25 @@ class QueryAssertTest
                 '[2, ARGENTINA, SOUTH AMERICA]'
     }
 
+    def 'hasRows with % query'()
+    {
+        when:
+        assertThat(new QueryResult(
+                    [VARCHAR],
+                    HashBiMap.create(["value": 1]),
+                    [["%,"],],
+                    Optional.of(Mock(ResultSet))))
+                .contains(row("value %,"))
+
+        then:
+        def e = thrown(AssertionError)
+        e.message == 'Could not find rows:\n' +
+                '[value %,]\n' +
+                '\n' +
+                'actual rows:\n' +
+                '[%,]'
+    }
+
     def 'hasRowsInOrder - different number of rows'()
     {
         when:
