@@ -221,13 +221,22 @@ public class QueryAssert
     }
 
     /**
+     * @deprecated Use {@link #containsExactlyInOrder(List)}
+     */
+    @Deprecated
+    public QueryAssert containsExactly(List<Row> rows)
+    {
+        return containsExactlyInOrder(rows);
+    }
+
+    /**
      * Verifies that the actual result set equals to {@code rows}.
      * ResultSet in different order or with any extra rows perceived as not same
      *
      * @param rows Rows to be matched
      * @return this
      */
-    public QueryAssert containsExactly(List<Row> rows)
+    public QueryAssert containsExactlyInOrder(List<Row> rows)
     {
         hasRowsCount(rows.size());
         List<Integer> unequalRowsIndexes = newArrayList();
@@ -248,11 +257,20 @@ public class QueryAssert
     }
 
     /**
+     * @deprecated Use {@link #containsExactlyInOrder(Row...)}
+     */
+    @Deprecated
+    public QueryAssert containsExactly(Row... rows)
+    {
+        return containsExactlyInOrder(rows);
+    }
+
+    /**
      * @param rows Rows to be matched
      * @return this
-     * @see #containsExactly(java.util.List)
+     * @see #containsExactlyInOrder(java.util.List)
      */
-    public QueryAssert containsExactly(Row... rows)
+    public QueryAssert containsExactlyInOrder(Row... rows)
     {
         return containsExactly(Arrays.asList(rows));
     }
