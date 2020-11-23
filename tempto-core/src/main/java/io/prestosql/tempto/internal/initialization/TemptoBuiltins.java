@@ -27,6 +27,8 @@ import io.prestosql.tempto.initialization.TestMethodModuleProvider;
 import io.prestosql.tempto.internal.configuration.TestConfigurationModuleProvider;
 import io.prestosql.tempto.internal.fulfillment.command.SuiteCommandFulfiller;
 import io.prestosql.tempto.internal.fulfillment.command.TestCommandFulfiller;
+import io.prestosql.tempto.internal.fulfillment.resources.SuiteResourceFulfiller;
+import io.prestosql.tempto.internal.fulfillment.resources.TestResourceFulfiller;
 import io.prestosql.tempto.internal.fulfillment.table.ImmutableTablesFulfiller;
 import io.prestosql.tempto.internal.fulfillment.table.MutableTablesFulfiller;
 import io.prestosql.tempto.internal.fulfillment.table.TableManagerDispatcherModuleProvider;
@@ -50,7 +52,9 @@ public class TemptoBuiltins
                 ImmutableTablesFulfiller.class,
                 SuiteCommandFulfiller.class,
                 MutableTablesFulfiller.class,
-                TestCommandFulfiller.class);
+                TestCommandFulfiller.class,
+                TestResourceFulfiller.class,
+                SuiteResourceFulfiller.class);
     }
 
     @Override
