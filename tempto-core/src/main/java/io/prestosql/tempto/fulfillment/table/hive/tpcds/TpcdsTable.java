@@ -14,7 +14,7 @@
 
 package io.prestosql.tempto.fulfillment.table.hive.tpcds;
 
-import io.prestosql.tpcds.Table;
+import io.trino.tpcds.Table;
 
 /**
  * Enum containing names of all TPCDS tables. Moreover it holds reference to

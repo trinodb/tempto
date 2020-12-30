@@ -19,7 +19,7 @@ import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
 import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
 import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 import io.prestosql.tempto.internal.fulfillment.table.hive.tpch.TpchEntityByteSource;
-import io.prestosql.tpch.TpchEntity;
+import io.trino.tpch.TpchEntity;
 
 import java.util.Collection;
 import java.util.Optional;

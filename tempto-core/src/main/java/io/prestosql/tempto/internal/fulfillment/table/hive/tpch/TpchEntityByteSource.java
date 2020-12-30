@@ -15,7 +15,7 @@
 package io.prestosql.tempto.internal.fulfillment.table.hive.tpch;
 
 import com.google.common.io.ByteSource;
-import io.prestosql.tpch.TpchEntity;
+import io.trino.tpch.TpchEntity;
 
 import java.io.InputStream;
 import java.util.Iterator;

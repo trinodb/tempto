@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableList;
 import io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTable;
 import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.prestosql.tempto.internal.query.QueryRowMapper;
-import io.prestosql.tpch.TpchEntity;
+import io.trino.tpch.TpchEntity;
 
 import java.sql.JDBCType;
 import java.util.ArrayList;

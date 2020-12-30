@@ -18,8 +18,8 @@ import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
 import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
 import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
 import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
-import io.prestosql.tpcds.Results;
-import io.prestosql.tpcds.Session;
+import io.trino.tpcds.Results;
+import io.trino.tpcds.Session;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static io.prestosql.tpcds.Results.constructResults;
+import static io.trino.tpcds.Results.constructResults;
 import static java.lang.String.format;
 import static java.util.Collections.singleton;
 import static java.util.Objects.requireNonNull;

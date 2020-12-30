@@ -52,12 +52,12 @@
         </dependency>
 
         <dependency>
-            <groupId>io.prestosql.tpch</groupId>
+            <groupId>io.trino.tpch</groupId>
             <artifactId>tpch</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.prestosql.tpcds</groupId>
+            <groupId>io.trino.tpcds</groupId>
             <artifactId>tpcds</artifactId>
         </dependency>
 
