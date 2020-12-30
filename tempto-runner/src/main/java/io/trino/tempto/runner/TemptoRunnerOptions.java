@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.runner;
+package io.trino.tempto.runner;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;

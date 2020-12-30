@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.process;
+package io.trino.tempto.process;
 
 public class TimeoutRuntimeException
         extends RuntimeException

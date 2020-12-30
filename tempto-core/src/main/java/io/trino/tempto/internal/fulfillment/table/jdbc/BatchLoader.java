@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.table.jdbc;
+package io.trino.tempto.internal.fulfillment.table.jdbc;
 
-import io.prestosql.tempto.query.QueryExecutor;
+import io.trino.tempto.query.QueryExecutor;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

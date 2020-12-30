@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.ssh;
+package io.trino.tempto.internal.ssh;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.prestosql.tempto.ssh.SshClient;
-import io.prestosql.tempto.ssh.SshClientFactory;
+import io.trino.tempto.ssh.SshClient;
+import io.trino.tempto.ssh.SshClientFactory;
 import org.slf4j.Logger;
 
 import java.util.Optional;

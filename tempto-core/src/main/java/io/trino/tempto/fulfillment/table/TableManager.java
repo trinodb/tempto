@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.fulfillment.table;
+package io.trino.tempto.fulfillment.table;
 
-import io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State;
-import io.prestosql.tempto.internal.fulfillment.table.TableName;
+import io.trino.tempto.fulfillment.table.MutableTableRequirement.State;
+import io.trino.tempto.internal.fulfillment.table.TableName;
 
 import java.io.Closeable;
 import java.lang.annotation.ElementType;
@@ -22,8 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
-import static io.prestosql.tempto.fulfillment.table.TableManagerDispatcher.getTableManagerDispatcher;
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
+import static io.trino.tempto.fulfillment.table.TableManagerDispatcher.getTableManagerDispatcher;
 
 /**
  * Provides functionality of creating/dropping tables based on {@link TableDefinition}.

@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.hive;
+package io.trino.tempto.fulfillment.table.hive;
 
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
-import io.prestosql.tempto.internal.fulfillment.table.TableName;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.internal.fulfillment.table.TableName;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +24,9 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.newArrayList;
-import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
-import static io.prestosql.tempto.fulfillment.table.hive.InlineDataSource.createSameRowDataSource;
-import static io.prestosql.tempto.fulfillment.table.hive.InlineDataSource.createStringDataSource;
+import static io.trino.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.trino.tempto.fulfillment.table.hive.InlineDataSource.createSameRowDataSource;
+import static io.trino.tempto.fulfillment.table.hive.InlineDataSource.createStringDataSource;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;

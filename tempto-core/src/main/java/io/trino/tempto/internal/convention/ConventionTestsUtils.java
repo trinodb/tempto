@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention;
+package io.trino.tempto.internal.convention;
 
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.copyRecursive;
+import static io.trino.tempto.internal.convention.SqlTestsFileUtils.copyRecursive;
 import static java.lang.ClassLoader.getSystemResources;
 import static java.nio.file.FileSystems.newFileSystem;
 import static java.nio.file.Files.createTempDirectory;

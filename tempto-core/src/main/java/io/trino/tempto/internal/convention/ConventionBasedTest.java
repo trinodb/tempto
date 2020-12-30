@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention;
+package io.trino.tempto.internal.convention;
 
-import io.prestosql.tempto.ProductTest;
-import io.prestosql.tempto.RequirementsProvider;
-import io.prestosql.tempto.testmarkers.WithName;
-import io.prestosql.tempto.testmarkers.WithTestGroups;
+import io.trino.tempto.ProductTest;
+import io.trino.tempto.RequirementsProvider;
+import io.trino.tempto.testmarkers.WithName;
+import io.trino.tempto.testmarkers.WithTestGroups;
 
 public abstract class ConventionBasedTest
         extends ProductTest

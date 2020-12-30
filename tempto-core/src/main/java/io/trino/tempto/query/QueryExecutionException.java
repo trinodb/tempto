@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.query;
+package io.trino.tempto.query;
 
 public class QueryExecutionException
         extends RuntimeException

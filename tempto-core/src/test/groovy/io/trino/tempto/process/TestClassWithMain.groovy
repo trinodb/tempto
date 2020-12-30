@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.process
+package io.trino.tempto.process
 
 import static org.assertj.core.api.Assertions.assertThat
 

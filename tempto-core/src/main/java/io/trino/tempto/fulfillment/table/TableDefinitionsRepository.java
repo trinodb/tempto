@@ -11,17 +11,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.fulfillment.table;
+package io.trino.tempto.fulfillment.table;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.prestosql.tempto.TemptoPlugin;
-import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
-import io.prestosql.tempto.fulfillment.table.jdbc.RelationalDataSource;
-import io.prestosql.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionDescriptor;
-import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedHiveDataSource;
-import io.prestosql.tempto.internal.convention.tabledefinitions.FileBasedRelationalDataSource;
+import io.trino.tempto.TemptoPlugin;
+import io.trino.tempto.fulfillment.table.hive.HiveDataSource;
+import io.trino.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.trino.tempto.fulfillment.table.jdbc.RelationalDataSource;
+import io.trino.tempto.internal.convention.tabledefinitions.ConventionTableDefinitionDescriptor;
+import io.trino.tempto.internal.convention.tabledefinitions.FileBasedHiveDataSource;
+import io.trino.tempto.internal.convention.tabledefinitions.FileBasedRelationalDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +39,10 @@ import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
-import static io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition.hiveTableDefinition;
-import static io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
-import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
+import static io.trino.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.trino.tempto.fulfillment.table.hive.HiveTableDefinition.hiveTableDefinition;
+import static io.trino.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
+import static io.trino.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newDirectoryStream;
 import static java.util.Collections.emptyList;

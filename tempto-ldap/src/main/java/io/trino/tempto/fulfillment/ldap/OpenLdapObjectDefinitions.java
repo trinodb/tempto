@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.ldap;
+package io.trino.tempto.fulfillment.ldap;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

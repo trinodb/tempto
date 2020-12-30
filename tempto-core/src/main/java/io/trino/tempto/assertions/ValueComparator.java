@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.assertions;
+package io.trino.tempto.assertions;
 
 import java.util.function.BiPredicate;
 

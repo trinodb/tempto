@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.fulfillment.table.kafka;
+package io.trino.tempto.fulfillment.table.kafka;
 
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableHandle;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;

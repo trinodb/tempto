@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.process;
+package io.trino.tempto.process;
 
-import io.prestosql.tempto.internal.process.CliProcessBase;
+import io.trino.tempto.internal.process.CliProcessBase;
 
 import java.time.Duration;
 

@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.process
+package io.trino.tempto.process
 
 import spock.lang.Specification
 
-import static io.prestosql.tempto.process.JavaProcessLauncher.defaultJavaProcessLauncher
-import static io.prestosql.tempto.process.TestClassWithMain.EXPECTED_ARGUMENT
-import static io.prestosql.tempto.process.TestClassWithMain.EXPECTED_LINE
-import static io.prestosql.tempto.process.TestClassWithMain.PRODUCED_LINE
+import static io.trino.tempto.process.JavaProcessLauncher.defaultJavaProcessLauncher
+import static io.trino.tempto.process.TestClassWithMain.EXPECTED_ARGUMENT
+import static io.trino.tempto.process.TestClassWithMain.EXPECTED_LINE
+import static io.trino.tempto.process.TestClassWithMain.PRODUCED_LINE
 
 class JavaProcessLauncherTest
         extends Specification

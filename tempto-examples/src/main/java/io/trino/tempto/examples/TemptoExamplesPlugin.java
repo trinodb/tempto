@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.examples;
+package io.trino.tempto.examples;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.TemptoPlugin;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.fulfillment.table.kafka.KafkaTableManager;
+import io.trino.tempto.TemptoPlugin;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.fulfillment.table.kafka.KafkaTableManager;
 
 import java.util.List;
 

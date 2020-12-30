@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.query;
+package io.trino.tempto.internal.query;
 
-import io.prestosql.tempto.query.JdbcConnectivityParamsState;
+import io.trino.tempto.query.JdbcConnectivityParamsState;
 
 import javax.sql.DataSource;
 

@@ -12,21 +12,21 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.context
+package io.trino.tempto.context
 
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
-import static io.prestosql.tempto.context.TestContextDsl.withChildTestContext
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.ThreadLocalTestContextException
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.popAllTestContexts
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.popTestContext
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.pushTestContext
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContextIfSet
+import static io.trino.tempto.context.TestContextDsl.withChildTestContext
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.ThreadLocalTestContextException
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.popAllTestContexts
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.popTestContext
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.pushTestContext
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContextIfSet
 
 class ThreadLocalTestContextHolderTest
         extends Specification

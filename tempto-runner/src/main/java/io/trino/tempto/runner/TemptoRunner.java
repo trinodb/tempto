@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.runner;
+package io.trino.tempto.runner;
 
 import com.google.common.base.Joiner;
-import io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector;
+import io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.TestNG;
@@ -28,13 +28,13 @@ import java.util.List;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Lists.newArrayList;
-import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY;
-import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_DIR_KEY;
-import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY;
-import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_EXCLUDE_PROPERTY;
-import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_RUN_PROPERTY;
-import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_EXCLUDE_PROPERTY;
-import static io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
+import static io.trino.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY;
+import static io.trino.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_DIR_KEY;
+import static io.trino.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_EXCLUDE_PROPERTY;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_RUN_PROPERTY;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_EXCLUDE_PROPERTY;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
 import static java.util.Collections.singletonList;
 
 public class TemptoRunner

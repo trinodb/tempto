@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.query;
+package io.trino.tempto.query;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;

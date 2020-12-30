@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.configuration
+package io.trino.tempto.internal.configuration
 
 import spock.lang.Specification
 
-import static io.prestosql.tempto.configuration.KeyUtils.getKeyPrefix
-import static io.prestosql.tempto.configuration.KeyUtils.joinKey
-import static io.prestosql.tempto.configuration.KeyUtils.splitKey
+import static io.trino.tempto.configuration.KeyUtils.getKeyPrefix
+import static io.trino.tempto.configuration.KeyUtils.joinKey
+import static io.trino.tempto.configuration.KeyUtils.splitKey
 
 class KeyUtilsTest
         extends Specification

@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.fulfillment.table;
+package io.trino.tempto.fulfillment.table;
 
-import io.prestosql.tempto.internal.fulfillment.table.TableName;
+import io.trino.tempto.internal.fulfillment.table.TableName;
 
 import java.util.Optional;
 

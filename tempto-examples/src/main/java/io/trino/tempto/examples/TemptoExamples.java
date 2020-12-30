@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.examples;
+package io.trino.tempto.examples;
 
-import io.prestosql.tempto.another.examples.MultiplePackagesTest;
-import io.prestosql.tempto.runner.TemptoRunner;
-import io.prestosql.tempto.runner.TemptoRunnerCommandLineParser;
+import io.trino.tempto.another.examples.MultiplePackagesTest;
+import io.trino.tempto.runner.TemptoRunner;
+import io.trino.tempto.runner.TemptoRunnerCommandLineParser;
 
-import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.DEFAULT_TEST_CONFIGURATION_LOCATION;
+import static io.trino.tempto.internal.configuration.TestConfigurationFactory.DEFAULT_TEST_CONFIGURATION_LOCATION;
 import static org.testng.Assert.assertTrue;
 
 public class TemptoExamples

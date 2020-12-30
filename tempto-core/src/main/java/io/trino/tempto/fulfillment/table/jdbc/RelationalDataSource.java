@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.jdbc;
+package io.trino.tempto.fulfillment.table.jdbc;
 
 import java.sql.PreparedStatement;
 import java.util.Iterator;

@@ -12,19 +12,19 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention.sql;
+package io.trino.tempto.internal.convention.sql;
 
 import com.google.common.base.Splitter;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.assertions.QueryAssert;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.internal.convention.ConventionBasedTest;
-import io.prestosql.tempto.internal.convention.SqlQueryDescriptor;
-import io.prestosql.tempto.internal.convention.SqlResultDescriptor;
-import io.prestosql.tempto.query.QueryExecutor;
-import io.prestosql.tempto.query.QueryResult;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.assertions.QueryAssert;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.internal.convention.ConventionBasedTest;
+import io.trino.tempto.internal.convention.SqlQueryDescriptor;
+import io.trino.tempto.internal.convention.SqlResultDescriptor;
+import io.trino.tempto.query.QueryExecutor;
+import io.trino.tempto.query.QueryResult;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
@@ -46,11 +46,11 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
-import static io.prestosql.tempto.assertions.QueryAssert.assertThat;
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
-import static io.prestosql.tempto.fulfillment.table.MutableTablesState.mutableTablesState;
-import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.getConventionTestResultsDumpPath;
-import static io.prestosql.tempto.internal.convention.ProcessUtils.execute;
+import static io.trino.tempto.assertions.QueryAssert.assertThat;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
+import static io.trino.tempto.fulfillment.table.MutableTablesState.mutableTablesState;
+import static io.trino.tempto.internal.convention.ConventionTestsUtils.getConventionTestResultsDumpPath;
+import static io.trino.tempto.internal.convention.ProcessUtils.execute;
 import static java.nio.file.Files.newBufferedWriter;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;

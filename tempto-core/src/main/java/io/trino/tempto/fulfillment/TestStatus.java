@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment;
+package io.trino.tempto.fulfillment;
 
 public enum TestStatus
 {

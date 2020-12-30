@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.initialization;
+package io.trino.tempto.internal.initialization;
 
-import io.prestosql.tempto.Requirement;
+import io.trino.tempto.Requirement;
 import org.testng.ITestNGMethod;
 
 import java.util.Set;

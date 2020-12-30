@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.ssh
+package io.trino.tempto.internal.ssh
 
 import com.google.common.io.Files
-import io.prestosql.tempto.process.CliProcess
+import io.trino.tempto.process.CliProcess
 import org.apache.sshd.SshServer
 import org.apache.sshd.server.Command
 import org.apache.sshd.server.CommandFactory

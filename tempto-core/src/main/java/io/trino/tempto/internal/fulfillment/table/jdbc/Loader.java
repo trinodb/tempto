@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.table.jdbc;
+package io.trino.tempto.internal.fulfillment.table.jdbc;
 
 import java.sql.SQLException;
 import java.util.List;

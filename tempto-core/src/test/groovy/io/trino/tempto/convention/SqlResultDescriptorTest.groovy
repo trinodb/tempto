@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.convention
+package io.trino.tempto.convention
 
-import io.prestosql.tempto.assertions.QueryAssert
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult
-import io.prestosql.tempto.internal.convention.SqlResultDescriptor
+import io.trino.tempto.assertions.QueryAssert
+import io.trino.tempto.internal.convention.AnnotatedFileParser
+import io.trino.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult
+import io.trino.tempto.internal.convention.SqlResultDescriptor
 import org.joda.time.DateTimeZone
 import spock.lang.Specification
 

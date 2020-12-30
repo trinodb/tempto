@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.kerberos;
+package io.trino.tempto.kerberos;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;

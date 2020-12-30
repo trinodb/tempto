@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.hadoop.hdfs;
+package io.trino.tempto.hadoop.hdfs;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 

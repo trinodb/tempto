@@ -11,13 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.fulfillment.table.hive.tpcds;
+package io.trino.tempto.fulfillment.table.hive.tpcds;
 
 import com.google.common.base.Charsets;
-import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
-import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
-import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
+import io.trino.tempto.fulfillment.table.hive.HiveDataSource;
+import io.trino.tempto.fulfillment.table.hive.statistics.TableStatistics;
+import io.trino.tempto.fulfillment.table.hive.statistics.TableStatisticsRepository;
+import io.trino.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 import io.trino.tpcds.Results;
 import io.trino.tpcds.Session;
 

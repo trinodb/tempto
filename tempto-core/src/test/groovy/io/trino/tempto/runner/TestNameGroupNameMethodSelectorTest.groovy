@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.runner
+package io.trino.tempto.runner
 
-import io.prestosql.tempto.internal.listeners.TestMetadata
-import io.prestosql.tempto.internal.listeners.TestMetadataReader
-import io.prestosql.tempto.internal.listeners.TestNameGroupNameMethodSelector
+import io.trino.tempto.internal.listeners.TestMetadata
+import io.trino.tempto.internal.listeners.TestMetadataReader
+import io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector
 import org.testng.IMethodSelectorContext
 import org.testng.ITestNGMethod
 import spock.lang.Specification

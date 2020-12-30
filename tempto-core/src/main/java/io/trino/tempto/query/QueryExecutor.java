@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.query;
+package io.trino.tempto.query;
 
 import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.JDBCType;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
 
 /**
  * Interface for executors of a sql queries.

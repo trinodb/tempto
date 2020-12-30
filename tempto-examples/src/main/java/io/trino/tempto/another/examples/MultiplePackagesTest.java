@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.another.examples;
+package io.trino.tempto.another.examples;
 
 import org.testng.annotations.Test;
 

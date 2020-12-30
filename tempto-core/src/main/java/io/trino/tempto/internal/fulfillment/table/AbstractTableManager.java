@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.fulfillment.table;
+package io.trino.tempto.internal.fulfillment.table;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.query.QueryExecutionException;
-import io.prestosql.tempto.query.QueryExecutor;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.query.QueryExecutionException;
+import io.trino.tempto.query.QueryExecutor;
 import org.slf4j.Logger;
 
 import java.sql.DatabaseMetaData;
@@ -26,7 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.trino.tempto.fulfillment.table.TableHandle.tableHandle;
 import static java.util.Objects.requireNonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 

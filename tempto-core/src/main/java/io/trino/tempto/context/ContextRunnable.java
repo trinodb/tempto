@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.context;
+package io.trino.tempto.context;
 
 /**
  * Interface for invocation of tests in dsl defined context.

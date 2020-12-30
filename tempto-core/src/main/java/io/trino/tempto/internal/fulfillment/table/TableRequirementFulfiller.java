@@ -12,17 +12,17 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.table;
+package io.trino.tempto.internal.fulfillment.table;
 
 import com.google.common.collect.ImmutableSet;
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.context.State;
-import io.prestosql.tempto.fulfillment.RequirementFulfiller;
-import io.prestosql.tempto.fulfillment.table.TableInstance;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
-import io.prestosql.tempto.fulfillment.table.TableRequirement;
-import io.prestosql.tempto.fulfillment.table.TablesState;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.context.State;
+import io.trino.tempto.fulfillment.RequirementFulfiller;
+import io.trino.tempto.fulfillment.table.TableInstance;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.fulfillment.table.TableManagerDispatcher;
+import io.trino.tempto.fulfillment.table.TableRequirement;
+import io.trino.tempto.fulfillment.table.TablesState;
 import org.slf4j.Logger;
 
 import java.util.List;

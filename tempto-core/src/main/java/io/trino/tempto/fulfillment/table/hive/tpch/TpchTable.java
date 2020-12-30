@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.hive.tpch;
+package io.trino.tempto.fulfillment.table.hive.tpch;
 
 /**
  * Enum containing names of all TPCH tables. Moreover it holds reference to

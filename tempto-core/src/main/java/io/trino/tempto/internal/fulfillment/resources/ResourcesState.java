@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.fulfillment.resources;
+package io.trino.tempto.internal.fulfillment.resources;
 
 import com.google.common.io.Closer;
-import io.prestosql.tempto.context.State;
+import io.trino.tempto.context.State;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

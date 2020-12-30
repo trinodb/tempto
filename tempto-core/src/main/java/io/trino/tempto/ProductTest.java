@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto;
+package io.trino.tempto;
 
-import io.prestosql.tempto.internal.initialization.RequirementsExpanderInterceptor;
-import io.prestosql.tempto.internal.initialization.TestInitializationListener;
-import io.prestosql.tempto.internal.listeners.ProgressLoggingListener;
+import io.trino.tempto.internal.initialization.RequirementsExpanderInterceptor;
+import io.trino.tempto.internal.initialization.TestInitializationListener;
+import io.trino.tempto.internal.listeners.ProgressLoggingListener;
 import org.testng.annotations.Listeners;
 
 @Listeners({RequirementsExpanderInterceptor.class, TestInitializationListener.class, ProgressLoggingListener.class})

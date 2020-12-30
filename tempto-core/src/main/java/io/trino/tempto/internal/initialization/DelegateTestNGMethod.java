@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.initialization;
+package io.trino.tempto.internal.initialization;
 
 import org.testng.IClass;
 import org.testng.IRetryAnalyzer;

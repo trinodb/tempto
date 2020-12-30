@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention;
+package io.trino.tempto.internal.convention;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.internal.convention.generator.GeneratorPathTestFactory;
-import io.prestosql.tempto.internal.convention.recursion.RecursionPathTestFactory;
-import io.prestosql.tempto.internal.convention.sql.SqlPathTestFactory;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.internal.convention.generator.GeneratorPathTestFactory;
+import io.trino.tempto.internal.convention.recursion.RecursionPathTestFactory;
+import io.trino.tempto.internal.convention.sql.SqlPathTestFactory;
 import org.slf4j.Logger;
 import org.testng.annotations.Factory;
 
@@ -28,9 +28,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import static io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository.tableDefinitionsRepository;
-import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
-import static io.prestosql.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
+import static io.trino.tempto.fulfillment.table.TableDefinitionsRepository.tableDefinitionsRepository;
+import static io.trino.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
+import static io.trino.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
 import static java.util.stream.Collectors.toList;
 import static org.slf4j.LoggerFactory.getLogger;
 

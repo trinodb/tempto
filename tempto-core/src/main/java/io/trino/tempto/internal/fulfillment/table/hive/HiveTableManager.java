@@ -11,21 +11,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.fulfillment.table.hive;
+package io.trino.tempto.internal.fulfillment.table.hive;
 
 import com.google.inject.Inject;
-import io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
-import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
-import io.prestosql.tempto.internal.fulfillment.table.AbstractTableManager;
-import io.prestosql.tempto.internal.fulfillment.table.TableName;
-import io.prestosql.tempto.internal.fulfillment.table.TableNameGenerator;
-import io.prestosql.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter;
-import io.prestosql.tempto.query.QueryExecutor;
-import io.prestosql.tempto.query.QueryResult;
+import io.trino.tempto.fulfillment.table.MutableTableRequirement.State;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.fulfillment.table.hive.HiveDataSource;
+import io.trino.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.trino.tempto.internal.fulfillment.table.AbstractTableManager;
+import io.trino.tempto.internal.fulfillment.table.TableName;
+import io.trino.tempto.internal.fulfillment.table.TableNameGenerator;
+import io.trino.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter;
+import io.trino.tempto.query.QueryExecutor;
+import io.trino.tempto.query.QueryResult;
 import org.slf4j.Logger;
 
 import javax.inject.Named;
@@ -43,8 +43,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Verify.verify;
 import static com.google.common.collect.Iterables.getOnlyElement;
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.PREPARED;
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.PREPARED;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.slf4j.LoggerFactory.getLogger;

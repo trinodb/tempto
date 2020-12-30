@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.sql.view;
+package io.trino.tempto.sql.view;
 
-import io.prestosql.tempto.context.ContextProvider;
-import io.prestosql.tempto.query.QueryExecutionException;
-import io.prestosql.tempto.query.QueryExecutor;
+import io.trino.tempto.context.ContextProvider;
+import io.trino.tempto.query.QueryExecutionException;
+import io.trino.tempto.query.QueryExecutor;
 
-import static io.prestosql.tempto.assertions.QueryAssert.assertThat;
+import static io.trino.tempto.assertions.QueryAssert.assertThat;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 

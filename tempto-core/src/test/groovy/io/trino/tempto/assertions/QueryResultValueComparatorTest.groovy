@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.assertions
+package io.trino.tempto.assertions
 
-import io.prestosql.tempto.configuration.Configuration
+import io.trino.tempto.configuration.Configuration
 import spock.lang.Specification
 import spock.lang.Unroll
 

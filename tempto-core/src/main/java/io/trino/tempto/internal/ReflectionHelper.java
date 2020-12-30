@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal;
+package io.trino.tempto.internal;
 
 import java.util.Collection;
 import java.util.List;

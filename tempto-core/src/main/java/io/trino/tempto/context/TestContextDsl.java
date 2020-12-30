@@ -11,13 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.context;
+package io.trino.tempto.context;
 
-import io.prestosql.tempto.threads.IndexedRunnable;
+import io.trino.tempto.threads.IndexedRunnable;
 
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.popTestContext;
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.pushTestContext;
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.popTestContext;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.pushTestContext;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
 
 public final class TestContextDsl
 {

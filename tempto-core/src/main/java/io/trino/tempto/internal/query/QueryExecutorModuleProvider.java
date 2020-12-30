@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.query;
+package io.trino.tempto.internal.query;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
@@ -20,13 +20,13 @@ import com.google.inject.Module;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
-import io.prestosql.tempto.query.JdbcConnectionsPool;
-import io.prestosql.tempto.query.JdbcConnectivityParamsState;
-import io.prestosql.tempto.query.JdbcQueryExecutor;
-import io.prestosql.tempto.query.QueryExecutor;
-import io.prestosql.tempto.query.QueryExecutorDispatcher;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.initialization.SuiteModuleProvider;
+import io.trino.tempto.query.JdbcConnectionsPool;
+import io.trino.tempto.query.JdbcConnectivityParamsState;
+import io.trino.tempto.query.JdbcQueryExecutor;
+import io.trino.tempto.query.QueryExecutor;
+import io.trino.tempto.query.QueryExecutorDispatcher;
 
 import javax.inject.Inject;
 

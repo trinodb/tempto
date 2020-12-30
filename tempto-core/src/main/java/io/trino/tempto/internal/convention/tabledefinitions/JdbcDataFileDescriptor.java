@@ -11,13 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.convention.tabledefinitions;
+package io.trino.tempto.internal.convention.tabledefinitions;
 
 import com.google.common.base.Splitter;
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser;
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
-import io.prestosql.tempto.internal.convention.SqlDescriptor;
-import io.prestosql.tempto.internal.query.QueryRowMapper;
+import io.trino.tempto.internal.convention.AnnotatedFileParser;
+import io.trino.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
+import io.trino.tempto.internal.convention.SqlDescriptor;
+import io.trino.tempto.internal.query.QueryRowMapper;
 
 import java.nio.file.Path;
 import java.sql.JDBCType;

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.fulfillment.table;
+package io.trino.tempto.internal.fulfillment.table;
 
 import com.google.common.base.MoreObjects;
 

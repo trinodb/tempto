@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.table;
+package io.trino.tempto.internal.fulfillment.table;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.fulfillment.table.TableManagerDispatcher;
 
 import java.util.Collection;
 import java.util.List;

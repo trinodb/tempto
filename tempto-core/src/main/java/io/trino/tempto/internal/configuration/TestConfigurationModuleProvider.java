@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.configuration;
+package io.trino.tempto.internal.configuration;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.initialization.SuiteModuleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

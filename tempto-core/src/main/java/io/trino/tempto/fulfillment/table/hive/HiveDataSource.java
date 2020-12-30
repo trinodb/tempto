@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.hive;
+package io.trino.tempto.fulfillment.table.hive;
 
-import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
-import io.prestosql.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
+import io.trino.tempto.fulfillment.table.hive.statistics.TableStatistics;
+import io.trino.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 
 import java.util.Collection;
 import java.util.Optional;

@@ -12,28 +12,28 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention.sql;
+package io.trino.tempto.internal.convention.sql;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.RequirementsProvider;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.fulfillment.table.ImmutableTableRequirement;
-import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableDefinitionsRepository;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
-import io.prestosql.tempto.internal.ReflectionHelper;
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser;
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
-import io.prestosql.tempto.internal.convention.ConventionBasedTest;
-import io.prestosql.tempto.internal.convention.ConventionBasedTestFactory;
-import io.prestosql.tempto.internal.convention.ConventionBasedTestProxyGenerator;
-import io.prestosql.tempto.internal.convention.MutableTableDescriptor;
-import io.prestosql.tempto.internal.convention.SqlQueryDescriptor;
-import io.prestosql.tempto.internal.convention.SqlResultDescriptor;
-import io.prestosql.tempto.internal.convention.SqlTestsFileUtils;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.RequirementsProvider;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.fulfillment.table.ImmutableTableRequirement;
+import io.trino.tempto.fulfillment.table.MutableTableRequirement;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableDefinitionsRepository;
+import io.trino.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.internal.ReflectionHelper;
+import io.trino.tempto.internal.convention.AnnotatedFileParser;
+import io.trino.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
+import io.trino.tempto.internal.convention.ConventionBasedTest;
+import io.trino.tempto.internal.convention.ConventionBasedTestFactory;
+import io.trino.tempto.internal.convention.ConventionBasedTestProxyGenerator;
+import io.trino.tempto.internal.convention.MutableTableDescriptor;
+import io.trino.tempto.internal.convention.SqlQueryDescriptor;
+import io.trino.tempto.internal.convention.SqlResultDescriptor;
+import io.trino.tempto.internal.convention.SqlTestsFileUtils;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -42,11 +42,11 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.google.common.collect.Lists.newArrayList;
-import static io.prestosql.tempto.Requirements.compose;
-import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle;
-import static io.prestosql.tempto.internal.convention.SqlResultDescriptor.sqlResultDescriptorFor;
-import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.changeExtension;
-import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.getExtension;
+import static io.trino.tempto.Requirements.compose;
+import static io.trino.tempto.fulfillment.table.TableHandle.tableHandle;
+import static io.trino.tempto.internal.convention.SqlResultDescriptor.sqlResultDescriptorFor;
+import static io.trino.tempto.internal.convention.SqlTestsFileUtils.changeExtension;
+import static io.trino.tempto.internal.convention.SqlTestsFileUtils.getExtension;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isRegularFile;
 import static java.util.Objects.requireNonNull;

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.kafka;
+package io.trino.tempto.fulfillment.table.kafka;
 
 import com.google.common.collect.ImmutableList;
 

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.assertions;
+package io.trino.tempto.assertions;
 
 import org.assertj.core.api.AbstractListAssert;
 import org.assertj.core.api.ObjectAssert;

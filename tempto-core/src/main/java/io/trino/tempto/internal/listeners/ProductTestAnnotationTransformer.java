@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.listeners;
+package io.trino.tempto.internal.listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

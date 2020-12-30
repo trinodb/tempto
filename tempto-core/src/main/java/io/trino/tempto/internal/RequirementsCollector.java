@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal;
+package io.trino.tempto.internal;
 
-import io.prestosql.tempto.CompositeRequirement;
+import io.trino.tempto.CompositeRequirement;
 
 import java.lang.reflect.Method;
 

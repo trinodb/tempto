@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention
+package io.trino.tempto.internal.convention
 
 import spock.lang.Specification
 
@@ -110,7 +110,7 @@ class AnnotatedFileParserTest
     def 'handles line end escapes'()
     {
         String fileContent = '--! name: section1\n' +
-                'line\\n1\n' + 
+                'line\\n1\n' +
                 'line2\n' +
                 '--! name: section2'
         def sections = fileParser.parseFile(toInputStream(fileContent))

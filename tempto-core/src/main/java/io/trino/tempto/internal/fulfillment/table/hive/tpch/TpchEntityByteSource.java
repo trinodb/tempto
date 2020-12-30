@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.table.hive.tpch;
+package io.trino.tempto.internal.fulfillment.table.hive.tpch;
 
 import com.google.common.io.ByteSource;
 import io.trino.tpch.TpchEntity;

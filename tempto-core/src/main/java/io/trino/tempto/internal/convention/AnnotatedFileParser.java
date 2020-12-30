@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention;
+package io.trino.tempto.internal.convention;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;

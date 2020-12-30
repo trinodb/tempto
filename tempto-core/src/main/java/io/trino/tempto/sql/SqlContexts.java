@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.sql;
+package io.trino.tempto.sql;
 
-import io.prestosql.tempto.query.QueryExecutor;
-import io.prestosql.tempto.sql.view.ViewContextProvider;
+import io.trino.tempto.query.QueryExecutor;
+import io.trino.tempto.sql.view.ViewContextProvider;
 
-import static io.prestosql.tempto.query.QueryExecutor.defaultQueryExecutor;
+import static io.trino.tempto.query.QueryExecutor.defaultQueryExecutor;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 public final class SqlContexts

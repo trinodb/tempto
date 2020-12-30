@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.hadoop.hdfs;
+package io.trino.tempto.internal.hadoop.hdfs;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -29,8 +29,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static com.google.common.io.BaseEncoding.base64;
-import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_PASSWORD_KEY;
-import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_USERNAME_KEY;
+import static io.trino.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_PASSWORD_KEY;
+import static io.trino.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_USERNAME_KEY;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.util.Objects.requireNonNull;

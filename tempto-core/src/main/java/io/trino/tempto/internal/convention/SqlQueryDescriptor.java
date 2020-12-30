@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention;
+package io.trino.tempto.internal.convention;
 
 import com.google.common.base.Splitter;
-import io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
+import io.trino.tempto.fulfillment.table.MutableTableRequirement.State;
+import io.trino.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
 
 import java.util.List;
 import java.util.Map;
@@ -26,8 +26,8 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
-import static io.prestosql.tempto.query.QueryExecutor.DEFAULT_DB_NAME;
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
+import static io.trino.tempto.query.QueryExecutor.DEFAULT_DB_NAME;
 import static java.util.stream.Collectors.toSet;
 
 public class SqlQueryDescriptor

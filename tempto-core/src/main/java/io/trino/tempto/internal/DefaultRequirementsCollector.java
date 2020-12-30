@@ -12,18 +12,18 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal;
+package io.trino.tempto.internal;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.CompositeRequirement;
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.Requirements;
-import io.prestosql.tempto.RequirementsProvider;
-import io.prestosql.tempto.Requires;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.fulfillment.command.Command;
-import io.prestosql.tempto.fulfillment.command.SuiteCommandRequirement;
-import io.prestosql.tempto.fulfillment.command.TestCommandRequirement;
+import io.trino.tempto.CompositeRequirement;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.Requirements;
+import io.trino.tempto.RequirementsProvider;
+import io.trino.tempto.Requires;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.fulfillment.command.Command;
+import io.trino.tempto.fulfillment.command.SuiteCommandRequirement;
+import io.trino.tempto.fulfillment.command.TestCommandRequirement;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -33,7 +33,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static io.prestosql.tempto.Requirements.compose;
+import static io.trino.tempto.Requirements.compose;
 
 /**
  * This class gathers requirements for a given test method.

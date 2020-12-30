@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.convention
+package io.trino.tempto.internal.convention
 
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult
+import io.trino.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult
 import spock.lang.Specification
 
 import static com.google.common.collect.Iterables.getOnlyElement
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
-import static io.prestosql.tempto.fulfillment.table.TableHandle.tableHandle
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
+import static io.trino.tempto.fulfillment.table.TableHandle.tableHandle
 import static org.apache.commons.io.IOUtils.toInputStream
 
 class SqlQueryDescriptorTest

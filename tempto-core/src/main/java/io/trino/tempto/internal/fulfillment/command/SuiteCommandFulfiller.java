@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.fulfillment.command;
+package io.trino.tempto.internal.fulfillment.command;
 
-import io.prestosql.tempto.fulfillment.RequirementFulfiller;
-import io.prestosql.tempto.fulfillment.command.SuiteCommandRequirement;
+import io.trino.tempto.fulfillment.RequirementFulfiller;
+import io.trino.tempto.fulfillment.command.SuiteCommandRequirement;
 
 @RequirementFulfiller.SuiteLevelFulfiller
 public class SuiteCommandFulfiller

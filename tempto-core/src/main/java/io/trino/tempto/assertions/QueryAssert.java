@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.assertions;
+package io.trino.tempto.assertions;
 
 import com.google.common.base.Joiner;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.internal.convention.SqlResultDescriptor;
-import io.prestosql.tempto.internal.query.QueryRowMapper;
-import io.prestosql.tempto.query.QueryExecutionException;
-import io.prestosql.tempto.query.QueryExecutor;
-import io.prestosql.tempto.query.QueryResult;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.internal.convention.SqlResultDescriptor;
+import io.trino.tempto.internal.query.QueryRowMapper;
+import io.trino.tempto.query.QueryExecutionException;
+import io.trino.tempto.query.QueryExecutor;
+import io.trino.tempto.query.QueryResult;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
@@ -37,10 +37,10 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.base.Verify.verify;
 import static com.google.common.collect.Lists.newArrayList;
-import static io.prestosql.tempto.assertions.QueryAssert.Row.row;
-import static io.prestosql.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
-import static io.prestosql.tempto.query.QueryResult.fromSqlIndex;
-import static io.prestosql.tempto.query.QueryResult.toSqlIndex;
+import static io.trino.tempto.assertions.QueryAssert.Row.row;
+import static io.trino.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
+import static io.trino.tempto.query.QueryResult.fromSqlIndex;
+import static io.trino.tempto.query.QueryResult.toSqlIndex;
 import static java.lang.String.format;
 import static java.sql.JDBCType.INTEGER;
 import static java.util.Collections.singletonList;

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.query;
+package io.trino.tempto.internal.query;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ColumnDefinitions;
@@ -25,9 +25,9 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.TableMetadata;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.query.QueryExecutionException;
-import io.prestosql.tempto.query.QueryResult;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.query.QueryExecutionException;
+import io.trino.tempto.query.QueryResult;
 
 import java.sql.JDBCType;
 import java.util.List;

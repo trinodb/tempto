@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.fulfillment.table;
+package io.trino.tempto.internal.fulfillment.table;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
@@ -21,14 +21,14 @@ import com.google.inject.Module;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
-import io.prestosql.tempto.TemptoPlugin;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.fulfillment.table.ReadOnlyTableManager;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
-import io.prestosql.tempto.internal.query.JdbcConnectionsConfiguration;
-import io.prestosql.tempto.query.QueryExecutor;
+import io.trino.tempto.TemptoPlugin;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.fulfillment.table.ReadOnlyTableManager;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.fulfillment.table.TableManagerDispatcher;
+import io.trino.tempto.initialization.SuiteModuleProvider;
+import io.trino.tempto.internal.query.JdbcConnectionsConfiguration;
+import io.trino.tempto.query.QueryExecutor;
 
 import java.util.List;
 import java.util.Map;

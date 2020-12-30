@@ -12,17 +12,17 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.table.jdbc;
+package io.trino.tempto.internal.fulfillment.table.jdbc;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.query.QueryExecutor;
+import io.trino.tempto.query.QueryExecutor;
 
 import java.sql.JDBCType;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static io.prestosql.tempto.internal.fulfillment.table.jdbc.JdbcTableManager.partitionBy;
+import static io.trino.tempto.internal.fulfillment.table.jdbc.JdbcTableManager.partitionBy;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

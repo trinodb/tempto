@@ -11,21 +11,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.fulfillment.table.kafka;
+package io.trino.tempto.fulfillment.table.kafka;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
-import io.prestosql.tempto.fulfillment.table.TableInstance;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.internal.fulfillment.table.TableName;
-import io.prestosql.tempto.query.QueryExecutor;
-import io.prestosql.tempto.query.QueryResult;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.fulfillment.table.MutableTableRequirement;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.fulfillment.table.TableInstance;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.internal.fulfillment.table.TableName;
+import io.trino.tempto.query.QueryExecutor;
+import io.trino.tempto.query.QueryResult;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.ListTopicsResult;

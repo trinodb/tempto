@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.listeners;
+package io.trino.tempto.internal.listeners;
 
 import com.google.common.base.Joiner;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.google.common.base.Preconditions.checkState;
-import static io.prestosql.tempto.internal.initialization.RequirementsExpanderInterceptor.getMethodsCountFromContext;
+import static io.trino.tempto.internal.initialization.RequirementsExpanderInterceptor.getMethodsCountFromContext;
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
 

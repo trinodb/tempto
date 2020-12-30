@@ -12,22 +12,22 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.table;
+package io.trino.tempto.internal.fulfillment.table;
 
 import com.google.inject.Inject;
-import io.prestosql.tempto.fulfillment.RequirementFulfiller;
-import io.prestosql.tempto.fulfillment.TestStatus;
-import io.prestosql.tempto.fulfillment.table.MutableTableRequirement;
-import io.prestosql.tempto.fulfillment.table.MutableTablesState;
-import io.prestosql.tempto.fulfillment.table.TableInstance;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.fulfillment.table.TableManagerDispatcher;
-import io.prestosql.tempto.fulfillment.table.TablesState;
+import io.trino.tempto.fulfillment.RequirementFulfiller;
+import io.trino.tempto.fulfillment.TestStatus;
+import io.trino.tempto.fulfillment.table.MutableTableRequirement;
+import io.trino.tempto.fulfillment.table.MutableTablesState;
+import io.trino.tempto.fulfillment.table.TableInstance;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.fulfillment.table.TableManagerDispatcher;
+import io.trino.tempto.fulfillment.table.TablesState;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkState;
-import static io.prestosql.tempto.fulfillment.TestStatus.FAILURE;
+import static io.trino.tempto.fulfillment.TestStatus.FAILURE;
 
 @RequirementFulfiller.TestLevelFulfiller
 public class MutableTablesFulfiller

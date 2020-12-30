@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.query;
+package io.trino.tempto.query;
 
-import io.prestosql.tempto.context.TestContext;
+import io.trino.tempto.context.TestContext;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -25,8 +25,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 
-import static io.prestosql.tempto.query.QueryResult.forSingleIntegerValue;
-import static io.prestosql.tempto.query.QueryResult.toSqlIndex;
+import static io.trino.tempto.query.QueryResult.forSingleIntegerValue;
+import static io.trino.tempto.query.QueryResult.toSqlIndex;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static org.slf4j.LoggerFactory.getLogger;

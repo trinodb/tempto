@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention
+package io.trino.tempto.internal.convention
 
-import io.prestosql.tempto.Requirement
-import io.prestosql.tempto.configuration.Configuration
-import io.prestosql.tempto.internal.DummyTestRequirement
-import io.prestosql.tempto.internal.convention.sql.SqlQueryConventionBasedTest
+import io.trino.tempto.Requirement
+import io.trino.tempto.configuration.Configuration
+import io.trino.tempto.internal.DummyTestRequirement
+import io.trino.tempto.internal.convention.sql.SqlQueryConventionBasedTest
 import org.testng.annotations.Test
 import spock.lang.Specification
 

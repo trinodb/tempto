@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.examples;
+package io.trino.tempto.examples;
 
-import io.prestosql.tempto.BeforeTestWithContext;
-import io.prestosql.tempto.ProductTest;
+import io.trino.tempto.BeforeTestWithContext;
+import io.trino.tempto.ProductTest;
 import org.testng.annotations.Test;
 
-import static io.prestosql.tempto.internal.fulfillment.resources.SuiteResourcesState.closeAfterSuite;
-import static io.prestosql.tempto.internal.fulfillment.resources.TestResourcesState.closeAfterTest;
+import static io.trino.tempto.internal.fulfillment.resources.SuiteResourcesState.closeAfterSuite;
+import static io.trino.tempto.internal.fulfillment.resources.TestResourcesState.closeAfterTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResourcesTest

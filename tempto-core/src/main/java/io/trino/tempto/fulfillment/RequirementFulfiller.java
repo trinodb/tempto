@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment;
+package io.trino.tempto.fulfillment;
 
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.context.State;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.context.State;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

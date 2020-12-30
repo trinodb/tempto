@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.context;
+package io.trino.tempto.context;
 
 /**
  * Provider class used for generation and cleanup of dsl defined contexts.

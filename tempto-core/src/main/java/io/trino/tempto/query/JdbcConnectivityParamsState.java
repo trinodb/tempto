@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.query;
+package io.trino.tempto.query;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.context.State;
+import io.trino.tempto.context.State;
 
 import java.util.List;
 import java.util.Optional;

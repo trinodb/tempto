@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.configuration;
+package io.trino.tempto.internal.configuration;
 
 import com.google.common.collect.ImmutableMap;
-import io.prestosql.tempto.configuration.Configuration;
+import io.trino.tempto.configuration.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.Yaml;
 

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto;
+package io.trino.tempto;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

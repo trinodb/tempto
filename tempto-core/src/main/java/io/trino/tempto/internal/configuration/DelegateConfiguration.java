@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.configuration;
+package io.trino.tempto.internal.configuration;
 
-import io.prestosql.tempto.configuration.Configuration;
+import io.trino.tempto.configuration.Configuration;
 
 import java.util.List;
 import java.util.Map;

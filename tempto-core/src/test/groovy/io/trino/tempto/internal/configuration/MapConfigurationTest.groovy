@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.configuration
+package io.trino.tempto.internal.configuration
 
 import spock.lang.Specification
 
-import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
+import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
 
 class MapConfigurationTest
         extends Specification

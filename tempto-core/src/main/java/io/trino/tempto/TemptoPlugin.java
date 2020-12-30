@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto;
+package io.trino.tempto;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.fulfillment.RequirementFulfiller;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
-import io.prestosql.tempto.initialization.TestMethodModuleProvider;
+import io.trino.tempto.fulfillment.RequirementFulfiller;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.initialization.SuiteModuleProvider;
+import io.trino.tempto.initialization.TestMethodModuleProvider;
 
 import java.util.List;
 

@@ -11,34 +11,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.initialization;
+package io.trino.tempto.internal.initialization;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.TemptoPlugin;
-import io.prestosql.tempto.fulfillment.RequirementFulfiller;
-import io.prestosql.tempto.fulfillment.table.ReadOnlyTableManager;
-import io.prestosql.tempto.fulfillment.table.TableDefinition;
-import io.prestosql.tempto.fulfillment.table.TableManager;
-import io.prestosql.tempto.fulfillment.table.hive.tpcds.TpcdsTableDefinitions;
-import io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions;
-import io.prestosql.tempto.fulfillment.table.jdbc.tpch.JdbcTpchTableDefinitions;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
-import io.prestosql.tempto.initialization.TestMethodModuleProvider;
-import io.prestosql.tempto.internal.configuration.TestConfigurationModuleProvider;
-import io.prestosql.tempto.internal.fulfillment.command.SuiteCommandFulfiller;
-import io.prestosql.tempto.internal.fulfillment.command.TestCommandFulfiller;
-import io.prestosql.tempto.internal.fulfillment.resources.SuiteResourceFulfiller;
-import io.prestosql.tempto.internal.fulfillment.resources.TestResourceFulfiller;
-import io.prestosql.tempto.internal.fulfillment.table.ImmutableTablesFulfiller;
-import io.prestosql.tempto.internal.fulfillment.table.MutableTablesFulfiller;
-import io.prestosql.tempto.internal.fulfillment.table.TableManagerDispatcherModuleProvider;
-import io.prestosql.tempto.internal.fulfillment.table.cassandra.CassandraTableManager;
-import io.prestosql.tempto.internal.fulfillment.table.hive.HiveTableManager;
-import io.prestosql.tempto.internal.fulfillment.table.jdbc.JdbcTableManager;
-import io.prestosql.tempto.internal.hadoop.hdfs.HdfsModuleProvider;
-import io.prestosql.tempto.internal.initialization.modules.TestMethodInfoModuleProvider;
-import io.prestosql.tempto.internal.query.QueryExecutorModuleProvider;
-import io.prestosql.tempto.internal.ssh.SshClientModuleProvider;
+import io.trino.tempto.TemptoPlugin;
+import io.trino.tempto.fulfillment.RequirementFulfiller;
+import io.trino.tempto.fulfillment.table.ReadOnlyTableManager;
+import io.trino.tempto.fulfillment.table.TableDefinition;
+import io.trino.tempto.fulfillment.table.TableManager;
+import io.trino.tempto.fulfillment.table.hive.tpcds.TpcdsTableDefinitions;
+import io.trino.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions;
+import io.trino.tempto.fulfillment.table.jdbc.tpch.JdbcTpchTableDefinitions;
+import io.trino.tempto.initialization.SuiteModuleProvider;
+import io.trino.tempto.initialization.TestMethodModuleProvider;
+import io.trino.tempto.internal.configuration.TestConfigurationModuleProvider;
+import io.trino.tempto.internal.fulfillment.command.SuiteCommandFulfiller;
+import io.trino.tempto.internal.fulfillment.command.TestCommandFulfiller;
+import io.trino.tempto.internal.fulfillment.resources.SuiteResourceFulfiller;
+import io.trino.tempto.internal.fulfillment.resources.TestResourceFulfiller;
+import io.trino.tempto.internal.fulfillment.table.ImmutableTablesFulfiller;
+import io.trino.tempto.internal.fulfillment.table.MutableTablesFulfiller;
+import io.trino.tempto.internal.fulfillment.table.TableManagerDispatcherModuleProvider;
+import io.trino.tempto.internal.fulfillment.table.cassandra.CassandraTableManager;
+import io.trino.tempto.internal.fulfillment.table.hive.HiveTableManager;
+import io.trino.tempto.internal.fulfillment.table.jdbc.JdbcTableManager;
+import io.trino.tempto.internal.hadoop.hdfs.HdfsModuleProvider;
+import io.trino.tempto.internal.initialization.modules.TestMethodInfoModuleProvider;
+import io.trino.tempto.internal.query.QueryExecutorModuleProvider;
+import io.trino.tempto.internal.ssh.SshClientModuleProvider;
 
 import java.util.List;
 

@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.ldap;
+package io.trino.tempto.internal.fulfillment.ldap;
 
-import io.prestosql.tempto.fulfillment.ldap.LdapObjectDefinition;
+import io.trino.tempto.fulfillment.ldap.LdapObjectDefinition;
 
 import java.util.List;
 

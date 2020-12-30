@@ -12,22 +12,22 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal
+package io.trino.tempto.internal
 
 import com.google.common.collect.ImmutableSet
-import io.prestosql.tempto.CompositeRequirement
-import io.prestosql.tempto.Requirement
-import io.prestosql.tempto.Requirements
-import io.prestosql.tempto.RequirementsProvider
-import io.prestosql.tempto.Requires
-import io.prestosql.tempto.configuration.Configuration
-import io.prestosql.tempto.internal.configuration.YamlConfiguration
+import io.trino.tempto.CompositeRequirement
+import io.trino.tempto.Requirement
+import io.trino.tempto.Requirements
+import io.trino.tempto.RequirementsProvider
+import io.trino.tempto.Requires
+import io.trino.tempto.configuration.Configuration
+import io.trino.tempto.internal.configuration.YamlConfiguration
 import spock.lang.Specification
 
-import static io.prestosql.tempto.Requirements.compose
-import static io.prestosql.tempto.fulfillment.command.SuiteCommandRequirement.suiteCommand
-import static io.prestosql.tempto.fulfillment.command.TestCommandRequirement.testCommand
-import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
+import static io.trino.tempto.Requirements.compose
+import static io.trino.tempto.fulfillment.command.SuiteCommandRequirement.suiteCommand
+import static io.trino.tempto.fulfillment.command.TestCommandRequirement.testCommand
+import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
 import static java.util.Arrays.asList
 
 class RequirementsCollectorTest

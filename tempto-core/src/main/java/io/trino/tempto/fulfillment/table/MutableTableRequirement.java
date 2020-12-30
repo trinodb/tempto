@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table;
+package io.trino.tempto.fulfillment.table;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 

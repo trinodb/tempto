@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal
+package io.trino.tempto.internal
 
-import io.prestosql.tempto.Requirement
+import io.trino.tempto.Requirement
 
 final class DummyTestRequirement
         implements Requirement

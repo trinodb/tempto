@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal;
+package io.trino.tempto.internal;
 
 import com.google.inject.Inject;
-import io.prestosql.tempto.context.TestContext;
+import io.trino.tempto.context.TestContext;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;

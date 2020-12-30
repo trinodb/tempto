@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.ldap;
+package io.trino.tempto.internal.fulfillment.ldap;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.initialization.SuiteModuleProvider;
 
 public class LdapObjectModuleProvider
         implements SuiteModuleProvider

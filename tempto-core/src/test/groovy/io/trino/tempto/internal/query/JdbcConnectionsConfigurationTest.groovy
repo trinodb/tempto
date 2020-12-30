@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.query
+package io.trino.tempto.internal.query
 
 import com.google.common.collect.ImmutableList
-import io.prestosql.tempto.internal.configuration.YamlConfiguration
-import io.prestosql.tempto.query.JdbcConnectivityParamsState
+import io.trino.tempto.internal.configuration.YamlConfiguration
+import io.trino.tempto.query.JdbcConnectivityParamsState
 import spock.lang.Specification
 
 class JdbcConnectionsConfigurationTest

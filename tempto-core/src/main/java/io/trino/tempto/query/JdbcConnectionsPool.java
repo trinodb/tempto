@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.query;
+package io.trino.tempto.query;
 
 import javax.sql.DataSource;
 
@@ -21,7 +21,7 @@ import java.sql.Statement;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
-import static io.prestosql.tempto.internal.query.JdbcUtils.dataSource;
+import static io.trino.tempto.internal.query.JdbcUtils.dataSource;
 
 public class JdbcConnectionsPool
 {

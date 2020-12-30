@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.jdbc.tpch;
+package io.trino.tempto.fulfillment.table.jdbc.tpch;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTable;
-import io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
+import io.trino.tempto.fulfillment.table.hive.tpch.TpchTable;
+import io.trino.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 
 import java.sql.JDBCType;
 
-import static io.prestosql.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
+import static io.trino.tempto.fulfillment.table.jdbc.RelationalTableDefinition.relationalTableDefinition;
 import static java.sql.JDBCType.BIGINT;
 import static java.sql.JDBCType.VARCHAR;
 

@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.resources;
+package io.trino.tempto.internal.fulfillment.resources;
 
 import com.google.common.collect.ImmutableSet;
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.context.State;
-import io.prestosql.tempto.fulfillment.RequirementFulfiller;
-import io.prestosql.tempto.fulfillment.TestStatus;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.context.State;
+import io.trino.tempto.fulfillment.RequirementFulfiller;
+import io.trino.tempto.fulfillment.TestStatus;
 
 import java.util.Set;
 

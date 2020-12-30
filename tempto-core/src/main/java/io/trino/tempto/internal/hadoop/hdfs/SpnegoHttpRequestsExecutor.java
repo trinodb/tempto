@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.hadoop.hdfs;
+package io.trino.tempto.internal.hadoop.hdfs;
 
 import com.google.inject.Inject;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.kerberos.KerberosAuthentication;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.kerberos.KerberosAuthentication;
 import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;

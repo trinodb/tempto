@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table;
+package io.trino.tempto.fulfillment.table;
 
 import java.util.List;
 
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.testContext;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
 
 public class ImmutableTablesState
         extends TablesState

@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.hive.tpch;
+package io.trino.tempto.fulfillment.table.hive.tpch;
 
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.Requirements;
-import io.prestosql.tempto.RequirementsProvider;
-import io.prestosql.tempto.configuration.Configuration;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.Requirements;
+import io.trino.tempto.RequirementsProvider;
+import io.trino.tempto.configuration.Configuration;
 
-import static io.prestosql.tempto.fulfillment.table.TableRequirements.immutableTable;
+import static io.trino.tempto.fulfillment.table.TableRequirements.immutableTable;
 
 public class ImmutableTpchTablesRequirements
         implements RequirementsProvider

@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.hadoop.hdfs;
+package io.trino.tempto.internal.hadoop.hdfs;
 
-import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource;
+import io.trino.tempto.fulfillment.table.hive.HiveDataSource;
 
 public interface HdfsDataSourceWriter
 {

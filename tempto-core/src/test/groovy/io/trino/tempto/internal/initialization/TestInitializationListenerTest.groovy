@@ -11,18 +11,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.initialization
+package io.trino.tempto.internal.initialization
 
 import com.google.inject.Inject
-import io.prestosql.tempto.*
-import io.prestosql.tempto.configuration.Configuration
-import io.prestosql.tempto.context.State
-import io.prestosql.tempto.context.TestContext
-import io.prestosql.tempto.context.TestContextCloseCallback
-import io.prestosql.tempto.fulfillment.RequirementFulfiller
-import io.prestosql.tempto.fulfillment.RequirementFulfiller.TestLevelFulfiller
-import io.prestosql.tempto.fulfillment.TestStatus
-import io.prestosql.tempto.internal.TestSpecificRequirementsResolver
+import io.trino.tempto.*
+import io.trino.tempto.configuration.Configuration
+import io.trino.tempto.context.State
+import io.trino.tempto.context.TestContext
+import io.trino.tempto.context.TestContextCloseCallback
+import io.trino.tempto.fulfillment.RequirementFulfiller
+import io.trino.tempto.fulfillment.RequirementFulfiller.TestLevelFulfiller
+import io.trino.tempto.fulfillment.TestStatus
+import io.trino.tempto.internal.TestSpecificRequirementsResolver
 import org.testng.*
 import org.testng.internal.ConstructorOrMethod
 import spock.lang.Specification
@@ -30,9 +30,9 @@ import spock.lang.Specification
 import java.lang.reflect.Method
 
 import static com.google.common.collect.Iterables.getOnlyElement
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
-import static io.prestosql.tempto.context.ThreadLocalTestContextHolder.assertTestContextSet
-import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.assertTestContextSet
+import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration
 
 class TestInitializationListenerTest
         extends Specification

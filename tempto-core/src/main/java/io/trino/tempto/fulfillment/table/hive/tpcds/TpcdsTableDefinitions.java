@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.hive.tpcds;
+package io.trino.tempto.fulfillment.table.hive.tpcds;
 
-import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition;
+import io.trino.tempto.fulfillment.table.hive.HiveTableDefinition;
 
 // Table definitions according to: tpc.org/tpc_documents_current_versions/pdf/tpc-ds_v2.3.0.pdf
 // TODO: move to separate module

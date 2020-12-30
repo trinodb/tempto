@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.configuration;
+package io.trino.tempto.internal.configuration;
 
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.configuration.KeyUtils;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.configuration.KeyUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,8 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.prestosql.tempto.configuration.KeyUtils.joinKey;
-import static io.prestosql.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration;
+import static io.trino.tempto.configuration.KeyUtils.joinKey;
+import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration;
 
 /**
  * <p>

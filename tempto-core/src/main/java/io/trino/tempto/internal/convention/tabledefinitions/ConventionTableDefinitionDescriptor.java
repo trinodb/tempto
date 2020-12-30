@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention.tabledefinitions;
+package io.trino.tempto.internal.convention.tabledefinitions;
 
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser;
-import io.prestosql.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
-import io.prestosql.tempto.internal.convention.ProcessUtils;
-import io.prestosql.tempto.internal.convention.SqlDescriptor;
+import io.trino.tempto.internal.convention.AnnotatedFileParser;
+import io.trino.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
+import io.trino.tempto.internal.convention.ProcessUtils;
+import io.trino.tempto.internal.convention.SqlDescriptor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,9 +28,9 @@ import java.util.Optional;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Iterables.getOnlyElement;
-import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.changeExtension;
-import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.getFilenameWithoutExtension;
-import static io.prestosql.tempto.internal.convention.SqlTestsFileUtils.makeExecutable;
+import static io.trino.tempto.internal.convention.SqlTestsFileUtils.changeExtension;
+import static io.trino.tempto.internal.convention.SqlTestsFileUtils.getFilenameWithoutExtension;
+import static io.trino.tempto.internal.convention.SqlTestsFileUtils.makeExecutable;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isRegularFile;
 

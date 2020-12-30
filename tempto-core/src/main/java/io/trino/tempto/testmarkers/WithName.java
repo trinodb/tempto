@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.testmarkers;
+package io.trino.tempto.testmarkers;
 
 import org.testng.ITest;
 

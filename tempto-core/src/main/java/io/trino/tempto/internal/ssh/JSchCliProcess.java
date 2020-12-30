@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.ssh;
+package io.trino.tempto.internal.ssh;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.prestosql.tempto.internal.process.CliProcessBase;
-import io.prestosql.tempto.process.CommandExecutionException;
-import io.prestosql.tempto.process.TimeoutRuntimeException;
+import io.trino.tempto.internal.process.CliProcessBase;
+import io.trino.tempto.process.CommandExecutionException;
+import io.trino.tempto.process.TimeoutRuntimeException;
 import org.slf4j.Logger;
 
 import java.io.IOException;

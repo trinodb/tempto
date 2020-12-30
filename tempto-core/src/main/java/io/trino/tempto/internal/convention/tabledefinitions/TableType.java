@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention.tabledefinitions;
+package io.trino.tempto.internal.convention.tabledefinitions;
 
 /**
  * Table types supported by convention based table definitions

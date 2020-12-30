@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.context;
+package io.trino.tempto.context;
 
 import com.google.common.annotations.VisibleForTesting;
-import io.prestosql.tempto.internal.context.TestContextStack;
+import io.trino.tempto.internal.context.TestContextStack;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;

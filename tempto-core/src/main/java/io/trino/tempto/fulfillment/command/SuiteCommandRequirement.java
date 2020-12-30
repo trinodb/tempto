@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.command;
+package io.trino.tempto.fulfillment.command;
 
 import java.util.List;
 

@@ -12,24 +12,24 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.fulfillment.hive
+package io.trino.tempto.internal.fulfillment.hive
 
-import io.prestosql.tempto.fulfillment.table.hive.HiveDataSource
-import io.prestosql.tempto.fulfillment.table.hive.HiveTableDefinition
-import io.prestosql.tempto.internal.fulfillment.table.TableName
-import io.prestosql.tempto.internal.fulfillment.table.TableNameGenerator
-import io.prestosql.tempto.internal.fulfillment.table.hive.HiveTableManager
-import io.prestosql.tempto.internal.fulfillment.table.hive.HiveThriftClient
-import io.prestosql.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter
-import io.prestosql.tempto.query.QueryExecutor
-import io.prestosql.tempto.query.QueryResult
+import io.trino.tempto.fulfillment.table.hive.HiveDataSource
+import io.trino.tempto.fulfillment.table.hive.HiveTableDefinition
+import io.trino.tempto.internal.fulfillment.table.TableName
+import io.trino.tempto.internal.fulfillment.table.TableNameGenerator
+import io.trino.tempto.internal.fulfillment.table.hive.HiveTableManager
+import io.trino.tempto.internal.fulfillment.table.hive.HiveThriftClient
+import io.trino.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter
+import io.trino.tempto.query.QueryExecutor
+import io.trino.tempto.query.QueryResult
 import spock.lang.Specification
 
 import java.sql.Connection
 import java.sql.JDBCType
 
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
-import static io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
+import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
 
 class HiveTableManagerTest
         extends Specification

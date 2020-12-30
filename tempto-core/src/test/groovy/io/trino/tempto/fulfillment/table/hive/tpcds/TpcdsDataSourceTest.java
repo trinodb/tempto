@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.fulfillment.table.hive.tpcds;
+package io.trino.tempto.fulfillment.table.hive.tpcds;
 
-import io.prestosql.tempto.fulfillment.table.hive.statistics.ColumnStatistics;
-import io.prestosql.tempto.fulfillment.table.hive.statistics.TableStatistics;
+import io.trino.tempto.fulfillment.table.hive.statistics.ColumnStatistics;
+import io.trino.tempto.fulfillment.table.hive.statistics.TableStatistics;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

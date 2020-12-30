@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.context;
+package io.trino.tempto.internal.context;
 
-import io.prestosql.tempto.context.TestContext;
+import io.trino.tempto.context.TestContext;
 
 import java.util.Iterator;
 import java.util.Stack;

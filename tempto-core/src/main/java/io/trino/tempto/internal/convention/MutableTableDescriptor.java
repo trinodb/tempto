@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.internal.convention;
+package io.trino.tempto.internal.convention;
 
-import io.prestosql.tempto.fulfillment.table.MutableTableRequirement.State;
-import io.prestosql.tempto.fulfillment.table.TableHandle;
+import io.trino.tempto.fulfillment.table.MutableTableRequirement.State;
+import io.trino.tempto.fulfillment.table.TableHandle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

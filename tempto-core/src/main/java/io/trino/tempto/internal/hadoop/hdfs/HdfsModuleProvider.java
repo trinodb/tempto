@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.hadoop.hdfs;
+package io.trino.tempto.internal.hadoop.hdfs;
 
 import com.google.inject.Inject;
 import com.google.inject.Key;
@@ -21,9 +21,9 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
-import io.prestosql.tempto.configuration.Configuration;
-import io.prestosql.tempto.hadoop.hdfs.HdfsClient;
-import io.prestosql.tempto.initialization.SuiteModuleProvider;
+import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.hadoop.hdfs.HdfsClient;
+import io.trino.tempto.initialization.SuiteModuleProvider;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
@@ -39,8 +39,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.google.inject.name.Names.named;
-import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_PASSWORD_KEY;
-import static io.prestosql.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_URI_KEY;
+import static io.trino.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_PASSWORD_KEY;
+import static io.trino.tempto.internal.hadoop.hdfs.WebHdfsClient.CONF_HDFS_WEBHDFS_URI_KEY;
 
 public class HdfsModuleProvider
         implements SuiteModuleProvider

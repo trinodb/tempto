@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.tempto.initialization;
+package io.trino.tempto.initialization;
 
 import com.google.inject.Module;
-import io.prestosql.tempto.configuration.Configuration;
+import io.trino.tempto.configuration.Configuration;
 import org.testng.ITestResult;
 
 /**

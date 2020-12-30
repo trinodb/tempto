@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package io.prestosql.tempto.internal.convention;
+package io.trino.tempto.internal.convention;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import io.prestosql.tempto.Requirement;
-import io.prestosql.tempto.configuration.Configuration;
+import io.trino.tempto.Requirement;
+import io.trino.tempto.configuration.Configuration;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
