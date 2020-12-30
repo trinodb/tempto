@@ -85,9 +85,9 @@
         </dependency>
 
         <dependency>
-            <groupId>io.prestosql.hive</groupId>
+            <groupId>io.trino.hive</groupId>
             <artifactId>hive-apache-jdbc</artifactId>
-            <version>0.13.1-6</version>
+            <version>0.13.1-9</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
