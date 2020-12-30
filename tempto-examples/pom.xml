@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.prestosql.tempto</groupId>
+        <groupId>io.trino.tempto</groupId>
         <artifactId>tempto-root</artifactId>
         <version>183-SNAPSHOT</version>
     </parent>
@@ -18,17 +18,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.prestosql.tempto</groupId>
+            <groupId>io.trino.tempto</groupId>
             <artifactId>tempto-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.prestosql.tempto</groupId>
+            <groupId>io.trino.tempto</groupId>
             <artifactId>tempto-runner</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.prestosql.tempto</groupId>
+            <groupId>io.trino.tempto</groupId>
             <artifactId>tempto-kafka</artifactId>
         </dependency>
 
