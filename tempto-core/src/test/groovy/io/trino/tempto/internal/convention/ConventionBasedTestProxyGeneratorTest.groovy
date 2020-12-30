@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat
 class ConventionBasedTestProxyGeneratorTest
         extends Specification
 {
-    private ConventionBasedTestProxyGenerator proxyGenerator = new ConventionBasedTestProxyGenerator("io.prestosql.tempto");
+    private ConventionBasedTestProxyGenerator proxyGenerator = new ConventionBasedTestProxyGenerator("io.trino.tempto");
 
     def 'testGenerateProxy'()
     {
@@ -86,15 +86,15 @@ class ConventionBasedTestProxyGeneratorTest
         proxyMethodNames.contains(expectedMethodName);
 
         where:
-        testName                       | expectedClassName                 | expectedMethodName
-        'a'                            | 'io.prestosql.tempto'             | 'a'
-        '.a'                           | 'io.prestosql.tempto'             | 'a'
-        'a.b'                          | 'io.prestosql.tempto.a'           | 'b'
-        '.a.b'                         | 'io.prestosql.tempto.a'           | 'b'
-        'a.b.c'                        | 'io.prestosql.tempto.b'           | 'c'
-        'a.b.c.d'                      | 'io.prestosql.tempto.c'           | 'd'
-        'a.b.9c.1d'                    | 'io.prestosql.tempto._9c'         | '_1d'
-        'a.b.ala ma kota.a-kot-ma ale' | 'io.prestosql.tempto.ala_ma_kota' | 'a_kot_ma_ale'
+        testName                       | expectedClassName             | expectedMethodName
+        'a'                            | 'io.trino.tempto'             | 'a'
+        '.a'                           | 'io.trino.tempto'             | 'a'
+        'a.b'                          | 'io.trino.tempto.a'           | 'b'
+        '.a.b'                         | 'io.trino.tempto.a'           | 'b'
+        'a.b.c'                        | 'io.trino.tempto.b'           | 'c'
+        'a.b.c.d'                      | 'io.trino.tempto.c'           | 'd'
+        'a.b.9c.1d'                    | 'io.trino.tempto._9c'         | '_1d'
+        'a.b.ala ma kota.a-kot-ma ale' | 'io.trino.tempto.ala_ma_kota' | 'a_kot_ma_ale'
     }
 
     private static class DummyConventionBasedTest

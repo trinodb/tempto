@@ -40,7 +40,7 @@ public class ConventionBasedTestFactory
     private static final ConventionBasedTest[] NO_TEST_CASES = new ConventionBasedTest[0];
 
     // TODO: make this configurable
-    private static final String TEST_PACKAGE = "io.prestosql.tempto";
+    private static final String TEST_PACKAGE = "io.trino.tempto";
     public static final String TESTCASES_PATH_PART = "testcases";
 
     public interface PathTestFactory

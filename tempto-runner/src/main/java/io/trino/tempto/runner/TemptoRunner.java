@@ -129,7 +129,7 @@ public class TemptoRunner
                 .map(XmlPackage::new)
                 .collect(toImmutableList());
         test.setPackages(testPackages);
-        XmlClass conventionBasedTestsClass = new XmlClass("io.prestosql.tempto.internal.convention.ConventionBasedTestFactory");
+        XmlClass conventionBasedTestsClass = new XmlClass("io.trino.tempto.internal.convention.ConventionBasedTestFactory");
         List<XmlClass> classes = newArrayList(conventionBasedTestsClass);
         test.setClasses(classes);
         test.setParallel(XmlSuite.ParallelMode.METHODS);

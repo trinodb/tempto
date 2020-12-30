@@ -200,7 +200,7 @@ tests:
 
 ### Example
 
-See io.prestosql.tempto.examples.SimpleQueryTest in tempto-examples module.
+See io.trino.tempto.examples.SimpleQueryTest in tempto-examples module.
 
 ### Requirements
 
@@ -319,7 +319,7 @@ Remark: If multiple table managers of the same type (e.g. hive) are defined in t
  * `HiveDataSource` responsible for providing table data which is saved to HDFS
 
 Certain commonly used tables, such as those in the TPC-H benchmark, are defined as constants and can
-be found in `io.prestosql.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions`.
+be found in `io.trino.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions`.
 
 For example this is how the nation table is built:
 
@@ -842,7 +842,7 @@ By default all tests found in classpath are executed but user may limit that by 
     <tr>
         <td>--tests</td>
         <td>List of tests to be executed. For java based tests test name is just fully qualified method name
-            e.g. io.prestosql.tempto.examples.SimpleQueryTest.selectCountFromNation. For sql convention based tests name
+            e.g. io.trino.tempto.examples.SimpleQueryTest.selectCountFromNation. For sql convention based tests name
             looks like: sql_tests.testcases.sample_table.allRows. Tests which name ends with one of patterns specified
             in --tests parameter will be executed.
         </td>

@@ -55,10 +55,10 @@ import static java.util.Optional.ofNullable;
 public class TestNameGroupNameMethodSelector
         implements IMethodSelector
 {
-    public static final String TEST_NAMES_TO_RUN_PROPERTY = "io.prestosql.tempto.tests";
-    public static final String TEST_NAMES_TO_EXCLUDE_PROPERTY = "io.prestosql.tempto.exclude_tests";
-    public static final String TEST_GROUPS_TO_RUN_PROPERTY = "io.prestosql.tempto.groups";
-    public static final String TEST_GROUPS_TO_EXCLUDE_PROPERTY = "io.prestosql.tempto.exclude_groups";
+    public static final String TEST_NAMES_TO_RUN_PROPERTY = "io.trino.tempto.tests";
+    public static final String TEST_NAMES_TO_EXCLUDE_PROPERTY = "io.trino.tempto.exclude_tests";
+    public static final String TEST_GROUPS_TO_RUN_PROPERTY = "io.trino.tempto.groups";
+    public static final String TEST_GROUPS_TO_EXCLUDE_PROPERTY = "io.trino.tempto.exclude_groups";
 
     private final Optional<Set<String>> testNamesToRun;
     private final Set<String> testNamesToExclude;

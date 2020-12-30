@@ -13,7 +13,7 @@
 
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
-        <main-class>io.prestosql.tempto.examples.TemptoExamples</main-class>
+        <main-class>io.trino.tempto.examples.TemptoExamples</main-class>
     </properties>
 
     <dependencies>

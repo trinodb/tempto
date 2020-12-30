@@ -27,13 +27,13 @@ public class TemptoExamples
     {
         TemptoRunnerCommandLineParser parser = TemptoRunnerCommandLineParser
                 .builder("tempto examples")
-                .setTestsPackage("io.prestosql.tempto.examples,io.prestosql.tempto.another.examples", false)
+                .setTestsPackage("io.trino.tempto.examples,io.trino.tempto.another.examples", false)
                 .setConfigFile(DEFAULT_TEST_CONFIGURATION_LOCATION, true)
                 .build();
         TemptoRunner.runTempto(parser, args);
 
         if (parser.parseCommandLine(args).getTestGroups().isEmpty()) {
-            assertTrue(MultiplePackagesTest.called.get(), "Tests from io.prestosql.tempto.another.examples were not called");
+            assertTrue(MultiplePackagesTest.called.get(), "Tests from io.trino.tempto.another.examples were not called");
         }
     }
 }
