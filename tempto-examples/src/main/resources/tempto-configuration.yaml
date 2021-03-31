@@ -80,8 +80,6 @@ databases:
     zookeeper:
       host: kafka
       port: 2181
-    trino_database_name: trino
-    trino_kafka_catalog: kafka
     table_manager_type: kafka
 
 tests:

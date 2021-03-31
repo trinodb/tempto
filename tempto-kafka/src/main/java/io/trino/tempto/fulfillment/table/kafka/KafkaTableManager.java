@@ -15,8 +15,6 @@ package io.trino.tempto.fulfillment.table.kafka;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.fulfillment.table.MutableTableRequirement;
 import io.trino.tempto.fulfillment.table.TableDefinition;
@@ -24,8 +22,6 @@ import io.trino.tempto.fulfillment.table.TableHandle;
 import io.trino.tempto.fulfillment.table.TableInstance;
 import io.trino.tempto.fulfillment.table.TableManager;
 import io.trino.tempto.internal.fulfillment.table.TableName;
-import io.trino.tempto.query.QueryExecutor;
-import io.trino.tempto.query.QueryResult;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.ListTopicsResult;
@@ -43,7 +39,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import static com.google.common.primitives.Shorts.checkedCast;
-import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 @TableManager.Descriptor(tableDefinitionClass = KafkaTableDefinition.class, type = "KAFKA")
@@ -52,30 +47,22 @@ public class KafkaTableManager
         implements TableManager<KafkaTableDefinition>
 {
     private final String databaseName;
-    private final QueryExecutor trinoQueryExecutor;
     private final Configuration brokerConfiguration;
-    private final String trinoKafkaCatalog;
 
     @Inject
     public KafkaTableManager(
             @Named("databaseName") String databaseName,
             @Named("broker") Configuration brokerConfiguration,
-            @Named("trino_database_name") String trinoDatabaseName,
-            @Named("trino_kafka_catalog") String trinoKafkaCatalog,
             Injector injector)
     {
         this.databaseName = requireNonNull(databaseName, "databaseName is null");
         this.brokerConfiguration = requireNonNull(brokerConfiguration, "brokerConfiguration is null");
         requireNonNull(injector, "injector is null");
-        requireNonNull(trinoDatabaseName, "trinoDatabaseName is null");
-        this.trinoQueryExecutor = injector.getInstance(Key.get(QueryExecutor.class, Names.named(trinoDatabaseName)));
-        this.trinoKafkaCatalog = requireNonNull(trinoKafkaCatalog, "trinoKafkaCatalog is null");
     }
 
     @Override
     public TableInstance<KafkaTableDefinition> createImmutable(KafkaTableDefinition tableDefinition, TableHandle tableHandle)
     {
-        verifyTableExistsInTrino(tableHandle.getSchema().orElseThrow(() -> new IllegalArgumentException("Schema required for Kafka tables")), tableHandle.getName());
         deleteTopic(tableDefinition.getTopic());
         createTopic(tableDefinition.getTopic(), tableDefinition.getPartitionsCount(), tableDefinition.getReplicationLevel());
         insertDataIntoTopic(tableDefinition.getTopic(), tableDefinition.getDataSource());
@@ -85,15 +72,6 @@ public class KafkaTableManager
                 tableHandle.getName(),
                 tableHandle.getName());
         return new KafkaTableInstance(createdTableName, tableDefinition);
-    }
-
-    private void verifyTableExistsInTrino(String schema, String name)
-    {
-        String sql = format("select count(1) from %s.information_schema.tables where table_schema='%s' and table_name='%s'", trinoKafkaCatalog, schema, name);
-        QueryResult queryResult = trinoQueryExecutor.executeQuery(sql);
-        if ((Long) queryResult.row(0).get(0) != 1) {
-            throw new RuntimeException(format("Table %s.%s not defined if kafka catalog (%s)", schema, name, trinoKafkaCatalog));
-        }
     }
 
     private void deleteTopic(String topic)
@@ -140,7 +118,6 @@ public class KafkaTableManager
             }
         }
     }
-
 
     private Properties getKafkaProperties()
     {
