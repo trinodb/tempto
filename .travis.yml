@@ -9,11 +9,11 @@ git:
   quiet: true
 
 install:
-  - mvn install -B -V -DskipTests -Dair.check.skip-all
-  - mvn dependency:go-offline -B -Dsilent
+  - ./mvnw install -B -V -DskipTests -Dair.check.skip-all
+  - ./mvnw dependency:go-offline -B -Dsilent
 
 script:
-  - mvn install -B
+  - ./mvnw install -B
   - ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -x failing -e io.trino.tempto.examples.ExclusionTest.failingTest,io.trino.tempto.examples.AnotherExclusionTest
   - CONFIG_FILE=tempto-configuration-read-only.yaml ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -g in_memory
   - CONFIG_FILE=tempto-configuration-no-db.yaml ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -g ssh
