@@ -1,4 +1,4 @@
-FROM prestodev/centos6-oj8
+FROM ghcr.io/trinodb/testing/centos6-oj8:38
 
 RUN yum install -y tar
 
