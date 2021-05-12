@@ -1,5 +1,5 @@
 cluster:
-  presto: presto-master
+  trino: trino-master
   hadoop: hadoop-master
   cassandra: cassandra
   psql1: psql1

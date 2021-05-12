@@ -138,7 +138,6 @@ public class JdbcQueryExecutor
         }
     }
 
-    // TODO - remove this method as soon as Presto supports prepared statements
     private QueryResult executeQueryWithParams(String sql, QueryParam[] params)
             throws SQLException
     {

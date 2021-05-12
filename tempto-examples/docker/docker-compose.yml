@@ -52,9 +52,9 @@ services:
     ports:
       - '2222:22'
 
-  presto-master:
-    hostname: presto-master
-    build: 'presto-server'
+  trino-master:
+    hostname: trino-master
+    build: 'trino-server'
     ports: 
       - '8080:8080'
     depends_on:
@@ -64,17 +64,17 @@ services:
       - 'psql2'
       - 'kafka'
 
-  presto-cli:
-    build: 'presto-cli'
+  trino-cli:
+    build: 'trino-cli'
     depends_on:
-      - 'presto-master'
+      - 'trino-master'
 
   runner:
-    image: 'ghcr.io/trinodb/testing/centos6-oj8:38'
+    image: 'ghcr.io/trinodb/testing/centos7-oj11:38'
     ports:
       - '5005:5005'
     volumes:
       - '..:/workspace'
     depends_on:
-      - 'presto-master'
+      - 'trino-master'
 

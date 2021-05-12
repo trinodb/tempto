@@ -1,7 +1,7 @@
 DOCKER_MACHINE: localhost
 
 cluster:
-  presto: ${DOCKER_MACHINE}
+  trino: ${DOCKER_MACHINE}
   cassandra: ${DOCKER_MACHINE}
   hadoop: ${DOCKER_MACHINE}
   psql1: ${DOCKER_MACHINE}
@@ -20,7 +20,7 @@ psql2:
 
 databases:
   default:
-    alias: presto
+    alias: trino
 
   hive:
     jdbc_driver_class: org.apache.hive.jdbc.HiveDriver
@@ -35,17 +35,17 @@ databases:
       host: ${cluster.hadoop}
       port: 9083
 
-  presto:
-    jdbc_driver_class: io.prestosql.jdbc.PrestoDriver
-    jdbc_url: jdbc:presto://${cluster.presto}:8080/hive/default
+  trino:
+    jdbc_driver_class: io.trino.jdbc.TrinoDriver
+    jdbc_url: jdbc:trino://${cluster.trino}:8080/hive/default
     jdbc_user: hdfs
     jdbc_password: "***empty***"
     jdbc_pooling: false
     table_manager_type: jdbc
 
-  presto_tpcds:
-    jdbc_driver_class: io.prestosql.jdbc.PrestoDriver
-    jdbc_url: jdbc:presto://${cluster.presto}:8080/hive/tpcds
+  trino_tpcds:
+    jdbc_driver_class: io.trino.jdbc.TrinoDriver
+    jdbc_url: jdbc:trino://${cluster.trino}:8080/hive/tpcds
     jdbc_user: hdfs
     jdbc_password: "***empty***"
     jdbc_pooling: false
@@ -80,8 +80,8 @@ databases:
     zookeeper:
       host: kafka
       port: 2181
-    presto_database_name: presto
-    presto_kafka_catalog: kafka
+    trino_database_name: trino
+    trino_kafka_catalog: kafka
     table_manager_type: kafka
 
 tests:

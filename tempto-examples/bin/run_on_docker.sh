@@ -32,9 +32,9 @@ function check_hive() {
   docker exec $(hadoop_master_container) hive -e 'show tables'
 }
 
-function check_presto() {
-  ${DOCKER_COMPOSE} run presto-cli \
-    java -jar presto-cli.jar --server presto-master:8080 --execute 'SHOW CATALOGS' | \
+function check_trino() {
+  ${DOCKER_COMPOSE} run trino-cli \
+    java -jar trino-cli.jar --server trino-master:8080 --execute 'SHOW CATALOGS' | \
     grep -i hive
 }
 
@@ -59,7 +59,7 @@ function stop_container() {
 
 function cleanup() {
   # stop application runner containers started with "run"
-  stop_container presto-cli
+  stop_container trino-cli
   stop_container runner
 
   # stop containers started with "up"
@@ -91,10 +91,10 @@ ${DOCKER_COMPOSE} pull --quiet
 
 ${DOCKER_COMPOSE} build
 ${DOCKER_COMPOSE} up -d 
-${DOCKER_COMPOSE} logs --no-color presto-master cassandra hadoop-master psql1 psql2 ssh kafka &
+${DOCKER_COMPOSE} logs --no-color trino-master cassandra hadoop-master psql1 psql2 ssh kafka &
 
 retry check_hive
-retry check_presto
+retry check_trino
 
 # run product tests
 set +e

@@ -1,4 +1,4 @@
-FROM ghcr.io/trinodb/testing/centos6-oj8:38
+FROM ghcr.io/trinodb/testing/centos7-oj11:38
 
 RUN yum install -y openssh-server openssh-clients passwd
 RUN echo s3cr37_p@55 | passwd --stdin root

@@ -1,4 +1,4 @@
--- database: presto; groups: stats, tpcds; tables: lineitem
+-- database: trino; groups: stats, tpcds; tables: lineitem
 -- delimiter: |; ignoreOrder: true; types: VARCHAR|DOUBLE|DOUBLE|DOUBLE|DOUBLE|VARCHAR|VARCHAR
 --! name: show stats for lineitem
 SHOW STATS FOR lineitem
@@ -8,9 +8,9 @@ l_partkey|null|200000.00000000000|0.00000000000|null|1|200000|
 l_suppkey|null|10000.00000000000|0.00000000000|null|1|10000|
 l_linenumber|null|7.00000000000|0.00000000000|null|1|7|
 l_quantity|null|50.00000000000|0.00000000000|null|0.02|1.0|
-l_extendedprice|null|933900.00000000000|0.00000000000|null|18.02|2098.99|
-l_discount|null|11.00000000000|0.00000000000|null|0.0|0.0|
-l_tax|null|9.00000000000|0.00000000000|null|0.0|0.0|
+l_extendedprice|null|208097.00000000000|0.00000000000|null|18.02|2098.99|
+l_discount|null|1.00000000000|0.00000000000|null|0.0|0.0|
+l_tax|null|1.00000000000|0.00000000000|null|0.0|0.0|
 l_returnflag|2000205.00000000000|3.00000000000|0.00000000000|null|null|null|
 l_linestatus|2000205.00000000000|2.00000000000|0.00000000000|null|null|null|
 l_shipdate|null|2526.00000000000|0.00000000000|null|1992-01-02|1998-12-01|

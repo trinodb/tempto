@@ -1,4 +1,4 @@
--- database: presto; groups: stats, tpcds; tables: tpcds.call_center 
+-- database: trino; groups: stats, tpcds; tables: tpcds.call_center
 -- delimiter: |; ignoreOrder: true; types: VARCHAR|DOUBLE|DOUBLE|DOUBLE|DOUBLE|VARCHAR|VARCHAR
 --! name: show stats for call_center
 SHOW STATS FOR hive.tpcds.call_center
@@ -7,7 +7,7 @@ cc_call_center_sk|null|6.00000000000|0.00000000000|null|1|6|
 cc_call_center_id|32.00000000000|3.00000000000|0.00000000000|null|null|null|
 cc_rec_start_date|null|4.00000000000|0.00000000000|null|1998-01-01|2002-01-01|
 cc_rec_end_date|null|2.00000000000|0.50000000000|null|2000-01-01|2001-12-31|
-cc_closed_date_sk|null|0.00000000000|1.00000000000|null|null|null|
+cc_closed_date_sk|0.00000000000|0.00000000000|1.00000000000|null|null|null|
 cc_open_date_sk|null|3.00000000000|0.00000000000|null|2450806|2451063|
 cc_name|100.00000000000|3.00000000000|0.00000000000|null|null|null|
 cc_class|100.00000000000|3.00000000000|0.00000000000|null|null|null|

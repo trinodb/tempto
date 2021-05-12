@@ -1,4 +1,4 @@
-# This configuration contains only presto and hive configured correctly
+# This configuration contains only trino and hive configured correctly
 # psql instances configuration and ssh configuration is wrongly configured
 # in purpouse to test that not needed configuration is not used.
 # So when running test only for particular database, only configuration for 
@@ -7,7 +7,7 @@
 DOCKER_MACHINE: localhost
 
 cluster:
-  presto: ${DOCKER_MACHINE}
+  trino: ${DOCKER_MACHINE}
   hadoop: ${DOCKER_MACHINE}
   psql1: wrong
   psql2: wrong
@@ -24,7 +24,7 @@ psql2:
 
 databases:
   default:
-    alias: presto
+    alias: trino
 
   hive:
     jdbc_driver_class: org.apache.hive.jdbc.HiveDriver
@@ -39,9 +39,9 @@ databases:
       host: ${cluster.hadoop}
       port: 9083
 
-  presto:
-    jdbc_driver_class: io.prestosql.jdbc.PrestoDriver
-    jdbc_url: jdbc:presto://${cluster.presto}:8080/hive/default
+  trino:
+    jdbc_driver_class: io.trino.jdbc.TrinoDriver
+    jdbc_url: jdbc:trino://${cluster.trino}:8080/hive/default
     jdbc_user: hdfs
     jdbc_password: "***empty***"
     jdbc_pooling: false

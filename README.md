@@ -135,7 +135,7 @@ Remark: Every database connection defined in the configuration will be initializ
 ```YAML
 databases:           # database connections
   default:           # default connection to query against
-    alias: presto    # points to connection defined below that you'd like to use as the default
+    alias: trino    # points to connection defined below that you'd like to use as the default
  
   hive:              # connection named hive
     jdbc_driver_class: org.apache.hive.jdbc.HiveDriver                                # fully qualified JDBC driver classname
@@ -155,9 +155,9 @@ databases:           # database connections
     kerberos_principal: USERNAME@EXAMPLE.COM
     kerberos_keytab: /path/to/username.keytab  
  
-  presto:           # connection named presto
-    jdbc_driver_class: io.prestosql.jdbc.PrestoDriver
-    jdbc_url: jdbc:presto://localhost:8080/hive/default
+  trino:           # connection named trino
+    jdbc_driver_class: io.trino.jdbc.TrinoDriver
+    jdbc_url: jdbc:trino://localhost:8080/hive/default
     jdbc_user: hdfs
     jdbc_password: na
 
@@ -510,8 +510,8 @@ To retrieve that executor and issue queries against that database you can use th
     QueryResult defaultQueryResult = QueryExecutor.query("SELECT * FROM nation");
     
     // Retrieve QueryExecutor for another, non-default, database
-    QueryExecutor prestoQueryExecutor = ThreadLocalTestContextHolder.testContext().getDependency(QueryExecutor.class, "presto");
-    QueryResult queryResultPresto = prestoQueryExecutor.query("SELECT * FROM nation");
+    QueryExecutor trinoQueryExecutor = ThreadLocalTestContextHolder.testContext().getDependency(QueryExecutor.class, "trino");
+    QueryResult queryResultTrino = trinoQueryExecutor.query("SELECT * FROM nation");
 ```
 
 Alternatively test writer can inject named QueryExecutor to the test. See below.
@@ -761,9 +761,9 @@ TODO more info on scripts, what they should be named, what they can contain.
 
 #### Using tables across databases.
 
-It is possible (which is useful for testing Presto for example) to use a table which is created in one database (e.g. hive, psql)
-while sending test query to other database (e.g. Presto).
-Take a look at the example below. Here query is issued via Presto JDBC, while nation table could be created somewhere else. In order to determine
+It is possible (which is useful for testing Trino for example) to use a table which is created in one database (e.g. hive, psql)
+while sending test query to other database (e.g. Trino).
+Take a look at the example below. Here query is issued via Trino JDBC, while nation table could be created somewhere else. In order to determine
 where nation should be created (find appropriate requirements) below matching flow is used:
  - If database is specified explicitly as prefix for table name (e.g psql.public.nation which means table nation in schema public in database psql) then requirement for
    table in that database will be generated. Note that database must have a table_manager with type
@@ -773,14 +773,14 @@ where nation should be created (find appropriate requirements) below matching fl
  - As fallback database to which test query would be send is used. Database type manager type vs table type checking is done.
 
 ```
--- database: presto; tables: nation;
+-- database: trino; tables: nation;
 SELECT * FROM nation
 ```
 
 Here you have an example with an immutable table requirement from database psql.
 
 ```
--- database: presto; tables: psql.public.nation;
+-- database: trino; tables: psql.public.nation;
 SELECT * FROM psql.public.nation
 ```
 

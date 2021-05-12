@@ -1,4 +1,4 @@
--- database: presto; tables: sample_jdbc_table; groups: presto_convention
+-- database: trino; tables: sample_jdbc_table; groups: trino_convention
 -- delimiter: |; ignoreOrder: false; types: BIGINT|VARCHAR
 --!
 SELECT * FROM sample_jdbc_table ORDER BY id;

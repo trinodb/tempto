@@ -52,30 +52,30 @@ public class KafkaTableManager
         implements TableManager<KafkaTableDefinition>
 {
     private final String databaseName;
-    private final QueryExecutor prestoQueryExecutor;
+    private final QueryExecutor trinoQueryExecutor;
     private final Configuration brokerConfiguration;
-    private final String prestoKafkaCatalog;
+    private final String trinoKafkaCatalog;
 
     @Inject
     public KafkaTableManager(
             @Named("databaseName") String databaseName,
             @Named("broker") Configuration brokerConfiguration,
-            @Named("presto_database_name") String prestoDatabaseName,
-            @Named("presto_kafka_catalog") String prestoKafkaCatalog,
+            @Named("trino_database_name") String trinoDatabaseName,
+            @Named("trino_kafka_catalog") String trinoKafkaCatalog,
             Injector injector)
     {
         this.databaseName = requireNonNull(databaseName, "databaseName is null");
         this.brokerConfiguration = requireNonNull(brokerConfiguration, "brokerConfiguration is null");
         requireNonNull(injector, "injector is null");
-        requireNonNull(prestoDatabaseName, "prestoDatabaseName is null");
-        this.prestoQueryExecutor = injector.getInstance(Key.get(QueryExecutor.class, Names.named(prestoDatabaseName)));
-        this.prestoKafkaCatalog = requireNonNull(prestoKafkaCatalog, "prestoKafkaCatalog is null");
+        requireNonNull(trinoDatabaseName, "trinoDatabaseName is null");
+        this.trinoQueryExecutor = injector.getInstance(Key.get(QueryExecutor.class, Names.named(trinoDatabaseName)));
+        this.trinoKafkaCatalog = requireNonNull(trinoKafkaCatalog, "trinoKafkaCatalog is null");
     }
 
     @Override
     public TableInstance<KafkaTableDefinition> createImmutable(KafkaTableDefinition tableDefinition, TableHandle tableHandle)
     {
-        verifyTableExistsInPresto(tableHandle.getSchema().orElseThrow(() -> new IllegalArgumentException("Schema required for Kafka tables")), tableHandle.getName());
+        verifyTableExistsInTrino(tableHandle.getSchema().orElseThrow(() -> new IllegalArgumentException("Schema required for Kafka tables")), tableHandle.getName());
         deleteTopic(tableDefinition.getTopic());
         createTopic(tableDefinition.getTopic(), tableDefinition.getPartitionsCount(), tableDefinition.getReplicationLevel());
         insertDataIntoTopic(tableDefinition.getTopic(), tableDefinition.getDataSource());
@@ -87,12 +87,12 @@ public class KafkaTableManager
         return new KafkaTableInstance(createdTableName, tableDefinition);
     }
 
-    private void verifyTableExistsInPresto(String schema, String name)
+    private void verifyTableExistsInTrino(String schema, String name)
     {
-        String sql = format("select count(1) from %s.information_schema.tables where table_schema='%s' and table_name='%s'", prestoKafkaCatalog, schema, name);
-        QueryResult queryResult = prestoQueryExecutor.executeQuery(sql);
+        String sql = format("select count(1) from %s.information_schema.tables where table_schema='%s' and table_name='%s'", trinoKafkaCatalog, schema, name);
+        QueryResult queryResult = trinoQueryExecutor.executeQuery(sql);
         if ((Long) queryResult.row(0).get(0) != 1) {
-            throw new RuntimeException(format("Table %s.%s not defined if kafka catalog (%s)", schema, name, prestoKafkaCatalog));
+            throw new RuntimeException(format("Table %s.%s not defined if kafka catalog (%s)", schema, name, trinoKafkaCatalog));
         }
     }
 

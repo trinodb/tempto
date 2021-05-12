@@ -1,16 +1,16 @@
 DOCKER_MACHINE: localhost
 
 cluster:
-  presto: ${DOCKER_MACHINE}
+  trino: ${DOCKER_MACHINE}
   ssh: ${DOCKER_MACHINE}
 
 databases:
   default:
-    alias: presto
+    alias: trino
 
-  presto:
-    jdbc_driver_class: io.prestosql.jdbc.PrestoDriver
-    jdbc_url: jdbc:presto://${cluster.presto}:8080/hive/default
+  trino:
+    jdbc_driver_class: io.trino.jdbc.TrinoDriver
+    jdbc_url: jdbc:trino://${cluster.trino}:8080/hive/default
     jdbc_user: hdfs
     jdbc_password: "***empty***"
 

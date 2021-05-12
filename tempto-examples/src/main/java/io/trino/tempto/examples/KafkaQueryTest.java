@@ -39,7 +39,7 @@ public class KafkaQueryTest
     private static final String SIMPLE_KEY_AND_VALUE_TABLE_NAME = "default.simple_key_and_value";
     private static final String SIMPLE_KEY_AND_VALUE_TOPIC_NAME = "simple_key_and_value";
 
-    // kafka-connectors requires tables to be predefined in presto configuration
+    // kafka-connectors requires tables to be predefined in trino configuration
     // the requirements here will be used to verify that table actually exists and to
     // create topics and propagate them with data
 
