@@ -71,14 +71,14 @@ public class TemptoRunnerOptions
 
     public static final Option TESTS = Option.builder("t")
             .longOpt("tests")
-            .desc("Test name suffix to be included")
+            .desc("Comma-separated list of values which are substring-matched against test names")
             .valueSeparator(',')
             .hasArg()
             .build();
 
     public static final Option EXCLUDED_TESTS = Option.builder("e")
             .longOpt("excluded-tests")
-            .desc("Test name suffix to be excluded")
+            .desc("Test name structural prefix (dot-separated) to be excluded")
             .valueSeparator(',')
             .hasArg()
             .build();
