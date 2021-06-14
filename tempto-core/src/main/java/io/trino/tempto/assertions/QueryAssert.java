@@ -25,6 +25,8 @@ import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 
+import javax.annotation.CheckReturnValue;
+
 import java.sql.JDBCType;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -67,11 +69,13 @@ public class QueryAssert
         this.columnTypes = actual.getColumnTypes();
     }
 
+    @CheckReturnValue
     public static QueryAssert assertThat(QueryResult queryResult)
     {
         return new QueryAssert(queryResult);
     }
 
+    @CheckReturnValue
     public static QueryExecutionAssert assertThat(QueryCallback queryCallback)
     {
         QueryExecutionException executionException = null;
