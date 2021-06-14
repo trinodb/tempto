@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.trino.tempto</groupId>
         <artifactId>tempto-root</artifactId>
-        <version>185-SNAPSHOT</version>
+        <version>185</version>
     </parent>
 
     <artifactId>tempto-ldap</artifactId>
