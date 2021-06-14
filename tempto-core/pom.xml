@@ -146,6 +146,12 @@
             <artifactId>cassandra-driver-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- needed at runtime -->
         <dependency>
             <groupId>org.slf4j</groupId>

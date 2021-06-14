@@ -23,6 +23,7 @@ import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryResult;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
+import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 
 import javax.annotation.CheckReturnValue;
@@ -457,7 +458,7 @@ public class QueryAssert
             return this;
         }
 
-        public QueryExecutionAssert failsWithMessageMatching(String expectedErrorMessagePattern)
+        public QueryExecutionAssert failsWithMessageMatching(@Language("RegExp") String expectedErrorMessagePattern)
         {
             requireNonNull(expectedErrorMessagePattern, "expectedErrorMessagePattern is null");
             String exceptionMessage = getFailureMessage();
