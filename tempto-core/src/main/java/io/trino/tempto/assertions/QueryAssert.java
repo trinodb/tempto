@@ -22,6 +22,7 @@ import io.trino.tempto.query.QueryExecutionException;
 import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryResult;
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractThrowableAssert;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
@@ -76,6 +77,10 @@ public class QueryAssert
         return new QueryAssert(queryResult);
     }
 
+    /**
+     * @deprecated Use {@link #assertQueryFailure(QueryCallback)} instead.
+     */
+    @Deprecated
     @CheckReturnValue
     public static QueryExecutionAssert assertThat(QueryCallback queryCallback)
     {
@@ -87,6 +92,19 @@ public class QueryAssert
             executionException = e;
         }
         return new QueryExecutionAssert(ofNullable(executionException));
+    }
+
+    @CheckReturnValue
+    public static AbstractThrowableAssert<?, ? extends Throwable> assertQueryFailure(QueryCallback queryCallback)
+    {
+        QueryExecutionException executionException = null;
+        try {
+            queryCallback.executeQuery();
+        }
+        catch (QueryExecutionException e) {
+            return Assertions.assertThat(e.getCause());
+        }
+        throw new AssertionError("Expected callback to throw QueryExecutionException");
     }
 
     public QueryAssert matches(SqlResultDescriptor sqlResultDescriptor)
@@ -422,6 +440,7 @@ public class QueryAssert
                 throws QueryExecutionException;
     }
 
+    @Deprecated
     public static class QueryExecutionAssert
     {
         private Optional<QueryExecutionException> executionExceptionOptional;
