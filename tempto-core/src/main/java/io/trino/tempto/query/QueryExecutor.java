@@ -14,6 +14,8 @@
 
 package io.trino.tempto.query;
 
+import org.intellij.lang.annotations.Language;
+
 import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.JDBCType;
@@ -37,7 +39,7 @@ public interface QueryExecutor
      * @param params Parameters to be used while executing query
      * @return Result of executed statement.
      */
-    QueryResult executeQuery(String sql, QueryParam... params)
+    QueryResult executeQuery(@Language("SQL") String sql, QueryParam... params)
             throws QueryExecutionException;
 
     Connection getConnection();
@@ -51,7 +53,7 @@ public interface QueryExecutor
      * @param params Parameters to be used while executing query
      * @return QueryResult
      */
-    static QueryResult query(String sql, QueryParam... params)
+    static QueryResult query(@Language("SQL") String sql, QueryParam... params)
             throws QueryExecutionException
     {
         return defaultQueryExecutor().executeQuery(sql, params);
