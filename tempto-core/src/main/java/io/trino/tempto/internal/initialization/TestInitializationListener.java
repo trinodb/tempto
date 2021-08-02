@@ -256,7 +256,7 @@ public class TestInitializationListener
 
     private void invokeMethodsAnnotatedWith(Class<? extends Annotation> annotationClass, ITestResult testCase, TestContext testContext)
     {
-        for (Method declaredMethod : testCase.getTestClass().getRealClass().getDeclaredMethods()) {
+        for (Method declaredMethod : testCase.getTestClass().getRealClass().getMethods()) {
             if (declaredMethod.getAnnotation(annotationClass) != null) {
                 try {
                     declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext, declaredMethod));

@@ -28,6 +28,7 @@ import org.testng.internal.ConstructorOrMethod
 import spock.lang.Specification
 
 import java.lang.reflect.Method
+import java.util.stream.Collectors
 
 import static com.google.common.collect.Iterables.getOnlyElement
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet
@@ -57,10 +58,14 @@ class TestInitializationListenerTest
     static final THROWING_TEST_C_CALLBACK = 'CCALLBACK'
     static final BUILTIN_CALLBACK = 'BUILTIN_CALLBACK'
 
+    static final String BEFORE_METHOD = "beforeMethod"
+    static final String AFTER_METHOD = "afterMethod"
+    public static final String BEFORE_METHOD_OVERRIDE = "beforeMethodOverride"
+    public static final String AFTER_METHOD_OVERRIDE = "afterMethodOverride"
+
     static final A_REQUIREMENT = new DummyRequirement(A)
     static final B_REQUIREMENT = new DummyRequirement(B)
     static final C_REQUIREMENT = new DummyRequirement(C)
-
     static List<Event> EVENTS
 
     def setup()
@@ -70,15 +75,12 @@ class TestInitializationListenerTest
 
     def testSpecificRequirementsResolver = new TestSpecificRequirementsResolver(emptyConfiguration())
 
-    def 'positive flow'()
+    def 'positive flows'()
     {
         setup:
-        def testClass = new TestClass()
         def listener = new TestInitializationListener([], [], [AFulfiller], [BFulfiller], emptyConfiguration())
         def iTestContext = getITestContext(successMethod, testClass)
         def iTestResult = getITestResult(successMethod, testClass)
-
-        when:
         listener.onStart(iTestContext)
         assertTestContextNotSet()
         listener.onTestStart(iTestResult)
@@ -88,18 +90,32 @@ class TestInitializationListenerTest
         assertTestContextNotSet()
         listener.onFinish(iTestContext)
 
-        then:
-        EVENTS[0].name == SUITE_A_FULFILL
-        EVENTS[1].name == TEST_B_FULFILL
-        EVENTS[2].name == "beforeMethod";
-        EVENTS[3].name == "afterMethod";
-        EVENTS[4].name == TEST_B_CLEANUP
-        EVENTS[5].name == TEST_B_CALLBACK
-        EVENTS[6].name == SUITE_A_CLEANUP
-        EVENTS[7].name == SUITE_A_CALLBACK
+        expect:
+        EVENTS.stream()
+                .map({ s -> s.name })
+                .collect(Collectors.toList())
+                .equals(eventsList)
+        EVENTS[1].object == EVENTS[EVENTS.size() - 4].object
+        EVENTS[0].object == EVENTS[EVENTS.size() - 2].object
 
-        EVENTS[1].object == EVENTS[4].object
-        EVENTS[0].object == EVENTS[6].object
+        where:
+        testClass                                        | eventsList
+        new TestClass()                                  | [SUITE_A_FULFILL, TEST_B_FULFILL,
+                                                            BEFORE_METHOD, AFTER_METHOD,
+                                                            TEST_B_CLEANUP, TEST_B_CALLBACK,
+                                                            SUITE_A_CLEANUP, SUITE_A_CALLBACK]
+        new TestClassNoOverrideAnnotatedMethods()        | [SUITE_A_FULFILL, TEST_B_FULFILL,
+                                                            BEFORE_METHOD, AFTER_METHOD,
+                                                            TEST_B_CLEANUP, TEST_B_CALLBACK,
+                                                            SUITE_A_CLEANUP, SUITE_A_CALLBACK]
+        new TestClassOverrideAnnotatedMethods()          | [SUITE_A_FULFILL, TEST_B_FULFILL,
+                                                            BEFORE_METHOD_OVERRIDE, AFTER_METHOD_OVERRIDE,
+                                                            TEST_B_CLEANUP, TEST_B_CALLBACK,
+                                                            SUITE_A_CLEANUP, SUITE_A_CALLBACK]
+        new TestClassOverrideAdditionalAnnotatedMethod() | [SUITE_A_FULFILL, TEST_B_FULFILL,
+                                                            BEFORE_METHOD_OVERRIDE, BEFORE_METHOD, AFTER_METHOD,
+                                                            TEST_B_CLEANUP, TEST_B_CALLBACK,
+                                                            SUITE_A_CLEANUP, SUITE_A_CALLBACK]
     }
 
     def 'failure during fulfillment'()
@@ -155,7 +171,7 @@ class TestInitializationListenerTest
         testResult.method >> getITestNGMethod(method, testClass, iTestClass)
         testResult.testClass >> iTestClass
         testResult.instance >> testResult.method.instance
-        iTestClass.realClass >> TestClass
+        iTestClass.realClass >> testClass.getClass()
         return testResult
     }
 
@@ -189,6 +205,39 @@ class TestInitializationListenerTest
         return TestClass.getMethod('testMethodFailed')
     }
 
+    static class TestClassNoOverrideAnnotatedMethods
+            extends TestClass
+    {
+    }
+
+    static class TestClassOverrideAdditionalAnnotatedMethod
+            extends TestClass
+    {
+        @BeforeTestWithContext
+        void beforeMethodAdditional()
+        {
+            EVENTS.add(new Event(BEFORE_METHOD_OVERRIDE, this));
+        }
+    }
+
+    static class TestClassOverrideAnnotatedMethods
+            extends TestClass
+    {
+        @Override
+        @BeforeTestWithContext
+        void beforeMethod()
+        {
+            EVENTS.add(new Event(BEFORE_METHOD_OVERRIDE, this));
+        }
+
+        @Override
+        @AfterTestWithContext
+        void afterMethod()
+        {
+            EVENTS.add(new Event(AFTER_METHOD_OVERRIDE, this));
+        }
+    }
+
     @Requires(ARequirement)
     static class TestClass
             implements RequirementsProvider
@@ -199,13 +248,13 @@ class TestInitializationListenerTest
         @BeforeTestWithContext
         void beforeMethod()
         {
-            EVENTS.add(new Event("beforeMethod", this));
+            EVENTS.add(new Event(BEFORE_METHOD, this));
         }
 
         @AfterTestWithContext
         void afterMethod()
         {
-            EVENTS.add(new Event("afterMethod", this));
+            EVENTS.add(new Event(AFTER_METHOD, this));
         }
 
         void testMethodSuccess()
