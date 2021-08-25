@@ -1,4 +1,4 @@
-# Tempto - test framework [![Build Status](https://travis-ci.com/trinodb/tempto.svg?branch=master)](https://travis-ci.com/trinodb/tempto)
+# Tempto - test framework [![Build Status](https://github.com/trinodb/tempto/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/trinodb/tempto/actions/workflows/ci.yml)
 
 This project allows developers to write and execute tests for SQL databases running
 on Hadoop. Individual test requirements such as data generation, HDFS file copy/storage
