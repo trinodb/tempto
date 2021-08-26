@@ -24,7 +24,7 @@ jobs:
     - name: test
       run: ./mvnw install -B
     - name: tempto test (exclusion)
-      run: ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -x failing -e io.prestosql.tempto.examples.ExclusionTest.failingTest,io.prestosql.tempto.examples.AnotherExclusionTest
+      run: ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -x failing -e io.trino.tempto.examples.ExclusionTest.failingTest,io.trino.tempto.examples.AnotherExclusionTest
     - name: tempto test (config-read-only)
       run: CONFIG_FILE=tempto-configuration-read-only.yaml ./tempto-examples/bin/run_on_docker.sh --thread-count 2 -g in_memory
     - name: tempto test (config-no-db)
