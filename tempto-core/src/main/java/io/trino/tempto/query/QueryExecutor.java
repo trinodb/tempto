@@ -29,6 +29,10 @@ import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
 public interface QueryExecutor
         extends Closeable
 {
+    /**
+     * @deprecated The concept of default query executor has been found to be confusing and will be removed.
+     */
+    @Deprecated
     String DEFAULT_DB_NAME = "default";
 
     /**
@@ -52,13 +56,20 @@ public interface QueryExecutor
      * @param sql SQL query to be executed
      * @param params Parameters to be used while executing query
      * @return QueryResult
+     * @deprecated This method runs a query on the {@link #defaultQueryExecutor default executor}.
+     * The concept of default query executor has been found to be confusing and will be removed.
      */
+    @Deprecated
     static QueryResult query(@Language("SQL") String sql, QueryParam... params)
             throws QueryExecutionException
     {
         return defaultQueryExecutor().executeQuery(sql, params);
     }
 
+    /**
+     * @deprecated The concept of default query executor has been found to be confusing and will be removed.
+     */
+    @Deprecated
     static QueryExecutor defaultQueryExecutor()
     {
         return testContext().getDependency(QueryExecutor.class, DEFAULT_DB_NAME);
