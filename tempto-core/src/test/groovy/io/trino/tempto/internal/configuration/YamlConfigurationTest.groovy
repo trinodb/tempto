@@ -93,4 +93,37 @@ copy:
         configuration.getIntMandatory('copy.one.a') == 42
         configuration.getStringListMandatory('copy.two') == ['quick', 'brown', 'fox']
     }
+
+    def createWithCopyFromAnchorAndOverride()
+    {
+        setup:
+        def configuration = new YamlConfiguration("""\
+root: &root
+  one:
+    q: life, universe and everything
+    a: 42
+  two:
+    - quick
+    - brown
+    - fox
+
+copy: 
+  <<: *root
+  one:
+    a: forty-two
+  two:
+    - walk on, walk on
+    - with hope in your heart
+    - and you'll never walk alone
+""")
+
+        expect:
+        configuration.listKeys() == ['root.one.q', 'root.one.a', 'root.two', 'copy.one.a', 'copy.two'] as Set
+        configuration.getStringMandatory('root.one.q') == 'life, universe and everything'
+        configuration.getIntMandatory('root.one.a') == 42
+        configuration.getStringListMandatory('root.two') == ['quick', 'brown', 'fox']
+        configuration.getString('copy.one.q').empty() // 'copy.one' was overridden, thus 'copy.one.q' is missing
+        configuration.getStringMandatory('copy.one.a') == 'forty-two'
+        configuration.getStringListMandatory('copy.two') == ['walk on, walk on', 'with hope in your heart', 'and you\'ll never walk alone']
+    }
 }
