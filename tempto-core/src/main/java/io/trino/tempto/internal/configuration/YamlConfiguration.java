@@ -43,7 +43,7 @@ public class YamlConfiguration
         mapConfiguration = loadConfiguration(inputStreamToStringSafe(yamlInputStream));
     }
 
-    private MapConfiguration loadConfiguration(String yamlString)
+    private static MapConfiguration loadConfiguration(String yamlString)
     {
         requireNonNull(yamlString, "yamlString is null");
         Yaml yaml = new Yaml();
