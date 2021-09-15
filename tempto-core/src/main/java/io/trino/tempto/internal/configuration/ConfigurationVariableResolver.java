@@ -37,7 +37,7 @@ public class ConfigurationVariableResolver
         return resolveVariables(configuration, configuration.asMap());
     }
 
-    private Configuration resolveVariables(Configuration configuration, Map<String, ? extends Object> variables)
+    private Configuration resolveVariables(Configuration configuration, Map<String, ?> variables)
     {
         StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
         return new MapConfiguration(resolveVariables(configuration, strSubstitutor));
@@ -48,7 +48,7 @@ public class ConfigurationVariableResolver
         return configuration.listPrefixes()
                 .stream()
                 .map(prefix -> resolveConfigurationEntry(configuration, prefix, strSubstitutor))
-                .collect(Collectors.toMap(entry -> entry.getLeft(), entry -> entry.getRight()));
+                .collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
     }
 
     private Pair<String, Object> resolveConfigurationEntry(Configuration configuration, String prefix, StrSubstitutor strSubstitutor)
@@ -60,7 +60,7 @@ public class ConfigurationVariableResolver
                 return Pair.of(prefix, strSubstitutor.replace(value));
             }
             else if (value instanceof List) {
-                List<String> resolvedList = new ArrayList<String>();
+                List<String> resolvedList = new ArrayList<>();
                 for (String entry : (List<String>) value) {
                     resolvedList.add(strSubstitutor.replace(entry));
                 }
