@@ -14,6 +14,7 @@
 
 package io.trino.tempto.assertions
 
+import com.google.common.collect.ImmutableMap
 import io.trino.tempto.configuration.Configuration
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -32,11 +33,13 @@ import static java.sql.JDBCType.DECIMAL
 import static java.sql.JDBCType.DOUBLE
 import static java.sql.JDBCType.FLOAT
 import static java.sql.JDBCType.INTEGER
+import static java.sql.JDBCType.JAVA_OBJECT
 import static java.sql.JDBCType.LONGVARBINARY
 import static java.sql.JDBCType.LONGVARCHAR
 import static java.sql.JDBCType.NUMERIC
 import static java.sql.JDBCType.NVARCHAR
 import static java.sql.JDBCType.SMALLINT
+import static java.sql.JDBCType.STRUCT
 import static java.sql.JDBCType.TIME
 import static java.sql.JDBCType.TIMESTAMP
 import static java.sql.JDBCType.TIMESTAMP_WITH_TIMEZONE
@@ -129,6 +132,24 @@ class QueryResultValueComparatorTest
         TIMESTAMP               | Timestamp.valueOf("2015-02-16 10:10:10") | Timestamp.valueOf("2015-02-15 10:10:10") | false
         TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | Timestamp.valueOf("2015-02-16 10:10:10") | false
         TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | "a"                                      | false
+
+        STRUCT                  | null                                     | null                                     | true
+        STRUCT                  | null                                     | ImmutableMap.of()                        | false
+        STRUCT                  | ImmutableMap.of()                        | null                                     | false
+        STRUCT                  | ImmutableMap.of()                        | ImmutableMap.of()                        | true
+        STRUCT                  | ImmutableMap.of("a", "B")                | ImmutableMap.of()                        | false
+        STRUCT                  | ImmutableMap.of("a", "B")                | ImmutableMap.of("a", "b")                | false
+        STRUCT                  | ImmutableMap.of("a", "B")                | ImmutableMap.of("x", "y")                | false
+        STRUCT                  | ImmutableMap.of()                        | ImmutableMap.of("x", "y")                | false
+        
+        JAVA_OBJECT             | null                                     | null                                     | true
+        JAVA_OBJECT             | null                                     | ImmutableMap.of()                        | false
+        JAVA_OBJECT             | ImmutableMap.of()                        | null                                     | false
+        JAVA_OBJECT             | ImmutableMap.of()                        | ImmutableMap.of()                        | true
+        JAVA_OBJECT             | ImmutableMap.of("a", "B")                | ImmutableMap.of()                        | false
+        JAVA_OBJECT             | ImmutableMap.of("a", "B")                | ImmutableMap.of("a", "b")                | false
+        JAVA_OBJECT             | ImmutableMap.of("a", "B")                | ImmutableMap.of("x", "y")                | false
+        JAVA_OBJECT             | ImmutableMap.of()                        | ImmutableMap.of("x", "y")                | false
     }
 
     @Unroll
