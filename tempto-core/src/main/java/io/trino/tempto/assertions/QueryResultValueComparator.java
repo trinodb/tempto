@@ -27,6 +27,7 @@ import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
@@ -104,6 +105,9 @@ class QueryResultValueComparator
                 return timestampWithTimezoneEqual(actual, expected);
             case ARRAY:
                 return arrayEqual(actual, expected);
+            case STRUCT:
+            case JAVA_OBJECT:
+                return Objects.equals(actual, expected);
             default:
                 throw new RuntimeException("Unsupported sql type " + type);
         }
