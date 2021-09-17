@@ -49,7 +49,7 @@ class QueryResultValueComparatorTest
         extends Specification
 {
     @Unroll
-    def 'queryResultValueComparator(#type).compare(#actual,#expected) = #result'()
+    def 'queryResultValueComparator(#type).test(#actual,#expected) = #result'()
     {
         setup:
         Configuration configuration = Mock(Configuration)
@@ -132,7 +132,7 @@ class QueryResultValueComparatorTest
     }
 
     @Unroll
-    def 'queryResultValueComparator(#type).compare(#actual,#expected) = #result with 0.01 tolerance'()
+    def 'queryResultValueComparator(#type).test(#actual,#expected) = #result with 0.01 tolerance'()
     {
         setup:
         Configuration configuration = Mock(Configuration)
