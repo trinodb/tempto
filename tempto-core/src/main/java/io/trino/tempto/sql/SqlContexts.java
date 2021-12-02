@@ -34,11 +34,18 @@ public final class SqlContexts
      *
      * @param selectSql sql select statement used to create view
      * @return viewContextProvider
+     * @deprecated This method uses internally the default query executor which is deprecated. Use {@link #createViewAs(String, QueryExecutor)} instead.
      */
+    @Deprecated
     public static ViewContextProvider createViewAs(String selectSql)
     {
+        return createViewAs(selectSql, defaultQueryExecutor());
+    }
+
+    public static ViewContextProvider createViewAs(String selectSql, QueryExecutor queryExecutor)
+    {
         String viewName = generateRandomName("TEST_VIEW_");
-        return new ViewContextProvider(viewName, selectSql, defaultQueryExecutor());
+        return new ViewContextProvider(viewName, selectSql, queryExecutor);
     }
 
     public static ViewContextProvider createViewAs(String viewName, String selectSql, QueryExecutor queryExecutor)
