@@ -14,7 +14,7 @@ services:
 
   psql1:
     hostname: psql1
-    image: 'postgres'
+    image: 'postgres:13.4'
     ports:
       - '15432:5432'
     environment:
@@ -23,7 +23,7 @@ services:
 
   psql2:
     hostname: psql2
-    image: 'postgres'
+    image: 'postgres:13.4'
     ports:
       - '15433:5432'
     environment:
