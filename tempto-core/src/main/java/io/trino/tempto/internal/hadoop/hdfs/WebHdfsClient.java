@@ -49,6 +49,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
@@ -373,7 +374,11 @@ public class WebHdfsClient
     {
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
             if (response.getStatusLine().getStatusCode() != SC_TEMPORARY_REDIRECT) {
-                throw new RuntimeException("Expected redirect for request: " + request);
+                throw new RuntimeException(format("Expected %s redirect for request %s, but got %s: %s",
+                        SC_TEMPORARY_REDIRECT,
+                        request,
+                        response.getStatusLine().getStatusCode(),
+                        response));
             }
             return response.getFirstHeader("Location").getValue();
         }
