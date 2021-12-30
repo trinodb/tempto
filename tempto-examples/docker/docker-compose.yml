@@ -2,7 +2,7 @@ version: '2'
 services:
   hadoop-master:
     hostname: hadoop-master
-    image: 'ghcr.io/trinodb/testing/hdp2.6-hive:38'
+    image: 'ghcr.io/trinodb/testing/hdp2.6-hive:53'
     ports:
       - '1080:1080'
       - '8020:8020'
@@ -70,7 +70,7 @@ services:
       - 'trino-master'
 
   runner:
-    image: 'ghcr.io/trinodb/testing/centos7-oj11:38'
+    image: 'ghcr.io/trinodb/testing/centos7-oj11:53'
     ports:
       - '5005:5005'
     volumes:
