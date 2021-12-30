@@ -1,4 +1,4 @@
-FROM ghcr.io/trinodb/testing/centos7-oj11:38
+FROM ghcr.io/trinodb/testing/centos7-oj11:53
 
 RUN yum install -y tar
 
