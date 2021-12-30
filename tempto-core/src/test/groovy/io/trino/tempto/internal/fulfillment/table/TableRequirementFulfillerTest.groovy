@@ -30,7 +30,7 @@ import static com.google.common.collect.Iterables.getOnlyElement
 import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.CREATED
 import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED
 import static io.trino.tempto.fulfillment.table.TableHandle.tableHandle
-import static junit.framework.TestCase.fail
+import static org.junit.jupiter.api.Assertions.fail
 
 class TableRequirementFulfillerTest
         extends Specification

@@ -28,8 +28,8 @@ import io.trino.tempto.fulfillment.table.MutableTablesState;
 import io.trino.tempto.fulfillment.table.TableDefinition;
 import io.trino.tempto.fulfillment.table.TableInstance;
 import io.trino.tempto.fulfillment.table.TableManager;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.testng.annotations.Test;
 
 import static io.trino.tempto.Requirements.allOf;
@@ -63,16 +63,16 @@ public class SimpleQueryTest
     @Named("hive")
     TableManager tableManager;
 
-    @Before
+    @BeforeEach
     public void someBefore()
     {
-        // just to check if having @Before method does not break anything
+        // just to check if having @BeforeEach method does not break anything
     }
 
-    @After
+    @AfterEach
     public void someAfter()
     {
-        // just to check if having @After method does not break anything
+        // just to check if having @AfterEach method does not break anything
     }
 
     @BeforeTestWithContext
