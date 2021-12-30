@@ -13,6 +13,8 @@
 
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
+        <!-- there are no tests in this module -->
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
