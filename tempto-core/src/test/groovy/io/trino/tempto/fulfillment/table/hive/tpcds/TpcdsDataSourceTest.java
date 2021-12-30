@@ -16,10 +16,10 @@ package io.trino.tempto.fulfillment.table.hive.tpcds;
 
 import io.trino.tempto.fulfillment.table.hive.statistics.ColumnStatistics;
 import io.trino.tempto.fulfillment.table.hive.statistics.TableStatistics;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TpcdsDataSourceTest
 {

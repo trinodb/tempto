@@ -22,10 +22,9 @@ import io.trino.tempto.fulfillment.table.TableDefinitionsRepository
 import io.trino.tempto.internal.convention.ConventionBasedTest
 import io.trino.tempto.internal.convention.ConventionBasedTestProxyGenerator
 import org.apache.commons.io.FilenameUtils
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.TempDir
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -35,8 +34,8 @@ import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyCon
 class SqlPathTestFactoryTest
         extends Specification
 {
-    @Rule
-    TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    Path temporaryFolder
 
     @Shared
     SqlPathTestFactory sqlPathTestFactory
@@ -155,7 +154,7 @@ query 2 result
 
     private Path getPathForConventionTest(String conventionTestContent, Optional<String> resultFileContent)
     {
-        def file = temporaryFolder.newFile()
+        def file = temporaryFolder.resolve(UUID.randomUUID().toString() + ".tmp").toFile()
         file.write conventionTestContent
         def testPath = Paths.get(file.path)
 

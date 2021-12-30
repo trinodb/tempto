@@ -25,9 +25,9 @@ import io.trino.tempto.context.State
 import io.trino.tempto.context.TestContext
 import io.trino.tempto.context.TestContextCloseCallback
 import io.trino.tempto.fulfillment.RequirementFulfiller
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 
 import javax.inject.Inject
 import javax.inject.Named
@@ -35,13 +35,14 @@ import java.lang.reflect.Method
 
 import static com.google.inject.Guice.createInjector
 import static com.google.inject.name.Names.named
+import static org.junit.jupiter.api.Assertions.assertThrows
 
 class ReflectionInjectorHelperTest
 {
     private final ReflectionInjectorHelper reflectionInjectorHelper = new ReflectionInjectorHelper()
     private TestContext testContext;
 
-    @Before
+    @BeforeEach
     void setup()
     {
         Injector injector = createInjector(new AbstractModule() {
@@ -137,7 +138,7 @@ class ReflectionInjectorHelperTest
         assert key == 'value2';
     }
 
-    @Ignore
+    @Disabled
     @Test
     void canInjectStringListToMethod()
     {
@@ -150,10 +151,10 @@ class ReflectionInjectorHelperTest
         assert stringList.size() == 3 && stringList.containsAll(['ala', 'ma', 'kota'])
     }
 
-    @Test(expected = ConfigurationException)
+    @Test
     void cannotInjectRequirementFulfillerToMethod()
     {
-        injectAndCallMethod('useFulfiller', RequirementFulfiller)
+        assertThrows(ConfigurationException, { _ -> injectAndCallMethod('useFulfiller', RequirementFulfiller) })
     }
 
     @Inject

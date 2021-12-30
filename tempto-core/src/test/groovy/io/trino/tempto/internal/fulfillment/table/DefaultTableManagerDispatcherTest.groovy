@@ -24,8 +24,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static io.trino.tempto.fulfillment.table.TableHandle.tableHandle
+import static org.junit.jupiter.api.Assertions.fail
 import static java.util.Optional.empty
-import static junit.framework.TestCase.fail
 
 class DefaultTableManagerDispatcherTest
         extends Specification
