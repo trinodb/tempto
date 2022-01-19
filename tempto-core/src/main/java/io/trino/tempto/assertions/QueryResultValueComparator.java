@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
@@ -88,7 +89,6 @@ class QueryResultValueComparator
                 return longEqual(actual, expected);
             case REAL:
             case FLOAT:
-                return floatingEqual(actual, expected);
             case DOUBLE:
                 return floatingEqual(actual, expected);
             case DECIMAL:
@@ -116,7 +116,7 @@ class QueryResultValueComparator
     private boolean arrayEqual(Object actual, Object expected)
     {
         if (!(actual instanceof Array && expected instanceof List)) {
-            return false;
+            throw incompatibleTypes(actual, expected);
         }
         Array actualArray = (Array) actual;
         QueryResultValueComparator elementComparator;
@@ -165,7 +165,7 @@ class QueryResultValueComparator
         if (actual instanceof String && expected instanceof String) {
             return actual.equals(expected);
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private boolean binaryEqual(Object actual, Object expected)
@@ -173,7 +173,7 @@ class QueryResultValueComparator
         if (actual instanceof byte[] && expected instanceof byte[]) {
             return Arrays.equals(((byte[]) actual), ((byte[]) expected));
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private boolean booleanEqual(Object actual, Object expected)
@@ -181,13 +181,13 @@ class QueryResultValueComparator
         if (actual instanceof Boolean && expected instanceof Boolean) {
             return actual.equals(expected);
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private boolean longEqual(Object actual, Object expected)
     {
         if (!(isLongOrNarrower(actual) && isLongOrNarrower(expected))) {
-            return false;
+            throw incompatibleTypes(actual, expected);
         }
         Long actualLong = ((Number) actual).longValue();
         Long expectedLong = ((Number) expected).longValue();
@@ -197,7 +197,7 @@ class QueryResultValueComparator
     private boolean integerEqual(Object actual, Object expected)
     {
         if (!(isIntegerOrNarrower(actual) && isIntegerOrNarrower(expected))) {
-            return false;
+            throw incompatibleTypes(actual, expected);
         }
         Integer actualInteger = ((Number) actual).intValue();
         Integer expectedInteger = ((Number) expected).intValue();
@@ -207,7 +207,7 @@ class QueryResultValueComparator
     private boolean floatingEqual(Object actual, Object expected)
     {
         if (!(isFloatingPointValue(actual) && isFloatingPointValue(expected))) {
-            return false;
+            throw incompatibleTypes(actual, expected);
         }
 
         double expectedDouble = getDoubleValue(expected);
@@ -222,28 +222,26 @@ class QueryResultValueComparator
     private boolean bigDecimalEqual(Object actual, Object expected)
     {
         if (actual instanceof BigDecimal && expected instanceof BigDecimal) {
-            // BigDecimal should be check for equality using compareTo()
+            // BigDecimal should be checked for equality using compareTo()
             return ((BigDecimal) actual).compareTo((BigDecimal) expected) == 0;
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private boolean dateEqual(Object actual, Object expected)
     {
         if (actual instanceof Date && expected instanceof Date) {
-            // Date.compareTo may not be equivalent to equals() TODO which one should be used?
             return ((Date) actual).compareTo((Date) expected) == 0;
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private boolean timeEqual(Object actual, Object expected)
     {
         if (actual instanceof Time && expected instanceof Time) {
-            // Time.compareTo may not be equivalent to equals() TODO which one should be used?
             return ((Time) actual).compareTo((Time) expected) == 0;
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private boolean timestampEqual(Object actual, Object expected)
@@ -251,7 +249,7 @@ class QueryResultValueComparator
         if (actual instanceof Timestamp && expected instanceof Timestamp) {
             return actual.equals(expected);
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private boolean timestampWithTimezoneEqual(Object actual, Object expected)
@@ -262,7 +260,7 @@ class QueryResultValueComparator
         if (actual instanceof ZonedDateTime && expected instanceof ZonedDateTime) {
             return actual.equals(expected);
         }
-        return false;
+        throw incompatibleTypes(actual, expected);
     }
 
     private static boolean isLongOrNarrower(Object value)
@@ -283,5 +281,12 @@ class QueryResultValueComparator
     private static double getDoubleValue(Object object)
     {
         return ((Number) object).doubleValue();
+    }
+
+    private static IllegalArgumentException incompatibleTypes(Object actual, Object expected) {
+        String message = format("Type mismatch: 'actual' value is of type '%s' while 'expected' value is of type '%s'",
+                requireNonNull(actual, "'actual' value is null").getClass().getCanonicalName(),
+                requireNonNull(expected, "'expected' value is null").getClass().getCanonicalName());
+        return new IllegalArgumentException(message);
     }
 }

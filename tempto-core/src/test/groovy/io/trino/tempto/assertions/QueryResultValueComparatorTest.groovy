@@ -16,6 +16,7 @@ package io.trino.tempto.assertions
 
 import com.google.common.collect.ImmutableMap
 import io.trino.tempto.configuration.Configuration
+import org.testng.Assert
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -49,8 +50,8 @@ import static java.sql.JDBCType.VARBINARY
 import static java.sql.JDBCType.VARCHAR
 
 class QueryResultValueComparatorTest
-        extends Specification
-{
+        extends Specification {
+
     @Unroll
     def 'queryResultValueComparator(#type).test(#actual,#expected) = #result'()
     {
@@ -73,19 +74,16 @@ class QueryResultValueComparatorTest
         LONGVARCHAR             | "a"                                      | "a"                                      | true
         VARCHAR                 | "a"                                      | "b"                                      | false
         VARCHAR                 | "b"                                      | "a"                                      | false
-        VARCHAR                 | "b"                                      | 1                                        | false
 
         BINARY                  | byteArray(0)                             | byteArray(0)                             | true
         VARBINARY               | byteArray(0)                             | byteArray(0)                             | true
         LONGVARBINARY           | byteArray(0)                             | byteArray(0)                             | true
         BINARY                  | byteArray(0)                             | byteArray(1)                             | false
         BINARY                  | byteArray(1)                             | byteArray(0)                             | false
-        BINARY                  | byteArray(0)                             | 0                                        | false
 
         BIT                     | true                                     | true                                     | true
         BIT                     | true                                     | false                                    | false
         BIT                     | false                                    | true                                     | false
-        BIT                     | false                                    | 0                                        | false
 
         BIGINT                  | 1L                                       | 1                                        | true
         INTEGER                 | 1                                        | 1                                        | true
@@ -93,12 +91,10 @@ class QueryResultValueComparatorTest
         TINYINT                 | 1 as byte                                | 1                                        | true
         BIGINT                  | 1L                                       | 0L                                       | false
         BIGINT                  | 0L                                       | 1L                                       | false
-        BIGINT                  | 0L                                       | "a"                                      | false
 
         DOUBLE                  | Double.valueOf(0.0)                      | Double.valueOf(0.0)                      | true
         DOUBLE                  | Double.valueOf(1.0)                      | Double.valueOf(0.0)                      | false
         DOUBLE                  | Double.valueOf(0.0)                      | Double.valueOf(1.0)                      | false
-        DOUBLE                  | Double.valueOf(0.0)                      | "a"                                      | false
 
         DOUBLE                  | Double.valueOf(1.0)                      | Double.valueOf(1.00000001)               | false
         DOUBLE                  | Double.valueOf(1.0)                      | Double.valueOf(1.000000000000001)        | false
@@ -110,18 +106,15 @@ class QueryResultValueComparatorTest
         DECIMAL                 | BigDecimal.valueOf(0.0)                  | BigDecimal.valueOf(0.0)                  | true
         NUMERIC                 | BigDecimal.valueOf(1.0)                  | BigDecimal.valueOf(0.0)                  | false
         NUMERIC                 | BigDecimal.valueOf(0.0)                  | BigDecimal.valueOf(1.0)                  | false
-        NUMERIC                 | BigDecimal.valueOf(0.0)                  | "a"                                      | false
 
         DATE                    | Date.valueOf("2015-02-15")               | Date.valueOf("2015-02-15")               | true
         DATE                    | Date.valueOf("2015-02-16")               | Date.valueOf("2015-02-15")               | false
         DATE                    | Date.valueOf("2015-02-15")               | Date.valueOf("2015-02-16")               | false
-        DATE                    | Date.valueOf("2015-02-15")               | "a"                                      | false
 
         TIME                    | Time.valueOf("10:10:10")                 | Time.valueOf("10:10:10")                 | true
         TIME_WITH_TIMEZONE      | Time.valueOf("10:10:10")                 | Time.valueOf("10:10:10")                 | true
         TIME                    | Time.valueOf("11:10:10")                 | Time.valueOf("10:10:10")                 | false
         TIME                    | Time.valueOf("10:10:10")                 | Time.valueOf("11:10:10")                 | false
-        TIME                    | Time.valueOf("10:10:10")                 | "a"                                      | false
 
         TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | Timestamp.valueOf("2015-02-15 10:10:10") | true
         TIMESTAMP_WITH_TIMEZONE | Timestamp.valueOf("2015-02-15 10:10:10") | Timestamp.valueOf("2015-02-15 10:10:10") | true
@@ -131,7 +124,6 @@ class QueryResultValueComparatorTest
         TIMESTAMP_WITH_TIMEZONE | ZonedDateTime.parse("2015-02-15T10:10:10+02:00") | ZonedDateTime.parse("2015-02-15T10:10:10+01:00") | false // same local time, different zone
         TIMESTAMP               | Timestamp.valueOf("2015-02-16 10:10:10") | Timestamp.valueOf("2015-02-15 10:10:10") | false
         TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | Timestamp.valueOf("2015-02-16 10:10:10") | false
-        TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | "a"                                      | false
 
         STRUCT                  | null                                     | null                                     | true
         STRUCT                  | null                                     | ImmutableMap.of()                        | false
@@ -184,6 +176,30 @@ class QueryResultValueComparatorTest
         FLOAT  | Double.valueOf(-1000.0)   | Double.valueOf(-1000.0) | true
         FLOAT  | Double.valueOf(-1010.0)   | Double.valueOf(-1000.0) | true
         FLOAT  | Double.valueOf(-1010.001) | Double.valueOf(-1000.0) | false
+    }
+
+    @Unroll
+    def 'queryResultValueComparator(#type).test(#actual,#expected) throws IllegalArgumentException'()
+    {
+        setup:
+        Configuration configuration = Mock(Configuration)
+
+        expect:
+        Assert.expectThrows(
+                IllegalArgumentException.class,
+                { -> QueryResultValueComparator.comparatorForType(type, configuration).test(actual, expected) })
+
+        where:
+        type                    | actual                                   | expected
+        VARCHAR                 | "b"                                      | 1
+        BINARY                  | byteArray(0)                             | 0
+        BIT                     | false                                    | 0
+        BIGINT                  | 0L                                       | "a"
+        DOUBLE                  | Double.valueOf(0.0)                      | "a"
+        NUMERIC                 | BigDecimal.valueOf(0.0)                  | "a"
+        DATE                    | Date.valueOf("2015-02-15")               | "a"
+        TIME                    | Time.valueOf("10:10:10")                 | "a"
+        TIMESTAMP               | Timestamp.valueOf("2015-02-15 10:10:10") | "a"
     }
 
     private byte[] byteArray(int value)
