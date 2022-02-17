@@ -31,7 +31,7 @@ import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyCon
  * This class constructs and stores a map based configuration using nested maps.
  * </p>
  * <p>
- * For leafs - value is stored in map.
+ * For leaves - value is stored in map.
  * For non-leaf - nested map is stored.
  * </p>
  * <p>
