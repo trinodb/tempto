@@ -60,5 +60,10 @@ public class HdfsClientTest
         hdfsClient.createDirectory(testPath + "/b");
         hdfsClient.createDirectory(testPath + "/c");
         assertThat(hdfsClient.listDirectory(testPath)).containsAll(ImmutableList.of("a", "b", "c"));
+
+        hdfsClient.createDirectory(testPath + "/rename");
+        hdfsClient.createDirectory(testPath + "/rename/src");
+        hdfsClient.rename(testPath + "/rename/src", testPath + "/rename/dest");
+        assertThat(hdfsClient.listDirectory(testPath + "/rename")).containsAll(ImmutableList.of("dest"));
     }
 }
