@@ -22,7 +22,11 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -43,17 +47,43 @@ public class YamlConfiguration
         mapConfiguration = loadConfiguration(inputStreamToStringSafe(yamlInputStream));
     }
 
+    YamlConfiguration(MapConfiguration mapConfiguration)
+    {
+        this.mapConfiguration = mapConfiguration;
+    }
+
+    public static List<YamlConfiguration> loadAll(String yamlString)
+    {
+        return loadAll(new ByteArrayInputStream(yamlString.getBytes(UTF_8)));
+    }
+
+    public static List<YamlConfiguration> loadAll(InputStream yamlInputStream)
+    {
+        requireNonNull(yamlInputStream, "yamlInputStream is null");
+        String yamlString = inputStreamToStringSafe(yamlInputStream);
+        Yaml yaml = new Yaml();
+        Iterable<Object> documents = yaml.loadAll(yamlString);
+        return StreamSupport.stream(documents.spliterator(), false)
+                .map(document -> new YamlConfiguration(buildMap(document)))
+                .collect(Collectors.toList());
+    }
+
     private MapConfiguration loadConfiguration(String yamlString)
     {
         requireNonNull(yamlString, "yamlString is null");
         Yaml yaml = new Yaml();
         Object loadedYaml = yaml.load(yamlString);
-        if (loadedYaml == null) {
+        return buildMap(loadedYaml);
+    }
+
+    private static MapConfiguration buildMap(Object document)
+    {
+        if (document == null) {
             // Empty input, or only comments
             return new MapConfiguration(ImmutableMap.of());
         }
-        checkArgument(loadedYaml instanceof Map, "yaml does not evaluate to map object; got %s", loadedYaml.getClass().getName());
-        Map<String, Object> loadedYamlMap = (Map<String, Object>) loadedYaml;
+        checkArgument(document instanceof Map, "yaml does not evaluate to map object; got %s", document.getClass().getName());
+        Map<String, Object> loadedYamlMap = (Map<String, Object>) document;
         return new MapConfiguration(loadedYamlMap);
     }
 
@@ -63,7 +93,7 @@ public class YamlConfiguration
         return mapConfiguration;
     }
 
-    private String inputStreamToStringSafe(InputStream yamlInputStream)
+    private static String inputStreamToStringSafe(InputStream yamlInputStream)
     {
         try {
             return IOUtils.toString(yamlInputStream, UTF_8);

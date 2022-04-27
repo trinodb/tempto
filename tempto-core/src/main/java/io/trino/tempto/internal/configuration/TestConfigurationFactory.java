@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 
 import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration;
@@ -62,8 +63,9 @@ public class TestConfigurationFactory
             if (!testConfigurationStream.isPresent()) {
                 throw new IllegalArgumentException("Unable find to configuration: " + testConfigurationUri);
             }
-            Configuration parsedConfiguration = parseConfiguration(testConfigurationStream.get());
-            configuration = new HierarchicalConfiguration(configuration, parsedConfiguration);
+            for (Configuration parsedConfiguration : parseConfiguration(testConfigurationStream.get())) {
+                configuration = new HierarchicalConfiguration(configuration, parsedConfiguration);
+            }
         }
         return configuration;
     }
@@ -95,10 +97,10 @@ public class TestConfigurationFactory
         return Optional.ofNullable(TestConfigurationFactory.class.getResourceAsStream(path));
     }
 
-    private static YamlConfiguration parseConfiguration(InputStream testConfigurationStream)
+    private static List<YamlConfiguration> parseConfiguration(InputStream testConfigurationStream)
     {
         try (InputStream configurationInputStream = testConfigurationStream) {
-            return new YamlConfiguration(configurationInputStream);
+            return YamlConfiguration.loadAll(configurationInputStream);
         }
         catch (IOException e) {
             throw new RuntimeException("could not parse configuration file", e);
