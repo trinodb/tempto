@@ -47,6 +47,27 @@ list:
         configuration.getStringOrList('list') == ['element1', 'element2']
     }
 
+    def createMultiple()
+    {
+        setup:
+        def configurations = YamlConfiguration.loadAll("""\
+a: 1
+list:
+    - element1
+    - element2   
+---
+b: 2
+""")
+        expect:
+        configurations[0].listKeys() == ['a', 'list'] as Set
+        configurations[0].getInt('a') == Optional.of(1)
+        configurations[0].isList('list')
+        configurations[0].getStringList('list') == ['element1', 'element2']
+        configurations[0].getStringOrList('list') == ['element1', 'element2']
+        configurations[1].listKeys() == ['b'] as Set
+        configurations[1].getInt('b') == Optional.of(2)
+    }
+
     def createEmpty()
     {
         setup:
