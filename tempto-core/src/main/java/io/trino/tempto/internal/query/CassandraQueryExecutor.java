@@ -13,27 +13,30 @@
  */
 package io.trino.tempto.internal.query;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ColumnDefinitions;
-import com.datastax.driver.core.ColumnMetadata;
-import com.datastax.driver.core.DataType;
-import com.datastax.driver.core.KeyspaceMetadata;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.TableMetadata;
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.core.metadata.Metadata;
+import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.TableMetadata;
+import com.datastax.oss.driver.api.core.type.DataType;
+import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.query.QueryExecutionException;
 import io.trino.tempto.query.QueryResult;
 
+import java.net.InetSocketAddress;
 import java.sql.JDBCType;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
@@ -41,30 +44,25 @@ import static java.util.stream.Collectors.toList;
 public class CassandraQueryExecutor
         implements AutoCloseable
 {
-    private static final Map<DataType, JDBCType> typeMapping;
-    private final Cluster cluster;
-    private Session session;
+    private static final Map<DataType, JDBCType> typeMapping = ImmutableMap.<DataType, JDBCType>builder()
+            .put(DataTypes.ASCII, JDBCType.VARCHAR)
+            .put(DataTypes.BIGINT, JDBCType.BIGINT)
+            .put(DataTypes.BLOB, JDBCType.BLOB)
+            .put(DataTypes.BOOLEAN, JDBCType.BOOLEAN)
+            .put(DataTypes.COUNTER, JDBCType.BIGINT)
+            .put(DataTypes.DATE, JDBCType.DATE)
+            .put(DataTypes.DECIMAL, JDBCType.DECIMAL)
+            .put(DataTypes.DOUBLE, JDBCType.DOUBLE)
+            .put(DataTypes.FLOAT, JDBCType.REAL)
+            .put(DataTypes.INT, JDBCType.INTEGER)
+            .put(DataTypes.SMALLINT, JDBCType.SMALLINT)
+            .put(DataTypes.TIME, JDBCType.TIME)
+            .put(DataTypes.TIMESTAMP, JDBCType.TIMESTAMP)
+            .put(DataTypes.TINYINT, JDBCType.TINYINT)
+            .put(DataTypes.TEXT, JDBCType.VARCHAR)
+            .build();
+    private final CqlSession session;
 
-    static {
-        typeMapping = ImmutableMap.<DataType, JDBCType>builder()
-                .put(DataType.ascii(), JDBCType.VARCHAR)
-                .put(DataType.bigint(), JDBCType.BIGINT)
-                .put(DataType.blob(), JDBCType.BLOB)
-                .put(DataType.cboolean(), JDBCType.BOOLEAN)
-                .put(DataType.counter(), JDBCType.BIGINT)
-                .put(DataType.date(), JDBCType.DATE)
-                .put(DataType.decimal(), JDBCType.DECIMAL)
-                .put(DataType.cdouble(), JDBCType.DOUBLE)
-                .put(DataType.cfloat(), JDBCType.REAL)
-                .put(DataType.cint(), JDBCType.INTEGER)
-                .put(DataType.smallint(), JDBCType.SMALLINT)
-                //.put(DataType.text(), JDBCType.NVARCHAR)
-                .put(DataType.time(), JDBCType.TIME)
-                .put(DataType.timestamp(), JDBCType.TIMESTAMP)
-                .put(DataType.tinyint(), JDBCType.TINYINT)
-                .put(DataType.varchar(), JDBCType.VARCHAR)
-                .build();
-    }
 
     public static class TypeNotSupportedException
             extends IllegalStateException
@@ -77,25 +75,23 @@ public class CassandraQueryExecutor
 
     public CassandraQueryExecutor(Configuration configuration)
     {
-        cluster = Cluster.builder()
-                .addContactPoint(configuration.getStringMandatory("databases.cassandra.host"))
-                .withPort(configuration.getIntMandatory("databases.cassandra.port"))
-                .build();
+        CqlSessionBuilder sessionBuilder = CqlSession.builder()
+                .addContactPoint(new InetSocketAddress(configuration.getStringMandatory("databases.cassandra.host"), configuration.getIntMandatory("databases.cassandra.port")));
+        configuration.getString("databases.cassandra.local_datacenter").ifPresent(sessionBuilder::withLocalDatacenter);
+        session = sessionBuilder.build();
     }
 
     public QueryResult executeQuery(String sql)
             throws QueryExecutionException
     {
-        ensureConnected();
-
         ResultSet rs = session.execute(sql);
-        List<ColumnDefinitions.Definition> definitions = rs.getColumnDefinitions().asList();
-        List<JDBCType> types = definitions.stream()
+        ColumnDefinitions definitions = rs.getColumnDefinitions();
+        List<JDBCType> types = StreamSupport.stream(definitions.spliterator(), false)
                 .map(definition -> getJDBCType(definition.getType()))
                 .collect(toList());
 
-        List<String> columnNames = definitions.stream()
-                .map(ColumnDefinitions.Definition::getName)
+        List<String> columnNames = StreamSupport.stream(definitions.spliterator(), false)
+                .map(columnDefinition -> columnDefinition.getName().asInternal())
                 .collect(toList());
 
         QueryResult.QueryResultBuilder resultBuilder = new QueryResult.QueryResultBuilder(types, columnNames);
@@ -103,7 +99,7 @@ public class CassandraQueryExecutor
         for (Row row : rs) {
             List<Object> builderRow = newArrayList();
             for (int i = 0; i < types.size(); ++i) {
-                builderRow.add(row.getToken(i).getValue());
+                builderRow.add(row.getObject(i));
             }
             resultBuilder.addRow(builderRow);
         }
@@ -111,53 +107,39 @@ public class CassandraQueryExecutor
         return resultBuilder.build();
     }
 
-    public Session getSession()
+    public CqlSession getSession()
     {
         return session;
     }
 
     public List<String> getColumnNames(String keySpace, String tableName)
     {
-        checkState(tableExists(keySpace, tableName), "table %s.%s does not exist", keySpace, tableName);
-        KeyspaceMetadata keyspaceMetadata = session.getCluster().getMetadata().getKeyspace(keySpace);
-        TableMetadata tableMetadata = keyspaceMetadata.getTable(tableName);
-        return tableMetadata.getColumns().stream().map(ColumnMetadata::getName).collect(toList());
+        KeyspaceMetadata keyspaceMetadata = session.getMetadata().getKeyspace(keySpace)
+                .orElseThrow(() -> new IllegalArgumentException(format("keyspace %s does not exist", keySpace)));
+        TableMetadata tableMetadata = keyspaceMetadata.getTable(tableName)
+                .orElseThrow(() -> new IllegalArgumentException(format("table %s.%s does not exist", keySpace, tableName)));
+        return tableMetadata.getColumns().keySet().stream().map(CqlIdentifier::asInternal).collect(toList());
     }
 
     public boolean tableExists(String keySpace, String tableName)
     {
-        KeyspaceMetadata keyspaceMetadata = cluster.getMetadata().getKeyspace(keySpace);
-        if (keyspaceMetadata == null) {
-            return false;
-        }
-        return keyspaceMetadata.getTable(tableName) != null;
+        Optional<KeyspaceMetadata> keyspaceMetadata = session.getMetadata().getKeyspace(keySpace);
+        return keyspaceMetadata.map(metadata -> metadata.getTable(tableName).isPresent()).orElse(false);
     }
 
     public List<String> getTableNames(String keySpace)
     {
-        Metadata clusterMetadata = cluster.getMetadata();
-        KeyspaceMetadata keyspaceMetadata = clusterMetadata.getKeyspace(keySpace);
-        if (keyspaceMetadata == null) {
-            return ImmutableList.of();
-        }
-        return keyspaceMetadata.getTables().stream()
-                .map(TableMetadata::getName)
-                .collect(toList());
+        Metadata clusterMetadata = session.getMetadata();
+        Optional<KeyspaceMetadata> keyspaceMetadata = clusterMetadata.getKeyspace(keySpace);
+        return keyspaceMetadata.map(metadata -> metadata.getTables().keySet().stream()
+                .map(CqlIdentifier::asInternal)
+                .collect(toList())).orElseGet(ImmutableList::of);
     }
 
     @Override
     public void close()
     {
-        cluster.close();
-    }
-
-    private void ensureConnected()
-    {
-        checkState(!cluster.isClosed(), "Trying to connect using closed Cluster");
-
-        if (session == null || session.isClosed()) {
-            session = cluster.connect();
-        }
+        session.close();
     }
 
     private static JDBCType getJDBCType(DataType type)

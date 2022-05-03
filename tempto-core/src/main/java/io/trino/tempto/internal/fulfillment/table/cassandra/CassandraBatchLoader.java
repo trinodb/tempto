@@ -13,9 +13,10 @@
  */
 package io.trino.tempto.internal.fulfillment.table.cassandra;
 
-import com.datastax.driver.core.BatchStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BatchStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.BatchType;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 
 import java.util.Iterator;
 import java.util.List;
@@ -28,12 +29,12 @@ import static java.util.stream.Collectors.joining;
 
 public class CassandraBatchLoader
 {
-    private final Session session;
+    private final CqlSession session;
     private final String insertQuery;
     private final int columnsCount;
     private final int batchRowsCount;
 
-    public CassandraBatchLoader(Session session, String tableName, List<String> columnNames, int batchRowsCount)
+    public CassandraBatchLoader(CqlSession session, String tableName, List<String> columnNames, int batchRowsCount)
     {
         this.session = requireNonNull(session, "session is null");
         requireNonNull(tableName, "tableName is null");
@@ -67,24 +68,25 @@ public class CassandraBatchLoader
     {
         PreparedStatement statement = session.prepare(insertQuery);
 
-        BatchStatement batch = createBatchStatement();
+        BatchStatementBuilder batch = createBatchStatement();
         while (rows.hasNext()) {
-            if (batch.size() >= batchRowsCount) {
-                session.execute(batch);
-                batch = createBatchStatement();
+            if (batch.getStatementsCount() >= batchRowsCount) {
+                session.execute(batch.build());
+                batch.clearStatements();
             }
             List<Object> row = rows.next();
             checkState(row.size() == columnsCount, "values count in a row is expected to be %d, but found: %d", columnsCount, row.size());
-            batch.add(statement.bind(row.toArray()));
+            batch.addStatement(statement.bind(row.toArray()));
         }
 
-        if (batch.size() > 0) {
-            session.execute(batch);
+        if (batch.getStatementsCount() > 0) {
+            session.execute(batch.build());
+            batch.clearStatements();
         }
     }
 
-    private static BatchStatement createBatchStatement()
+    private static BatchStatementBuilder createBatchStatement()
     {
-        return new BatchStatement(BatchStatement.Type.UNLOGGED);
+        return new BatchStatementBuilder(BatchType.UNLOGGED);
     }
 }
