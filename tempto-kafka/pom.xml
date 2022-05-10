@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.trino.tempto</groupId>
         <artifactId>tempto-root</artifactId>
-        <version>188-SNAPSHOT</version>
+        <version>188</version>
     </parent>
 
     <artifactId>tempto-kafka</artifactId>
