@@ -42,7 +42,7 @@ public class JdbcConnectionsConfiguration
 
     public JdbcConnectionsConfiguration(Configuration configuration) {this.configuration = configuration;}
 
-    public Set<String> getDefinedJdcbConnectionNames()
+    public Set<String> getDefinedJdbcConnectionNames()
     {
         return configuration.getSubconfiguration(DATABASES_CONFIGURATION_SECTION).listPrefixes().stream()
                 .filter(databaseName -> getDatabaseConnectionSubConfiguration(databaseName).getString(JDBC_DRIVER_CLASS).isPresent())
