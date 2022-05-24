@@ -50,8 +50,8 @@ public class QueryExecutorModuleProvider
             protected void configure()
             {
                 bind(JdbcConnectionsPool.class).toInstance(jdbcConnectionsPool);
-                Set<String> definedJdcbConnectionNames = jdbcConnectionsConfiguration.getDefinedJdcbConnectionNames();
-                for (String connectionName : definedJdcbConnectionNames) {
+                Set<String> definedJdbcConnectionNames = jdbcConnectionsConfiguration.getDefinedJdbcConnectionNames();
+                for (String connectionName : definedJdbcConnectionNames) {
                     bindDatabaseConnectionBeans(connectionName);
                 }
             }

@@ -104,7 +104,7 @@ databases:
     def "list database connection configurations"()
     {
         expect:
-        jdbcConnectionConfiguration.getDefinedJdcbConnectionNames() == ['a', 'b', 'b_alias'] as Set
+        jdbcConnectionConfiguration.getDefinedJdbcConnectionNames() == ['a', 'b', 'b_alias'] as Set
     }
 
     def "get connection configuration"()

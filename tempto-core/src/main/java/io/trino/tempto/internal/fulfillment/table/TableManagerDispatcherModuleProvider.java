@@ -64,7 +64,7 @@ public class TableManagerDispatcherModuleProvider
         {
             Configuration databasesSectionConfiguration = configuration.getSubconfiguration("databases");
             Set<String> databaseNames = databasesSectionConfiguration.listPrefixes();
-            Set<String> jdbcDatabaseNames = new JdbcConnectionsConfiguration(configuration).getDefinedJdcbConnectionNames();
+            Set<String> jdbcDatabaseNames = new JdbcConnectionsConfiguration(configuration).getDefinedJdbcConnectionNames();
 
             if (databaseNames.isEmpty()) {
                 bind(new TypeLiteral<Map<String, TableManager>>() {}).toInstance(emptyMap());
