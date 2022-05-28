@@ -39,7 +39,6 @@ databases:
     jdbc_driver_class: io.trino.jdbc.TrinoDriver
     jdbc_url: jdbc:trino://${cluster.trino}:8080/hive/default
     jdbc_user: hdfs
-    jdbc_password: "***empty***"
     jdbc_pooling: false
     table_manager_type: jdbc
 
@@ -47,7 +46,6 @@ databases:
     jdbc_driver_class: io.trino.jdbc.TrinoDriver
     jdbc_url: jdbc:trino://${cluster.trino}:8080/hive/tpcds
     jdbc_user: hdfs
-    jdbc_password: "***empty***"
     jdbc_pooling: false
 
   psql:

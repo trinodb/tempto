@@ -53,18 +53,19 @@ public class JdbcConnectionsConfiguration
     {
         Configuration connectionConfiguration = getDatabaseConnectionSubConfiguration(connectionName);
 
-        return JdbcConnectivityParamsState.builder()
+        JdbcConnectivityParamsState.Builder builder = JdbcConnectivityParamsState.builder()
                 .setName(connectionName)
                 .setDriverClass(connectionConfiguration.getStringMandatory(JDBC_DRIVER_CLASS))
                 .setUrl(connectionConfiguration.getStringMandatory(JDBC_URL_KEY))
                 .setUser(connectionConfiguration.getStringMandatory(JDBC_USER_KEY))
-                .setPassword(connectionConfiguration.getStringMandatory(JDBC_PASSWORD_KEY))
                 .setPooling(connectionConfiguration.getBoolean(JDBC_POOLING_KEY).orElse(false))
                 .setJar(connectionConfiguration.getString(JDBC_JAR))
                 .setPrepareStatements(connectionConfiguration.getStringOrList(PREPARE_STATEMENT_KEY))
                 .setKerberosPrincipal(connectionConfiguration.getString(KERBEROS_PRINCIPAL_KEY))
-                .setKerberosKeytab(connectionConfiguration.getString(KERBEROS_KEYTAB_KEY))
-                .build();
+                .setKerberosKeytab(connectionConfiguration.getString(KERBEROS_KEYTAB_KEY));
+        Optional<String> password = connectionConfiguration.getString(JDBC_PASSWORD_KEY);
+        password.ifPresent(builder::setPassword);
+        return builder.build();
     }
 
     private Configuration getDatabaseConnectionSubConfiguration(String connectionName)
