@@ -41,6 +41,11 @@ databases:
     kerberos_principal: HIVE@EXAMPLE.COM
     kerberos_keytab: example.keytab
 
+  c:
+    jdbc_driver_class: com.acme.ADriver
+    jdbc_url: jdbc:c://localhost:8080
+    jdbc_user: cuser
+
   b_alias:
     alias: b
 
@@ -85,6 +90,15 @@ databases:
                     .setKerberosKeytab(Optional.of('example.keytab'))
                     .build();
 
+    private static final def EXPECTED_C_JDBC_CONNECTIVITY_PARAMS =
+            JdbcConnectivityParamsState.builder()
+                    .setName('c')
+                    .setDriverClass('com.acme.ADriver')
+                    .setUrl('jdbc:c://localhost:8080')
+                    .setUser('cuser')
+                    .setPassword('')
+                    .build()
+
     private static final def EXPECTED_B_ALIAS_JDBC_CONNECTIVITY_PARAMS =
             JdbcConnectivityParamsState.builder()
                     .setName('b_alias')
@@ -104,7 +118,7 @@ databases:
     def "list database connection configurations"()
     {
         expect:
-        jdbcConnectionConfiguration.getDefinedJdbcConnectionNames() == ['a', 'b', 'b_alias'] as Set
+        jdbcConnectionConfiguration.getDefinedJdbcConnectionNames() == ['a', 'b', 'c', 'b_alias'] as Set
     }
 
     def "get connection configuration"()
@@ -112,10 +126,12 @@ databases:
         setup:
         def a = jdbcConnectionConfiguration.getConnectionConfiguration('a')
         def b = jdbcConnectionConfiguration.getConnectionConfiguration('b')
+        def c = jdbcConnectionConfiguration.getConnectionConfiguration('c')
 
         expect:
         a == EXPECTED_A_JDBC_CONNECTIVITY_PARAMS
         b == EXPECTED_B_JDBC_CONNECTIVITY_PARAMS
+        c == EXPECTED_C_JDBC_CONNECTIVITY_PARAMS
     }
 
     def "get connection configuration for alias"()

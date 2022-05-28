@@ -12,7 +12,6 @@ databases:
     jdbc_driver_class: io.trino.jdbc.TrinoDriver
     jdbc_url: jdbc:trino://${cluster.trino}:8080/hive/default
     jdbc_user: hdfs
-    jdbc_password: "***empty***"
 
 ssh:
   identity: ${IDENTITY}
