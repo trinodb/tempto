@@ -42,4 +42,56 @@ class QueryResultTest
         projection.column(2) == [1, 2]
         projection.getJdbcResultSet().get() == jdbcResultSet
     }
+
+    def "test QueryResult onlyValue"()
+    {
+        setup:
+        def jdbcResultSet = Mock(ResultSet)
+        def columnTypes = [JDBCType.VARCHAR]
+        def columnNames = ['varchar']
+        def builder = new QueryResult.QueryResultBuilder(columnTypes, columnNames)
+        builder.addRow('tempto')
+        builder.setJdbcResultSet(jdbcResultSet)
+        def queryResult = builder.build()
+
+        expect:
+        queryResult.onlyValue == 'tempto'
+    }
+
+    def "test QueryResult onlyValue with multiple rows"()
+    {
+        given:
+        def jdbcResultSet = Mock(ResultSet)
+        def columnTypes = [JDBCType.VARCHAR]
+        def columnNames = ['varchar']
+        def builder = new QueryResult.QueryResultBuilder(columnTypes, columnNames)
+        builder.addRow('tempto')
+        builder.addRow('tempto')
+        builder.setJdbcResultSet(jdbcResultSet)
+        def multiRowQueryResult = builder.build()
+
+        when:
+        multiRowQueryResult.onlyValue
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def "test QueryResult onlyValue with multiple columns"()
+    {
+        given:
+        def jdbcResultSet = Mock(ResultSet)
+        def columnTypes = [JDBCType.VARCHAR, JDBCType.VARCHAR]
+        def columnNames = ['varchar', 'varchar']
+        def builder = new QueryResult.QueryResultBuilder(columnTypes, columnNames)
+        builder.addRow('aaa', 'bbb')
+        builder.setJdbcResultSet(jdbcResultSet)
+        def multiColumnQueryResult = builder.build()
+
+        when:
+        multiColumnQueryResult.onlyValue
+
+        then:
+        thrown(IllegalStateException)
+    }
 }

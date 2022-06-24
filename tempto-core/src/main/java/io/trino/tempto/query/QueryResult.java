@@ -97,6 +97,13 @@ public class QueryResult
         return values;
     }
 
+    public Object getOnlyValue()
+    {
+        checkState(values.size() == 1, "result set must have exactly one row");
+        checkState(columnTypes.size() == 1, "result set must have exactly one column");
+        return values.get(0).get(0);
+    }
+
     @SuppressWarnings("unchecked")
     public <T> List<T> column(int sqlColumnIndex)
     {
