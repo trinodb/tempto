@@ -124,7 +124,7 @@ public class ProgressLoggingListener
             return "";
         }
 
-        return format(" [%s]", Joiner.on(", ").join(testParameters));
+        return format(" [%s]", Joiner.on(", ").useForNull("null").join(testParameters));
     }
 
     private static String formatDuration(long durationInMillis)
