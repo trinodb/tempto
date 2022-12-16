@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.trino.tempto</groupId>
         <artifactId>tempto-root</artifactId>
-        <version>190-SNAPSHOT</version>
+        <version>190</version>
     </parent>
 
     <artifactId>tempto-core</artifactId>
