@@ -102,6 +102,14 @@ class QueryResultValueComparatorTest
         FLOAT                   | Float.valueOf(1.0)                       | Float.valueOf(1.0000001)                 | false
         FLOAT                   | Float.valueOf(1.0)                       | Float.valueOf(1.00000001)                | true
 
+        DOUBLE                  | Double.NaN                               | Double.NaN                               | true
+        DOUBLE                  | Double.valueOf(1.0)                      | Double.NaN                               | false
+        DOUBLE                  | Double.NaN                               | Double.valueOf(1.0)                      | false
+
+        FLOAT                   | Float.NaN                                | Float.NaN                                | true
+        FLOAT                   | Float.valueOf(1.0)                       | Float.NaN                                | false
+        FLOAT                   | Float.NaN                                | Float.valueOf(1.0)                       | false
+
         NUMERIC                 | BigDecimal.valueOf(0.0)                  | BigDecimal.valueOf(0.0)                  | true
         DECIMAL                 | BigDecimal.valueOf(0.0)                  | BigDecimal.valueOf(0.0)                  | true
         NUMERIC                 | BigDecimal.valueOf(1.0)                  | BigDecimal.valueOf(0.0)                  | false
@@ -176,6 +184,14 @@ class QueryResultValueComparatorTest
         FLOAT  | Double.valueOf(-1000.0)   | Double.valueOf(-1000.0) | true
         FLOAT  | Double.valueOf(-1010.0)   | Double.valueOf(-1000.0) | true
         FLOAT  | Double.valueOf(-1010.001) | Double.valueOf(-1000.0) | false
+
+        DOUBLE | Double.NaN                | Double.NaN              | true
+        DOUBLE | Double.valueOf(0.001)     | Double.NaN              | false
+        DOUBLE | Double.NaN                | Double.valueOf(0.001)   | false
+
+        FLOAT  | Float.NaN                 | Float.NaN               | true
+        FLOAT  | Float.valueOf(0.001)      | Float.NaN               | false
+        FLOAT  | Float.NaN                 | Float.valueOf(0.001)    | false
     }
 
     @Unroll
