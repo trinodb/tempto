@@ -10,7 +10,7 @@
 
     <groupId>io.trino.tempto</groupId>
     <artifactId>tempto-root</artifactId>
-    <version>192</version>
+    <version>193-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>Tempto - test framework</description>
@@ -21,7 +21,7 @@
     <scm>
         <connection>scm:git:git://github.com/trinodb/tempto.git</connection>
         <url>https://github.com/trinodb/tempto</url>
-        <tag>192</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
