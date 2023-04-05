@@ -25,7 +25,8 @@
     </scm>
 
     <properties>
-        <dep.httpcomponents.version>4.4</dep.httpcomponents.version>
+        <dep.httpcomponents.client.version>4.5.14</dep.httpcomponents.client.version>
+        <dep.httpcomponents.core.version>4.4.16</dep.httpcomponents.core.version>
 
         <air.check.skip-checkstyle>true</air.check.skip-checkstyle>
         <air.check.skip-modernizer>true</air.check.skip-modernizer>
@@ -126,13 +127,13 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>${dep.httpcomponents.version}</version>
+                <version>${dep.httpcomponents.core.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>${dep.httpcomponents.version}</version>
+                <version>${dep.httpcomponents.client.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>commons-logging</artifactId>
