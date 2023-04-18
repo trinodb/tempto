@@ -16,6 +16,9 @@ package io.trino.tempto.internal.query;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
+import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
+import com.datastax.oss.driver.api.core.config.ProgrammaticDriverConfigLoaderBuilder;
 import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
@@ -32,6 +35,7 @@ import io.trino.tempto.query.QueryResult;
 
 import java.net.InetSocketAddress;
 import java.sql.JDBCType;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -75,7 +79,11 @@ public class CassandraQueryExecutor
 
     public CassandraQueryExecutor(Configuration configuration)
     {
+        ProgrammaticDriverConfigLoaderBuilder loader = DriverConfigLoader.programmaticBuilder();
+        configuration.getInt("databases.cassandra.basic.request.timeout_seconds")
+                .ifPresent(timeout -> loader.withDuration(DefaultDriverOption.REQUEST_TIMEOUT, Duration.ofSeconds(timeout)));
         CqlSessionBuilder sessionBuilder = CqlSession.builder()
+                .withConfigLoader(loader.build())
                 .addContactPoint(new InetSocketAddress(configuration.getStringMandatory("databases.cassandra.host"), configuration.getIntMandatory("databases.cassandra.port")));
         configuration.getString("databases.cassandra.local_datacenter").ifPresent(sessionBuilder::withLocalDatacenter);
         session = sessionBuilder.build();
