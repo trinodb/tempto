@@ -213,7 +213,7 @@ class TestInitializationListenerTest
     static class TestClassOverrideAdditionalAnnotatedMethod
             extends TestClass
     {
-        @BeforeTestWithContext
+        @BeforeMethodWithContext
         void beforeMethodAdditional()
         {
             EVENTS.add(new Event(BEFORE_METHOD_OVERRIDE, this));
@@ -224,14 +224,14 @@ class TestInitializationListenerTest
             extends TestClass
     {
         @Override
-        @BeforeTestWithContext
+        @BeforeMethodWithContext
         void beforeMethod()
         {
             EVENTS.add(new Event(BEFORE_METHOD_OVERRIDE, this));
         }
 
         @Override
-        @AfterTestWithContext
+        @AfterMethodWithContext
         void afterMethod()
         {
             EVENTS.add(new Event(AFTER_METHOD_OVERRIDE, this));
@@ -245,13 +245,13 @@ class TestInitializationListenerTest
         @Inject
         TestContext testContext
 
-        @BeforeTestWithContext
+        @BeforeMethodWithContext
         void beforeMethod()
         {
             EVENTS.add(new Event(BEFORE_METHOD, this));
         }
 
-        @AfterTestWithContext
+        @AfterMethodWithContext
         void afterMethod()
         {
             EVENTS.add(new Event(AFTER_METHOD, this));

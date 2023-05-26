@@ -15,7 +15,6 @@
 package io.trino.tempto;
 
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,12 +26,7 @@ import java.lang.annotation.Target;
  * but before Tempto context has been destroyed.
  *
  * @see AfterMethod
- * @deprecated The annotation mimics {@link AfterMethod} but is named after {@link AfterTest},
- * which is confusing. Use {@link AfterMethodWithContext} instead.
  */
-@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface AfterTestWithContext
-{
-}
+public @interface AfterMethodWithContext {}

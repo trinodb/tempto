@@ -14,8 +14,7 @@
 
 package io.trino.tempto;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -23,16 +22,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates methods that should be invoked after each test method (like {@link @AfterMethod}),
- * but before Tempto context has been destroyed.
+ * Annotates methods that should be invoked before each test method (like {@link @BeforeMethod}),
+ * but after Tempto context has been injected.
  *
- * @see AfterMethod
- * @deprecated The annotation mimics {@link AfterMethod} but is named after {@link AfterTest},
- * which is confusing. Use {@link AfterMethodWithContext} instead.
+ * @see BeforeMethod
  */
-@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface AfterTestWithContext
-{
-}
+public @interface BeforeMethodWithContext {}

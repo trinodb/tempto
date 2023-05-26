@@ -16,7 +16,9 @@ package io.trino.tempto.examples;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import io.trino.tempto.AfterMethodWithContext;
 import io.trino.tempto.AfterTestWithContext;
+import io.trino.tempto.BeforeMethodWithContext;
 import io.trino.tempto.BeforeTestWithContext;
 import io.trino.tempto.ProductTest;
 import io.trino.tempto.Requirement;
@@ -75,13 +77,13 @@ public class SimpleQueryTest
         // just to check if having @AfterEach method does not break anything
     }
 
-    @BeforeTestWithContext
+    @BeforeMethodWithContext
     public void beforeTest()
     {
         assertThat(testContextIfSet().isPresent()).isTrue();
     }
 
-    @AfterTestWithContext
+    @AfterMethodWithContext
     public void afterTest()
     {
         assertThat(testContextIfSet().isPresent()).isTrue();
