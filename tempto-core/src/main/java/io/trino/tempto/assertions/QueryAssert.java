@@ -23,6 +23,7 @@ import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryResult;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractThrowableAssert;
+import org.assertj.core.api.AssertProvider;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.nullToEmpty;
@@ -71,7 +73,11 @@ public class QueryAssert
         this.columnTypes = actual.getColumnTypes();
     }
 
+    /**
+     * Use {@link Assertions#assertThat(AssertProvider)}.
+     */
     @CheckReturnValue
+    @Deprecated
     public static QueryAssert assertThat(QueryResult queryResult)
     {
         return new QueryAssert(queryResult);
