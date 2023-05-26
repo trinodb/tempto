@@ -14,6 +14,7 @@
 
 package io.trino.tempto.examples;
 
+import io.trino.tempto.BeforeMethodWithContext;
 import io.trino.tempto.BeforeTestWithContext;
 import io.trino.tempto.ProductTest;
 import org.testng.annotations.Test;
@@ -28,7 +29,7 @@ public class ResourcesTest
     private boolean testResource;
     private boolean suiteResource;
 
-    @BeforeTestWithContext
+    @BeforeMethodWithContext
     public void suiteResources()
     {
         suiteResource = true;

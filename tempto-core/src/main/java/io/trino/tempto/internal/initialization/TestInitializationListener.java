@@ -15,11 +15,14 @@
 package io.trino.tempto.internal.initialization;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
+import io.trino.tempto.AfterMethodWithContext;
 import io.trino.tempto.AfterTestWithContext;
+import io.trino.tempto.BeforeMethodWithContext;
 import io.trino.tempto.BeforeTestWithContext;
 import io.trino.tempto.Requirement;
 import io.trino.tempto.TemptoPlugin;
@@ -240,7 +243,7 @@ public class TestInitializationListener
     private void runBeforeWithContextMethods(ITestResult testResult, TestContext testContext)
     {
         try {
-            invokeMethodsAnnotatedWith(BeforeTestWithContext.class, testResult, testContext);
+            invokeMethodsAnnotatedWith(ImmutableSet.of(BeforeMethodWithContext.class, BeforeTestWithContext.class), testResult, testContext);
         }
         catch (RuntimeException e) {
             TestContextStack<TestContext> testContextStack = popAllTestContexts();
@@ -251,19 +254,23 @@ public class TestInitializationListener
 
     private void runAfterWithContextMethods(ITestResult testResult, TestContext testContext)
     {
-        invokeMethodsAnnotatedWith(AfterTestWithContext.class, testResult, testContext);
+        invokeMethodsAnnotatedWith(ImmutableSet.of(AfterMethodWithContext.class, AfterTestWithContext.class), testResult, testContext);
     }
 
-    private void invokeMethodsAnnotatedWith(Class<? extends Annotation> annotationClass, ITestResult testCase, TestContext testContext)
+    private void invokeMethodsAnnotatedWith(Set<Class<? extends Annotation>> annotationClasses, ITestResult testCase, TestContext testContext)
     {
         for (Method declaredMethod : testCase.getTestClass().getRealClass().getMethods()) {
-            if (declaredMethod.getAnnotation(annotationClass) != null) {
-                try {
-                    declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext, declaredMethod));
+            for (Class<? extends Annotation> annotationClass : annotationClasses) {
+                if (declaredMethod.getAnnotation(annotationClass) != null) {
+                    try {
+                        declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext, declaredMethod));
+                    }
+                    catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException("error invoking method annotated with " + annotationClass.getName(), e);
+                    }
                 }
-                catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException("error invoking methods annotated with " + annotationClass.getName(), e);
-                }
+                // Invoke annotated method once
+                break;
             }
         }
     }

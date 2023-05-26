@@ -554,7 +554,7 @@ public class InjectionTest
     @Inject
     MutableTablesState mutableTablesState;
 
-    @BeforeTestWithContext
+    @BeforeMethodWithContext
     @Inject
     public void setUp(
             ImmutableTablesState immutableTablesState,

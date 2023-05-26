@@ -14,11 +14,23 @@
 
 package io.trino.tempto;
 
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotates methods that should be invoked before each test method (like {@link @BeforeMethod}),
+ * but after Tempto context has been injected.
+ *
+ * @see BeforeMethod
+ * @deprecated The annotation mimics {@link BeforeMethod} but is named after {@link BeforeTest},
+ * which is confusing. Use {@link BeforeMethodWithContext} instead.
+ */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface BeforeTestWithContext
