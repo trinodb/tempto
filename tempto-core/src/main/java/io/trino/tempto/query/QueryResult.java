@@ -20,6 +20,8 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import io.trino.tempto.assertions.QueryAssert;
+import org.assertj.core.api.AssertProvider;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -46,6 +48,8 @@ import static java.util.stream.Collectors.toList;
  * It stores all returned values, column names and their types as {@link java.sql.JDBCType}.
  */
 public class QueryResult
+        // Allow using query results with Assertions.assertThat, avoiding import conflicts
+        implements AssertProvider<QueryAssert>
 {
     private final List<JDBCType> columnTypes;
     private final BiMap<String, Integer> columnNamesIndexes;
@@ -147,6 +151,12 @@ public class QueryResult
                 .add("columnTypes", columnTypes)
                 .add("values", values)
                 .toString();
+    }
+
+    @Override
+    public QueryAssert assertThat()
+    {
+        return QueryAssert.assertThat(this);
     }
 
     /**
