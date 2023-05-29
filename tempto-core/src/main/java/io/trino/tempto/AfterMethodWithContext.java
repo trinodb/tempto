@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates methods that should be invoked after each test method (like {@link @AfterMethod}),
+ * Annotates methods that should be invoked after each test method (like {@link AfterMethod}),
  * but before Tempto context has been destroyed.
  *
  * @see AfterMethod

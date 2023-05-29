@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates methods that should be invoked before each test method (like {@link @BeforeMethod}),
+ * Annotates methods that should be invoked before each test method (like {@link BeforeMethod}),
  * but after Tempto context has been injected.
  *
  * @see BeforeMethod
