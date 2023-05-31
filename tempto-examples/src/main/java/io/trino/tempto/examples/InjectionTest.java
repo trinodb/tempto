@@ -16,9 +16,7 @@ package io.trino.tempto.examples;
 
 import com.google.inject.Inject;
 import io.trino.tempto.AfterMethodWithContext;
-import io.trino.tempto.AfterTestWithContext;
 import io.trino.tempto.BeforeMethodWithContext;
-import io.trino.tempto.BeforeTestWithContext;
 import io.trino.tempto.ProductTest;
 import io.trino.tempto.fulfillment.table.ImmutableTablesState;
 import io.trino.tempto.fulfillment.table.MutableTablesState;
