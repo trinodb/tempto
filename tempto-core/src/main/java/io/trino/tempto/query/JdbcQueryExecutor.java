@@ -17,7 +17,7 @@ package io.trino.tempto.query;
 import io.trino.tempto.context.TestContext;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

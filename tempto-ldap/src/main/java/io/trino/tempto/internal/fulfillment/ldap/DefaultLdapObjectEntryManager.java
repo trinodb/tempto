@@ -18,8 +18,8 @@ import io.trino.tempto.fulfillment.ldap.LdapObjectDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import javax.naming.Context;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NamingException;

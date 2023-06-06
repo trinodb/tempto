@@ -28,8 +28,8 @@ import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryResult;
 import org.slf4j.Logger;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import com.google.inject.name.Named;
+import com.google.inject.Singleton;
 
 import java.net.URI;
 import java.net.URISyntaxException;

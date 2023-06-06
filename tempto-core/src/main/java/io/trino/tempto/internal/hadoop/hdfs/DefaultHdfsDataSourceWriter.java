@@ -19,7 +19,7 @@ import io.trino.tempto.hadoop.hdfs.HdfsClient;
 import io.trino.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

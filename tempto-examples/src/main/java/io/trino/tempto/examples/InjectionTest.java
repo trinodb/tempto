@@ -22,7 +22,7 @@ import io.trino.tempto.fulfillment.table.ImmutableTablesState;
 import io.trino.tempto.fulfillment.table.MutableTablesState;
 import org.testng.annotations.Test;
 
-import javax.inject.Named;
+import com.google.inject.name.Named;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

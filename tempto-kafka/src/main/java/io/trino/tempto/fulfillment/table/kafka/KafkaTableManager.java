@@ -30,9 +30,9 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.google.inject.Singleton;
 
 import java.util.Iterator;
 import java.util.Properties;

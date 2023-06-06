@@ -21,7 +21,7 @@ import io.trino.tempto.ssh.SshClient;
 import io.trino.tempto.ssh.SshClientFactory;
 import org.testng.annotations.Test;
 
-import javax.inject.Named;
+import com.google.inject.name.Named;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
