@@ -28,7 +28,7 @@ import io.trino.tempto.query.JdbcQueryExecutor;
 import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryExecutorDispatcher;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import java.util.Map;
 import java.util.Set;

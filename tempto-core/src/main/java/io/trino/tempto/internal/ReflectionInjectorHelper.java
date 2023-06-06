@@ -17,9 +17,9 @@ package io.trino.tempto.internal;
 import com.google.inject.Inject;
 import io.trino.tempto.context.TestContext;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -27,11 +27,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 import static java.lang.ClassLoader.getSystemClassLoader;
+import static java.util.Arrays.stream;
 import static net.bytebuddy.description.modifier.Visibility.PUBLIC;
 
 public class ReflectionInjectorHelper
 {
-    private static InjectAnnotation INJECT_ANNOTATION = new InjectAnnotation();
+    private static AnnotationDescription INJECT_ANNOTATION_DESCRIPTION = AnnotationDescription.Builder.ofType(Inject.class)
+            .build();
 
     public Object[] getMethodArguments(TestContext testContext, Method method)
     {
@@ -48,17 +50,24 @@ public class ReflectionInjectorHelper
 
     private boolean isAnnotatedWithInject(Method method)
     {
-        return method.getAnnotation(Inject.class) != null ||
-                method.getAnnotation(javax.inject.Inject.class) != null;
+        return stream(method.getAnnotations())
+                .anyMatch(ReflectionInjectorHelper::isInjectAnnotation);
+    }
+
+    private static boolean isInjectAnnotation(Annotation annotation)
+    {
+        return annotation.annotationType().getSimpleName().equals("Inject");
     }
 
     private Object createInstanceWithFields(Parameter[] parameters)
     {
         DynamicType.Builder<Object> objectBuilder = new ByteBuddy().subclass(Object.class)
                 .modifiers(PUBLIC);
+
         for (Parameter parameter : parameters) {
             objectBuilder = objectBuilder.defineField(parameter.getName(), parameter.getType(), PUBLIC)
-                    .annotateField(ArrayUtils.add(parameter.getAnnotations(), INJECT_ANNOTATION));
+                    .annotateField(parameter.getAnnotations())
+                    .annotateField(INJECT_ANNOTATION_DESCRIPTION);
         }
         try {
             Class<?> createdClass = objectBuilder.make()
@@ -87,15 +96,5 @@ public class ReflectionInjectorHelper
             }
         }
         return values;
-    }
-
-    private static class InjectAnnotation
-            implements Annotation
-    {
-        @Override
-        public Class<? extends Annotation> annotationType()
-        {
-            return javax.inject.Inject.class;
-        }
     }
 }

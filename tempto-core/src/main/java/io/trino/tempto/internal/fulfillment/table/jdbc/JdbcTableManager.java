@@ -31,7 +31,7 @@ import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryResult;
 import org.slf4j.Logger;
 
-import javax.inject.Named;
+import com.google.inject.name.Named;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

@@ -30,7 +30,7 @@ import io.trino.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 import io.trino.tempto.query.QueryExecutor;
 import org.testng.annotations.Test;
 
-import javax.inject.Named;
+import com.google.inject.name.Named;
 
 import java.util.List;
 

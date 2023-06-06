@@ -15,20 +15,20 @@
 package io.trino.tempto.util;
 
 import javax.annotation.concurrent.ThreadSafe;
-import javax.inject.Provider;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
 @ThreadSafe
 public class Lazy<T>
-        implements Provider<T>
+        implements Supplier<T>
 {
-    private final Provider<T> provider;
+    private final Supplier<T> provider;
     private T instance;
 
-    public Lazy(Provider<T> provider)
+    public Lazy(Supplier<T> provider)
     {
         this.provider = requireNonNull(provider, "provider is null");
     }

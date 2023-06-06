@@ -17,9 +17,11 @@ package io.trino.tempto.internal
 import com.google.common.collect.ImmutableList
 import com.google.inject.AbstractModule
 import com.google.inject.ConfigurationException
+import com.google.inject.Inject
 import com.google.inject.Injector
 import com.google.inject.Key
 import com.google.inject.TypeLiteral
+import com.google.inject.name.Named
 import io.trino.tempto.Requirement
 import io.trino.tempto.context.State
 import io.trino.tempto.context.TestContext
@@ -29,8 +31,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-import javax.inject.Inject
-import javax.inject.Named
 import java.lang.reflect.Method
 
 import static com.google.inject.Guice.createInjector
@@ -132,20 +132,20 @@ class ReflectionInjectorHelperTest
         assert key == 'value';
     }
 
-    @javax.inject.Inject
-    void useKey2(@javax.inject.Named('key2') String key)
+    @jakarta.inject.Inject
+    void useKey2(@jakarta.inject.Named('key2') String key)
     {
         assert key == 'value2';
     }
 
-    @Disabled
     @Test
+    @Disabled
     void canInjectStringListToMethod()
     {
         injectAndCallMethod('useStringList', List)
     }
 
-    @javax.inject.Inject
+    @Inject
     void useStringList(List<String> stringList)
     {
         assert stringList.size() == 3 && stringList.containsAll(['ala', 'ma', 'kota'])

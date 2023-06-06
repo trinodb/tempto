@@ -27,8 +27,8 @@ import io.trino.tempto.internal.query.CassandraQueryExecutor;
 import io.trino.tempto.util.Lazy;
 import org.slf4j.Logger;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import com.google.inject.name.Named;
+import com.google.inject.Singleton;
 
 import java.util.List;
 import java.util.Optional;
