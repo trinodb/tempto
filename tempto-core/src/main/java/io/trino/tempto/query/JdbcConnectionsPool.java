@@ -22,12 +22,19 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static io.trino.tempto.internal.query.JdbcUtils.dataSource;
+import static java.util.Objects.requireNonNull;
 
 public class JdbcConnectionsPool
 {
     private final Map<JdbcConnectivityParamsState, DataSource> dataSources = newHashMap();
 
     public Connection connectionFor(JdbcConnectivityParamsState jdbcParamsState)
+            throws SQLException
+    {
+        return configureConnection(jdbcParamsState, createConnection(jdbcParamsState));
+    }
+
+    protected Connection createConnection(JdbcConnectivityParamsState jdbcParamsState)
             throws SQLException
     {
         if (!dataSources.containsKey(jdbcParamsState)) {
@@ -39,6 +46,13 @@ public class JdbcConnectionsPool
             // this should never happen, `javax.sql.DataSource#getConnection()` should not return null
             throw new IllegalStateException("No connection was created for: " + jdbcParamsState.getName());
         }
+        return connection;
+    }
+
+    protected static Connection configureConnection(JdbcConnectivityParamsState jdbcParamsState, Connection connection)
+            throws SQLException
+    {
+        requireNonNull(connection, "connection is null");
         if (!jdbcParamsState.prepareStatements.isEmpty()) {
             try (Statement statement = connection.createStatement()) {
                 for (String query : jdbcParamsState.prepareStatements) {
