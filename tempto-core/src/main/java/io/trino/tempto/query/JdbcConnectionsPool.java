@@ -37,11 +37,7 @@ public class JdbcConnectionsPool
     protected Connection createConnection(JdbcConnectivityParamsState jdbcParamsState)
             throws SQLException
     {
-        if (!dataSources.containsKey(jdbcParamsState)) {
-            dataSources.put(jdbcParamsState, dataSource(jdbcParamsState));
-        }
-
-        Connection connection = dataSources.get(jdbcParamsState).getConnection();
+        Connection connection = dataSources.computeIfAbsent(jdbcParamsState, this::createDataSource).getConnection();
         if (connection == null) {
             // this should never happen, `javax.sql.DataSource#getConnection()` should not return null
             throw new IllegalStateException("No connection was created for: " + jdbcParamsState.getName());
@@ -49,7 +45,12 @@ public class JdbcConnectionsPool
         return connection;
     }
 
-    protected static Connection configureConnection(JdbcConnectivityParamsState jdbcParamsState, Connection connection)
+    protected DataSource createDataSource(JdbcConnectivityParamsState jdbcParamsState)
+    {
+        return dataSource(jdbcParamsState);
+    }
+
+    protected Connection configureConnection(JdbcConnectivityParamsState jdbcParamsState, Connection connection)
             throws SQLException
     {
         requireNonNull(connection, "connection is null");
