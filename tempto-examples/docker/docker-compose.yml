@@ -70,7 +70,7 @@ services:
       - 'trino-master'
 
   runner:
-    image: 'ghcr.io/trinodb/testing/centos7-oj11:53'
+    image: 'ghcr.io/trinodb/testing/centos7-oj17:82'
     ports:
       - '5005:5005'
     volumes:
