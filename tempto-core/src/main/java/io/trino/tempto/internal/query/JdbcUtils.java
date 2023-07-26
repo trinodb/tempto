@@ -27,6 +27,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
 
+import static java.lang.ClassLoader.getPlatformClassLoader;
 import static java.sql.DriverManager.getConnection;
 
 public final class JdbcUtils
@@ -89,12 +90,11 @@ public final class JdbcUtils
     private static ClassLoader getDriverClassLoader(JdbcConnectivityParamsState jdbcParamsState)
     {
         try {
-            ClassLoader myClassLoader = JdbcUtils.class.getClassLoader();
             if (!jdbcParamsState.jar.isPresent()) {
-                return myClassLoader;
+                return JdbcUtils.class.getClassLoader();
             }
             URL jarURL = new File(jdbcParamsState.jar.get()).toURL();
-            return URLClassLoader.newInstance(new URL[] {jarURL}, myClassLoader);
+            return URLClassLoader.newInstance(new URL[] {jarURL}, getPlatformClassLoader());
         }
         catch (MalformedURLException e) {
             throw new RuntimeException("could not create classloader for file" + jdbcParamsState.jar.get(), e);

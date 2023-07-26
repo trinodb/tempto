@@ -9,7 +9,7 @@ paradigm and AssertJ style assertion) or by providing query files with expected 
 
 ## Prerequisites
 
-To use Tempto you need a Java 1.8 runtime.
+To use Tempto you need a Java 17 runtime.
 
 Other dependencies will vary based on the set of features you are using.
 
