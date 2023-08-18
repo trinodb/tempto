@@ -19,14 +19,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static com.google.common.collect.Maps.newHashMap;
 import static io.trino.tempto.internal.query.JdbcUtils.dataSource;
 import static java.util.Objects.requireNonNull;
 
 public class JdbcConnectionsPool
 {
-    private final Map<JdbcConnectivityParamsState, DataSource> dataSources = newHashMap();
+    private final Map<JdbcConnectivityParamsState, DataSource> dataSources = new ConcurrentHashMap<>();
 
     public Connection connectionFor(JdbcConnectivityParamsState jdbcParamsState)
             throws SQLException
