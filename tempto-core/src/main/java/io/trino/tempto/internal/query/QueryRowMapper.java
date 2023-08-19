@@ -16,13 +16,12 @@ package io.trino.tempto.internal.query;
 
 import io.trino.tempto.assertions.QueryAssert.Row;
 
-import javax.xml.bind.DatatypeConverter;
-
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.JDBCType;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.HexFormat;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -115,7 +114,7 @@ public class QueryRowMapper
 
     private byte[] convertBinary(String value)
     {
-        return DatatypeConverter.parseHexBinary(value);
+        return HexFormat.of().parseHex(value);
     }
 
     private Boolean convertBoolean(String value)
