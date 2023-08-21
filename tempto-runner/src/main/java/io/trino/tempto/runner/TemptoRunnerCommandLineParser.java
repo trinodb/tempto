@@ -44,6 +44,7 @@ import static io.trino.tempto.runner.TemptoRunnerOptions.EXCLUDED_TESTS;
 import static io.trino.tempto.runner.TemptoRunnerOptions.GROUPS;
 import static io.trino.tempto.runner.TemptoRunnerOptions.HELP;
 import static io.trino.tempto.runner.TemptoRunnerOptions.PACKAGE;
+import static io.trino.tempto.runner.TemptoRunnerOptions.PARALLEL;
 import static io.trino.tempto.runner.TemptoRunnerOptions.REPORT_DIR;
 import static io.trino.tempto.runner.TemptoRunnerOptions.TESTS;
 import static io.trino.tempto.runner.TemptoRunnerOptions.THREAD_COUNT;
@@ -185,6 +186,7 @@ public class TemptoRunnerCommandLineParser
             addOption(HELP);
             addOption(DUMP_CONVENTION_RESULTS);
             addOption(THREAD_COUNT);
+            addOption(PARALLEL);
             setReportDir("./test-reports", true);
             setConfigFile(TestConfigurationFactory.DEFAULT_TEST_CONFIGURATION_LOCATION, true);
             setConventionTestDirectory(ConventionTestsUtils.DEFAULT_CONVENTION_TESTS_DIR, true);

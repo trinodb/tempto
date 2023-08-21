@@ -99,6 +99,12 @@ public class TemptoRunnerOptions
             .hasArg()
             .build();
 
+    public static final Option PARALLEL = Option.builder()
+            .longOpt("parallel")
+            .desc("Parallel mode")
+            .hasArg()
+            .build();
+
     private final Map<String, String> values;
 
     public TemptoRunnerOptions(Map<String, String> values)
@@ -160,6 +166,11 @@ public class TemptoRunnerOptions
     public int getThreadCount()
     {
         return Integer.parseInt(getValue(THREAD_COUNT.getLongOpt()).orElse("1"));
+    }
+
+    public Optional<String> getParallel()
+    {
+        return getValue(PARALLEL.getLongOpt());
     }
 
     public Set<String> getValues(String option)

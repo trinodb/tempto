@@ -36,6 +36,7 @@ import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector
 import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_EXCLUDE_PROPERTY;
 import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
 import static java.util.Collections.singletonList;
+import static org.testng.xml.XmlSuite.ParallelMode.getValidParallel;
 
 public class TemptoRunner
 {
@@ -84,6 +85,7 @@ public class TemptoRunner
         System.setProperty(CONVENTION_TESTS_DIR_KEY, options.getConventionTestsDirectory());
         TestNG testNG = new TestNG();
         testNG.setXmlSuites(singletonList(testSuite));
+        options.getParallel().ifPresent(parallel -> testNG.setParallel(getValidParallel(parallel)));
         testNG.setOutputDirectory(options.getReportDir());
         setupTestsFiltering(testNG);
         options.getConventionResultsDumpPath()
