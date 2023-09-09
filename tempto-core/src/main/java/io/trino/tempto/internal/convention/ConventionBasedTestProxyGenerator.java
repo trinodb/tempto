@@ -19,6 +19,7 @@ import com.google.common.collect.Iterables;
 import io.trino.tempto.Requirement;
 import io.trino.tempto.configuration.Configuration;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -26,13 +27,10 @@ import net.bytebuddy.implementation.MethodCall;
 import org.slf4j.Logger;
 import org.testng.annotations.Test;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.lang.Character.isAlphabetic;
 import static java.lang.ClassLoader.getSystemClassLoader;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -57,17 +55,21 @@ public class ConventionBasedTestProxyGenerator
         try {
             String className = generatedClassName(conventionBasedTest);
             String methodName = generatedMethodName(conventionBasedTest);
-            TestAnnotationImpl testAnnotationImpl = new TestAnnotationImpl(conventionBasedTest);
+
+            AnnotationDescription annotation = AnnotationDescription.Builder.ofType(Test.class)
+                    .defineArray("groups", conventionBasedTest.getTestGroups().toArray(String[]::new))
+                    .define("enabled", true)
+                    .build();
 
             DynamicType.Unloaded<ConventionBasedTestProxy> dynamicType = new ByteBuddy()
                     .subclass(ConventionBasedTestProxy.class)
                     .name(className)
                     .defineMethod(methodName, void.class, Visibility.PUBLIC)
                     .intercept(MethodCall.invoke(ConventionBasedTestProxy.class.getMethod("test")))
-                    .annotateMethod(testAnnotationImpl)
+                    .annotateMethod(annotation)
                     .make();
 
-            LOGGER.debug("Generating proxy class: {}.{}, annotation: {}", className, methodName, testAnnotationImpl);
+            LOGGER.debug("Generating proxy class: {}.{}, annotation: {}", className, methodName, annotation);
 
             return dynamicType
                     .load(getSystemClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
@@ -139,176 +141,6 @@ public class ConventionBasedTestProxyGenerator
         public Requirement getRequirements(Configuration configuration)
         {
             return delegate.getRequirements(configuration);
-        }
-    }
-
-    private static class TestAnnotationImpl
-            implements Test
-    {
-        private final ConventionBasedTest conventionBasedTest;
-
-        public TestAnnotationImpl(ConventionBasedTest conventionBasedTest)
-        {
-            this.conventionBasedTest = conventionBasedTest;
-        }
-
-        @Override
-        public String[] groups()
-        {
-            Set<String> testGroups = conventionBasedTest.getTestGroups();
-            return testGroups.toArray(new String[testGroups.size()]);
-        }
-
-        @Override
-        public boolean enabled()
-        {
-            return true;
-        }
-
-        @Override
-        public String[] parameters()
-        {
-            return new String[0];
-        }
-
-        @Override
-        public String[] dependsOnGroups()
-        {
-            return new String[0];
-        }
-
-        @Override
-        public String[] dependsOnMethods()
-        {
-            return new String[0];
-        }
-
-        @Override
-        public long timeOut()
-        {
-            return 0;
-        }
-
-        @Override
-        public long invocationTimeOut()
-        {
-            return 0;
-        }
-
-        @Override
-        public int invocationCount()
-        {
-            return 1;
-        }
-
-        @Override
-        public int threadPoolSize()
-        {
-            return 0;
-        }
-
-        @Override
-        public int successPercentage()
-        {
-            return 100;
-        }
-
-        @Override
-        public String dataProvider()
-        {
-            return "";
-        }
-
-        @Override
-        public Class<?> dataProviderClass()
-        {
-            return Object.class;
-        }
-
-        @Override
-        public boolean alwaysRun()
-        {
-            return false;
-        }
-
-        @Override
-        public String description()
-        {
-            return "";
-        }
-
-        @Override
-        public Class[] expectedExceptions()
-        {
-            return new Class[0];
-        }
-
-        @Override
-        public String expectedExceptionsMessageRegExp()
-        {
-            return "";
-        }
-
-        @Override
-        public String suiteName()
-        {
-            return "";
-        }
-
-        @Override
-        public String testName()
-        {
-            return "";
-        }
-
-        @Override
-        public boolean sequential()
-        {
-            return false;
-        }
-
-        @Override
-        public boolean singleThreaded()
-        {
-            return false;
-        }
-
-        @Override
-        public Class retryAnalyzer()
-        {
-            return Class.class;
-        }
-
-        @Override
-        public boolean skipFailedInvocations()
-        {
-            return false;
-        }
-
-        @Override
-        public boolean ignoreMissingDependencies()
-        {
-            return false;
-        }
-
-        @Override
-        public int priority()
-        {
-            return 0;
-        }
-
-        @Override
-        public Class<? extends Annotation> annotationType()
-        {
-            return Test.class;
-        }
-
-        @Override
-        public String toString()
-        {
-            return toStringHelper(this)
-                    .add("groups", Arrays.toString(groups()))
-                    .toString();
         }
     }
 }
