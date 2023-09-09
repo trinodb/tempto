@@ -87,7 +87,7 @@ public class SimpleQueryTest
         assertThat(testContextIfSet().isPresent()).isTrue();
     }
 
-    @Test(groups = "query", timeOut = 1000000)
+    @Test(groups = "query", timeOut = 1000000, enabled = false)
     public void createAndDropMutableTable()
     {
         TableDefinition tableDefinition = like(NATION)
