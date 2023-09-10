@@ -69,7 +69,7 @@ public class ConventionBasedTestProxyGenerator
                     .annotateMethod(annotation)
                     .make();
 
-            LOGGER.debug("Generating proxy class: {}.{}, annotation: {}", className, methodName, annotation);
+            LOGGER.info("Generating proxy class: {}.{}, annotation: {}", className, methodName, annotation);
 
             return dynamicType
                     .load(getSystemClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
