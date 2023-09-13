@@ -16,25 +16,23 @@ package io.trino.tempto.internal.hadoop.hdfs;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.trino.tempto.hadoop.hdfs.HdfsClient;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.entity.ContentProducer;
-import org.apache.http.entity.EntityTemplate;
-import org.apache.http.entity.InputStreamEntity;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.io.entity.BufferedHttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityTemplate;
+import org.apache.hc.core5.http.io.entity.InputStreamEntity;
+import org.apache.hc.core5.io.IOCallback;
+import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -42,6 +40,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,14 +49,16 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.apache.commons.io.IOUtils.copyLarge;
-import static org.apache.http.HttpStatus.SC_CREATED;
-import static org.apache.http.HttpStatus.SC_NOT_FOUND;
-import static org.apache.http.HttpStatus.SC_OK;
-import static org.apache.http.HttpStatus.SC_TEMPORARY_REDIRECT;
+import static org.apache.hc.core5.http.ContentType.APPLICATION_OCTET_STREAM;
+import static org.apache.hc.core5.http.HttpStatus.SC_CREATED;
+import static org.apache.hc.core5.http.HttpStatus.SC_NOT_FOUND;
+import static org.apache.hc.core5.http.HttpStatus.SC_OK;
+import static org.apache.hc.core5.http.HttpStatus.SC_TEMPORARY_REDIRECT;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -96,7 +97,7 @@ public class WebHdfsClient
         // TODO: reconsider permission=777
         HttpPut mkdirRequest = new HttpPut(buildUri(path, "MKDIRS", ImmutableMap.of("permission", "777")));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(mkdirRequest)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("MKDIRS", path, mkdirRequest, response);
             }
             logger.debug("Created directory {} - username: {}", path, username);
@@ -111,7 +112,7 @@ public class WebHdfsClient
     {
         HttpDelete removeFileOrDirectoryRequest = new HttpDelete(buildUri(path, "DELETE", ImmutableMap.of("recursive", "true")));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(removeFileOrDirectoryRequest)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("DELETE", path, removeFileOrDirectoryRequest, response);
             }
             logger.debug("Removed file or directory {} - username: {}", path, username);
@@ -125,7 +126,7 @@ public class WebHdfsClient
     public void saveFile(String path, InputStream input)
     {
         try {
-            saveFile(path, new BufferedHttpEntity(new InputStreamEntity(input)));
+            saveFile(path, new BufferedHttpEntity(new InputStreamEntity(input, -1, APPLICATION_OCTET_STREAM, null)));
         }
         catch (IOException e) {
             throw new RuntimeException("Could not create buffered http entity", e);
@@ -135,12 +136,12 @@ public class WebHdfsClient
     @Override
     public void saveFile(String path, RepeatableContentProducer repeatableContentProducer)
     {
-        saveFile(path, new EntityTemplate(toApacheContentProducer(repeatableContentProducer)));
+        saveFile(path, new EntityTemplate(-1, APPLICATION_OCTET_STREAM, null, toIoCallback(repeatableContentProducer)));
     }
 
-    private ContentProducer toApacheContentProducer(RepeatableContentProducer repeatableContentProducer)
+    private IOCallback<OutputStream> toIoCallback(RepeatableContentProducer repeatableContentProducer)
     {
-        return (OutputStream outputStream) -> {
+        return outputStream -> {
             try (InputStream inputStream = repeatableContentProducer.getInputStream()) {
                 copyLarge(inputStream, outputStream);
             }
@@ -156,7 +157,7 @@ public class WebHdfsClient
         writeRequest.setEntity(entity);
 
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(writeRequest)) {
-            if (response.getStatusLine().getStatusCode() != SC_CREATED) {
+            if (response.getCode() != SC_CREATED) {
                 throw invalidStatusException("CREATE", path, writeRequest, response);
             }
             long length = waitForFileSavedAndReturnLength(path);
@@ -172,7 +173,7 @@ public class WebHdfsClient
     {
         HttpGet readRequest = new HttpGet(buildUri(path, "OPEN", ImmutableMap.of()));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(readRequest)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("OPEN", path, readRequest, response);
             }
 
@@ -191,7 +192,7 @@ public class WebHdfsClient
     {
         HttpGet request = new HttpGet(buildUri(path, "LISTSTATUS", emptyMap()));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
-            int statusCode = response.getStatusLine().getStatusCode();
+            int statusCode = response.getCode();
             if (statusCode != SC_OK) {
                 throw invalidStatusException("LISTSTATUS", path, request, response);
             }
@@ -210,7 +211,7 @@ public class WebHdfsClient
     {
         HttpGet readRequest = new HttpGet(buildUri(path, "GETFILESTATUS", emptyMap()));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(readRequest)) {
-            int statusCode = response.getStatusLine().getStatusCode();
+            int statusCode = response.getCode();
             if (statusCode != SC_OK) {
                 throw invalidStatusException("GETFILESTATUS", path, readRequest, response);
             }
@@ -240,7 +241,7 @@ public class WebHdfsClient
     public void setOwner(String path, String owner) {
         HttpPut request = new HttpPut(buildUri(path, "SETOWNER", ImmutableMap.of("owner", owner)));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("SETPERMISSION", path, request, response);
             }
             logger.debug("Set owner for {} to {}, username: {}", path, owner, username);
@@ -261,7 +262,7 @@ public class WebHdfsClient
     public void setGroup(String path, String group) {
         HttpPut request = new HttpPut(buildUri(path, "SETOWNER", ImmutableMap.of("group", group)));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("SETPERMISSION", path, request, response);
             }
             logger.debug("Set group for {} to {}, username: {}", path, group, username);
@@ -282,7 +283,7 @@ public class WebHdfsClient
     public void setPermission(String path, String octalPermissions) {
         HttpPut request = new HttpPut(buildUri(path, "SETPERMISSION", ImmutableMap.of("permission", octalPermissions)));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("SETPERMISSION", path, request, response);
             }
             logger.debug("Set permission for {} to {}, username: {}", path, octalPermissions, username);
@@ -297,7 +298,7 @@ public class WebHdfsClient
     {
         HttpGet readRequest = new HttpGet(buildUri(path, "GETFILESTATUS", emptyMap()));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(readRequest)) {
-            return response.getStatusLine().getStatusCode() == SC_OK;
+            return response.getCode() == SC_OK;
         }
         catch (IOException e) {
             throw new RuntimeException("Could not get file status: " + path + " , user: " + username, e);
@@ -314,7 +315,7 @@ public class WebHdfsClient
         );
         HttpPut setXAttrRequest = new HttpPut(buildUri(path, "SETXATTR", params));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(setXAttrRequest)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("SETXATTR", path, setXAttrRequest, response);
             }
             logger.debug("Set xAttr {} = {} for {}, username: {}", key, value, path, username);
@@ -329,7 +330,7 @@ public class WebHdfsClient
     {
         HttpPut setXAttrRequest = new HttpPut(buildUri(path, "REMOVEXATTR", ImmutableMap.of("xattr.name", key)));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(setXAttrRequest)) {
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("SETXATTR", path, setXAttrRequest, response);
             }
             logger.debug("Remove xAttr {} for {}, username: {}", key, path, username);
@@ -345,10 +346,10 @@ public class WebHdfsClient
     {
         HttpGet setXAttrRequest = new HttpGet(buildUri(path, "GETXATTRS", ImmutableMap.of()));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(setXAttrRequest)) {
-            if (response.getStatusLine().getStatusCode() == SC_NOT_FOUND) {
+            if (response.getCode() == SC_NOT_FOUND) {
                 return Optional.empty();
             }
-            if (response.getStatusLine().getStatusCode() != SC_OK) {
+            if (response.getCode() != SC_OK) {
                 throw invalidStatusException("GETXATTRS", path, setXAttrRequest, response);
             }
 
@@ -373,11 +374,11 @@ public class WebHdfsClient
     private String executeAndGetRedirectUri(HttpUriRequest request)
     {
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
-            if (response.getStatusLine().getStatusCode() != SC_TEMPORARY_REDIRECT) {
+            if (response.getCode() != SC_TEMPORARY_REDIRECT) {
                 throw new RuntimeException(format("Expected %s redirect for request %s, but got %s: %s",
                         SC_TEMPORARY_REDIRECT,
                         request,
-                        response.getStatusLine().getStatusCode(),
+                        response.getCode(),
                         response));
             }
             return response.getFirstHeader("Location").getValue();
@@ -418,19 +419,19 @@ public class WebHdfsClient
         }
     }
 
-    private RuntimeException invalidStatusException(String operation, String path, HttpRequest request, HttpResponse response)
+    private RuntimeException invalidStatusException(String operation, String path, HttpRequest request, CloseableHttpResponse response)
             throws IOException
     {
         return new RuntimeException("Operation " + operation +
                 " on file " + path + " failed, user: " + username +
-                ", status: " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() +
-                ", content: " + IOUtils.toString(response.getEntity().getContent()) +
-                ", request: " + request.getRequestLine().getMethod() + " " + request.getRequestLine().getUri());
+                ", status: " + response.getCode() + " " + response.getReasonPhrase() +
+                ", content: " + IOUtils.toString(response.getEntity().getContent(), UTF_8) +
+                ", request: " + request.getMethod() + " " + request.getRequestUri());
     }
 
-    private Map<String, Object> deserializeJsonResponse(HttpResponse response)
+    private Map<String, Object> deserializeJsonResponse(CloseableHttpResponse response)
             throws IOException
     {
-        return MAPPER.readValue(IOUtils.toString(response.getEntity().getContent()), MAP_TYPE_REFERENCE);
+        return MAPPER.readValue(IOUtils.toString(response.getEntity().getContent(), UTF_8), MAP_TYPE_REFERENCE);
     }
 }

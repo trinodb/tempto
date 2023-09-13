@@ -18,11 +18,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Scopes;
 import com.google.inject.name.Named;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpRequestWrapper;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.net.URIBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -75,14 +74,18 @@ public class SimpleHttpRequestsExecutor
 
     private HttpUriRequest appendUsernameToQueryString(HttpUriRequest request)
     {
-        HttpRequestWrapper httpRequestWrapper = HttpRequestWrapper.wrap(request);
-        URI originalUri = httpRequestWrapper.getURI();
-        URI uriWithUsername = appendUsername(originalUri);
-        httpRequestWrapper.setURI(uriWithUsername);
-        if (!password.isEmpty()) {
-            httpRequestWrapper.setHeader("Authorization", "Basic " + base64().encode(format("%s:%s", username, password).getBytes(ISO_8859_1)));
+        try {
+            URI originalUri = request.getUri();
+            URI uriWithUsername = appendUsername(originalUri);
+            request.setUri(uriWithUsername);
+            if (!password.isEmpty()) {
+                request.setHeader("Authorization", "Basic " + base64().encode(format("%s:%s", username, password).getBytes(ISO_8859_1)));
+            }
+            return request;
         }
-        return httpRequestWrapper;
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private URI appendUsername(URI originalUri)

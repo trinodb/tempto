@@ -24,13 +24,17 @@ import com.google.inject.Singleton;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.hadoop.hdfs.HdfsClient;
 import io.trino.tempto.initialization.SuiteModuleProvider;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.hc.client5.http.impl.DefaultHttpRequestRetryStrategy;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.TrustSelfSignedStrategy;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.apache.hc.core5.util.TimeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,8 +106,8 @@ public class HdfsModuleProvider
             @Singleton
             CloseableHttpClient createHttpClient()
             {
-                HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-                httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(NUMBER_OF_HTTP_RETRIES, true));
+                HttpClientBuilder httpClientBuilder = HttpClients.custom();
+                httpClientBuilder.setRetryStrategy(new DefaultHttpRequestRetryStrategy(NUMBER_OF_HTTP_RETRIES, TimeValue.ofSeconds(1L)));
                 skipCertificateValidation(httpClientBuilder);
                 return httpClientBuilder.build();
             }
@@ -111,11 +115,15 @@ public class HdfsModuleProvider
             private void skipCertificateValidation(HttpClientBuilder httpClientBuilder)
             {
                 try {
-                    httpClientBuilder.setSSLSocketFactory(new SSLConnectionSocketFactory(
-                            SSLContextBuilder.create()
-                                    .loadTrustMaterial(new TrustSelfSignedStrategy())
-                                    .build(),
-                            new NoopHostnameVerifier()));
+                    HttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                            .setSSLSocketFactory(new SSLConnectionSocketFactory(
+                                    SSLContextBuilder.create()
+                                            .loadTrustMaterial(new TrustSelfSignedStrategy())
+                                            .build(),
+                                    new NoopHostnameVerifier()))
+                            .build();
+
+                    httpClientBuilder.setConnectionManager(connectionManager);
                 }
                 catch (GeneralSecurityException e) {
                     throw new RuntimeException(e);

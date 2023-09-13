@@ -21,19 +21,21 @@ import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.kerberos.KerberosAuthentication;
-import org.apache.http.auth.AuthSchemeProvider;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
-import org.apache.http.client.config.AuthSchemes;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.config.Lookup;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.impl.auth.SPNegoSchemeFactory;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.client5.http.SystemDefaultDnsResolver;
+import org.apache.hc.client5.http.auth.AuthSchemeFactory;
+import org.apache.hc.client5.http.auth.AuthScope;
+import org.apache.hc.client5.http.auth.Credentials;
+import org.apache.hc.client5.http.auth.KerberosConfig;
+import org.apache.hc.client5.http.auth.StandardAuthScheme;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
+import org.apache.hc.client5.http.impl.auth.SPNegoSchemeFactory;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.core5.http.config.Lookup;
+import org.apache.hc.core5.http.config.RegistryBuilder;
+import org.apache.hc.core5.http.protocol.HttpContext;
 
 import javax.security.auth.Subject;
 
@@ -45,6 +47,8 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
+
+;
 
 public class SpnegoHttpRequestsExecutor
         implements HttpRequestsExecutor
@@ -94,12 +98,18 @@ public class SpnegoHttpRequestsExecutor
     private HttpContext createSpnegoAwareHttpContext()
     {
         HttpClientContext httpContext = HttpClientContext.create();
-        Lookup<AuthSchemeProvider> authSchemeRegistry = RegistryBuilder.<AuthSchemeProvider>create()
-                .register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory(true, useCanonicalHostname)).build();
+
+        KerberosConfig kerberosConfig = KerberosConfig.custom()
+                .setStripPort(true)
+                .setUseCanonicalHostname(useCanonicalHostname)
+                .build();
+
+        Lookup<AuthSchemeFactory> authSchemeRegistry = RegistryBuilder.<AuthSchemeFactory>create()
+                .register(StandardAuthScheme.SPNEGO, new SPNegoSchemeFactory(kerberosConfig, new SystemDefaultDnsResolver())).build();
         httpContext.setAuthSchemeRegistry(authSchemeRegistry);
 
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(new AuthScope(null, -1, null), new NullCredentials());
+        credentialsProvider.setCredentials(new AuthScope(null, -1), new NullCredentials());
         httpContext.setCredentialsProvider(credentialsProvider);
         return httpContext;
     }
@@ -128,9 +138,9 @@ public class SpnegoHttpRequestsExecutor
         }
 
         @Override
-        public String getPassword()
+        public char[] getPassword()
         {
-            return null;
+            return new char[0];
         }
     }
 }
