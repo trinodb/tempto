@@ -61,7 +61,9 @@ class TestInitializationListenerTest
     static final String BEFORE_METHOD = "beforeMethod"
     static final String AFTER_METHOD = "afterMethod"
     public static final String BEFORE_METHOD_OVERRIDE = "beforeMethodOverride"
+    public static final String BEFORE_METHOD_ADDITIONAL = "beforeMethodAdditional"
     public static final String AFTER_METHOD_OVERRIDE = "afterMethodOverride"
+    public static final String AFTER_METHOD_ADDITIONAL = "afterMethodAdditional"
 
     static final A_REQUIREMENT = new DummyRequirement(A)
     static final B_REQUIREMENT = new DummyRequirement(B)
@@ -90,6 +92,12 @@ class TestInitializationListenerTest
         assertTestContextNotSet()
         listener.onFinish(iTestContext)
 
+        println  EVENTS.stream()
+                .map({ s -> s.name })
+                .collect(Collectors.toList());
+
+        println eventsList;
+
         expect:
         EVENTS.stream()
                 .map({ s -> s.name })
@@ -112,8 +120,8 @@ class TestInitializationListenerTest
                                                             BEFORE_METHOD_OVERRIDE, AFTER_METHOD_OVERRIDE,
                                                             TEST_B_CLEANUP, TEST_B_CALLBACK,
                                                             SUITE_A_CLEANUP, SUITE_A_CALLBACK]
-        new TestClassOverrideAdditionalAnnotatedMethod() | [SUITE_A_FULFILL, TEST_B_FULFILL,
-                                                            BEFORE_METHOD_OVERRIDE, BEFORE_METHOD, AFTER_METHOD,
+        new TestClassAdditionalAnnotatedMethod()         | [SUITE_A_FULFILL, TEST_B_FULFILL,
+                                                            BEFORE_METHOD_ADDITIONAL, BEFORE_METHOD, AFTER_METHOD_ADDITIONAL, AFTER_METHOD,
                                                             TEST_B_CLEANUP, TEST_B_CALLBACK,
                                                             SUITE_A_CLEANUP, SUITE_A_CALLBACK]
     }
@@ -210,13 +218,19 @@ class TestInitializationListenerTest
     {
     }
 
-    static class TestClassOverrideAdditionalAnnotatedMethod
+    static class TestClassAdditionalAnnotatedMethod
             extends TestClass
     {
         @BeforeMethodWithContext
         void beforeMethodAdditional()
         {
-            EVENTS.add(new Event(BEFORE_METHOD_OVERRIDE, this));
+            EVENTS.add(new Event(BEFORE_METHOD_ADDITIONAL, this));
+        }
+
+        @AfterMethodWithContext
+        void afterMethodAdditional()
+        {
+            EVENTS.add(new Event(AFTER_METHOD_ADDITIONAL, this));
         }
     }
 
