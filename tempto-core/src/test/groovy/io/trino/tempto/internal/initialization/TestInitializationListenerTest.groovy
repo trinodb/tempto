@@ -121,7 +121,7 @@ class TestInitializationListenerTest
                                                             TEST_B_CLEANUP, TEST_B_CALLBACK,
                                                             SUITE_A_CLEANUP, SUITE_A_CALLBACK]
         new TestClassAdditionalAnnotatedMethod()         | [SUITE_A_FULFILL, TEST_B_FULFILL,
-                                                            BEFORE_METHOD_ADDITIONAL, BEFORE_METHOD, AFTER_METHOD_ADDITIONAL, AFTER_METHOD,
+                                                            BEFORE_METHOD, BEFORE_METHOD_ADDITIONAL, AFTER_METHOD_ADDITIONAL, AFTER_METHOD,
                                                             TEST_B_CLEANUP, TEST_B_CALLBACK,
                                                             SUITE_A_CLEANUP, SUITE_A_CALLBACK]
     }

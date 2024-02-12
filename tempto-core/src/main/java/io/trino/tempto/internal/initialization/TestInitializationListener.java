@@ -15,7 +15,6 @@
 package io.trino.tempto.internal.initialization;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -49,6 +48,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +56,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
@@ -73,6 +74,7 @@ import static io.trino.tempto.internal.configuration.TestConfigurationFactory.te
 import static io.trino.tempto.internal.logging.LoggingMdcHelper.cleanLoggingMdc;
 import static io.trino.tempto.internal.logging.LoggingMdcHelper.setupLoggingMdcForTest;
 import static java.util.Collections.emptyList;
+import static java.util.Comparator.comparing;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class TestInitializationListener
@@ -241,7 +243,7 @@ public class TestInitializationListener
     private void runBeforeWithContextMethods(ITestResult testResult, TestContext testContext)
     {
         try {
-            invokeMethodsAnnotatedWith(BeforeMethodWithContext.class, testResult, testContext);
+            invokeMethodsAnnotatedWith(BeforeMethodWithContext.class, testResult, testContext, ClassOrdering.SUPER_FIRST);
         }
         catch (RuntimeException e) {
             TestContextStack<TestContext> testContextStack = popAllTestContexts();
@@ -252,21 +254,42 @@ public class TestInitializationListener
 
     private void runAfterWithContextMethods(ITestResult testResult, TestContext testContext)
     {
-        invokeMethodsAnnotatedWith(AfterMethodWithContext.class, testResult, testContext);
+        invokeMethodsAnnotatedWith(AfterMethodWithContext.class, testResult, testContext, ClassOrdering.SUPER_LAST);
     }
 
-    private void invokeMethodsAnnotatedWith(Class<? extends Annotation> annotationClass, ITestResult testCase, TestContext testContext)
+    private void invokeMethodsAnnotatedWith(Class<? extends Annotation> annotationClass, ITestResult testCase, TestContext testContext, ClassOrdering ordering)
     {
-        for (Method declaredMethod : testCase.getTestClass().getRealClass().getMethods()) {
-            if (declaredMethod.getAnnotation(annotationClass) != null) {
-                try {
-                    declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext, declaredMethod));
-                }
-                catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException("error invoking method annotated with " + annotationClass.getName(), e);
-                }
+        Comparator<Class<?>> depthComparator = comparing(clazz -> {
+            int depth = 0;
+            while (clazz.getSuperclass() != null) {
+                clazz = clazz.getSuperclass();
+                depth++;
             }
+            return depth;
+        });
+        Comparator<Class<?>> classComparator;
+        switch (ordering) {
+            case SUPER_FIRST:
+                classComparator = depthComparator;
+                break;
+            case SUPER_LAST:
+                classComparator = depthComparator.reversed();
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported ordering: " + ordering);
         }
+
+        Stream.of(testCase.getTestClass().getRealClass().getMethods())
+                .filter(declaredMethod -> declaredMethod.isAnnotationPresent(annotationClass))
+                .sorted(comparing(Method::getDeclaringClass, classComparator))
+                .forEachOrdered(declaredMethod -> {
+                    try {
+                        declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext, declaredMethod));
+                    }
+                    catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException("error invoking method annotated with " + annotationClass.getName(), e);
+                    }
+                });
     }
 
     private void doFulfillment(TestContextStack<TestContext> testContextStack,
@@ -390,5 +413,11 @@ public class TestInitializationListener
                     // Suppress stacktrace for all but first 10 exceptions. It is not useful when printed for every test.
                     instanceCount.getAndIncrement() < 10);
         }
+    }
+
+    private enum ClassOrdering
+    {
+        SUPER_FIRST,
+        SUPER_LAST,
     }
 }
