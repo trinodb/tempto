@@ -45,6 +45,8 @@ public interface HdfsClient
 
     void createDirectory(String path);
 
+    void rename(String sourcePath, String destinationPath);
+
     void delete(String path);
 
     void saveFile(String path, InputStream input);

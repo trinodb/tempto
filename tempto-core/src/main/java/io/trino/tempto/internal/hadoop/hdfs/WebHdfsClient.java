@@ -16,7 +16,6 @@ package io.trino.tempto.internal.hadoop.hdfs;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -103,6 +102,21 @@ public class WebHdfsClient
         }
         catch (IOException e) {
             throw new RuntimeException("Could not create directory " + path + " in hdfs, user: " + username, e);
+        }
+    }
+
+    @Override
+    public void rename(String sourcePath, String destinationPath)
+    {
+        HttpPut renameRequest = new HttpPut(buildUri(sourcePath, "RENAME", ImmutableMap.of("destination", destinationPath)));
+        try (CloseableHttpResponse response = httpRequestsExecutor.execute(renameRequest)) {
+            if (response.getStatusLine().getStatusCode() != SC_OK) {
+                throw invalidStatusException("RENAME", sourcePath, renameRequest, response);
+            }
+            logger.debug("Renamed file/directory {} to {} - username: {}", sourcePath, destinationPath, username);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not rename file/directory " + sourcePath + " to " + destinationPath + " in hdfs, user: " + username, e);
         }
     }
 
