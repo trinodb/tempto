@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import io.trino.tempto.assertions.QueryAssert;
 import org.assertj.core.api.AssertProvider;
+import org.assertj.core.api.Assertions;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -156,7 +157,7 @@ public class QueryResult
     @Override
     public QueryAssert assertThat()
     {
-        return QueryAssert.assertThat(this);
+        return Assertions.assertThat(this);
     }
 
     /**

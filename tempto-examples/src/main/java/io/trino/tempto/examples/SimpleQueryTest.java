@@ -34,7 +34,6 @@ import org.testng.annotations.Test;
 
 import static io.trino.tempto.Requirements.allOf;
 import static io.trino.tempto.assertions.QueryAssert.Row.row;
-import static io.trino.tempto.assertions.QueryAssert.assertThat;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
 import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.CREATED;

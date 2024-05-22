@@ -26,11 +26,11 @@ import io.trino.tempto.query.QueryResult;
 import org.testng.annotations.Test;
 
 import static io.trino.tempto.assertions.QueryAssert.Row.row;
-import static io.trino.tempto.assertions.QueryAssert.assertThat;
 import static io.trino.tempto.fulfillment.table.TableRequirements.immutableTable;
 import static io.trino.tempto.fulfillment.table.kafka.KafkaMessageContentsBuilder.contentsBuilder;
 import static io.trino.tempto.query.QueryExecutor.query;
 import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class KafkaQueryTest
         extends ProductTest

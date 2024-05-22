@@ -28,10 +28,10 @@ import java.sql.Connection
 import static JdbcUtils.connection
 import static JdbcUtils.registerDriver
 import static io.trino.tempto.assertions.QueryAssert.Row.row
-import static io.trino.tempto.assertions.QueryAssert.assertThat
 import static io.trino.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
 import static java.sql.JDBCType.INTEGER
 import static java.sql.JDBCType.VARCHAR
+import static org.assertj.core.api.Assertions.assertThat;
 
 class JdbcQueryExecutorTest
         extends Specification

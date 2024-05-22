@@ -73,33 +73,6 @@ public class QueryAssert
         this.columnTypes = actual.getColumnTypes();
     }
 
-    /**
-     * Use {@link Assertions#assertThat(AssertProvider)}.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public static QueryAssert assertThat(QueryResult queryResult)
-    {
-        return new QueryAssert(queryResult);
-    }
-
-    /**
-     * @deprecated Use {@link #assertQueryFailure(QueryCallback)} instead.
-     */
-    @Deprecated
-    @CheckReturnValue
-    public static QueryExecutionAssert assertThat(QueryCallback queryCallback)
-    {
-        QueryExecutionException executionException = null;
-        try {
-            queryCallback.executeQuery();
-        }
-        catch (QueryExecutionException e) {
-            executionException = e;
-        }
-        return new QueryExecutionAssert(ofNullable(executionException));
-    }
-
     @CheckReturnValue
     public static AbstractThrowableAssert<?, ? extends Throwable> assertQueryFailure(QueryCallback queryCallback)
     {

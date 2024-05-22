@@ -28,13 +28,13 @@ import java.sql.ResultSet
 import static com.google.common.collect.Iterables.getOnlyElement
 import static io.trino.tempto.assertions.QueryAssert.Row.row
 import static io.trino.tempto.assertions.QueryAssert.anyOf
-import static io.trino.tempto.assertions.QueryAssert.assertThat
 import static io.trino.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY
 import static java.nio.charset.StandardCharsets.UTF_8
 import static java.sql.JDBCType.BIGINT
 import static java.sql.JDBCType.INTEGER
 import static java.sql.JDBCType.VARBINARY
 import static java.sql.JDBCType.VARCHAR
+import static org.assertj.core.api.Assertions.assertThat;
 
 class QueryAssertTest
         extends Specification

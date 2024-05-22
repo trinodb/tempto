@@ -18,7 +18,6 @@ import io.trino.tempto.context.ContextProvider;
 import io.trino.tempto.query.QueryExecutionException;
 import io.trino.tempto.query.QueryExecutor;
 
-import static io.trino.tempto.assertions.QueryAssert.assertThat;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
