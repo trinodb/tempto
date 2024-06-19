@@ -19,47 +19,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>io.trino.tempto</groupId>
-            <artifactId>tempto-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.trino.tempto</groupId>
-            <artifactId>tempto-runner</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.trino.tempto</groupId>
-            <artifactId>tempto-kafka</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <scope>runtime</scope>
-        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -70,20 +29,34 @@
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
         </dependency>
-
-        <!-- needed at runtime -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${dep.slf4j.version}</version>
-            <scope>runtime</scope>
+            <groupId>io.trino.tempto</groupId>
+            <artifactId>tempto-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.4-1201-jdbc41</version>
-            <scope>runtime</scope>
+            <groupId>io.trino.tempto</groupId>
+            <artifactId>tempto-kafka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.trino.tempto</groupId>
+            <artifactId>tempto-runner</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
         </dependency>
 
         <dependency>
@@ -99,20 +72,47 @@
             <version>0.13.1-9</version>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4-1201-jdbc41</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- needed at runtime -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${dep.slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <directory>src/main/resources</directory>
                 <includes>
                     <include>tempto.env</include>
                 </includes>
             </resource>
             <resource>
-                <directory>src/main/resources</directory>
                 <filtering>false</filtering>
+                <directory>src/main/resources</directory>
                 <excludes>
                     <exclude>tempto.env</exclude>
                 </excludes>
@@ -125,10 +125,10 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <phase>package</phase>
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>executable</shadedClassifierName>
