@@ -73,8 +73,9 @@ public class HiveThriftClient
             checkState(client != null, "Previously failed to open");
             return;
         }
-        transport = new TSocket(thriftHost, thriftPort);
+
         try {
+            transport = new TSocket(thriftHost, thriftPort);
             transport.open();
         }
         catch (TTransportException e) {
