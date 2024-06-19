@@ -18,10 +18,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>io.trino.tempto</groupId>
-            <artifactId>tempto-core</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -31,6 +27,10 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.trino.tempto</groupId>
+            <artifactId>tempto-core</artifactId>
         </dependency>
 
         <dependency>
