@@ -1,5 +1,10 @@
 FROM ghcr.io/trinodb/testing/centos7-oj11:53
 
+# TODO: Remove when updating to newer base image
+# replace mirrorlist.centos.org and mirror.centos.org with vault.centos.org
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
 RUN yum install -y openssh-server openssh-clients passwd
 RUN echo s3cr37_p@55 | passwd --stdin root
 
