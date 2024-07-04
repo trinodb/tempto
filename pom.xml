@@ -42,6 +42,7 @@
         <air.check.skip-pmd>true</air.check.skip-pmd>
 
         <project.build.targetJdk>21</project.build.targetJdk>
+        <dep.testng.version>7.10.2</dep.testng.version>
     </properties>
 
     <dependencyManagement>

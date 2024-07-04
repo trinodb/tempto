@@ -18,6 +18,7 @@ import org.testng.IClass;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestClass;
 import org.testng.ITestNGMethod;
+import org.testng.ITestResult;
 import org.testng.internal.ConstructorOrMethod;
 import org.testng.xml.XmlTest;
 
@@ -55,23 +56,9 @@ public abstract class DelegateTestNGMethod
     }
 
     @Override
-    @Deprecated
-    public Method getMethod()
-    {
-        return delegate.getMethod();
-    }
-
-    @Override
     public String getMethodName()
     {
         return delegate.getMethodName();
-    }
-
-    @Override
-    @Deprecated
-    public Object[] getInstances()
-    {
-        return delegate.getInstances();
     }
 
     @Override
@@ -225,12 +212,6 @@ public abstract class DelegateTestNGMethod
     }
 
     @Override
-    public int getTotalInvocationCount()
-    {
-        return delegate.getTotalInvocationCount();
-    }
-
-    @Override
     public int getSuccessPercentage()
     {
         return delegate.getSuccessPercentage();
@@ -324,18 +305,6 @@ public abstract class DelegateTestNGMethod
     public int getParameterInvocationCount()
     {
         return delegate.getParameterInvocationCount();
-    }
-
-    @Override
-    public IRetryAnalyzer getRetryAnalyzer()
-    {
-        return delegate.getRetryAnalyzer();
-    }
-
-    @Override
-    public void setRetryAnalyzer(IRetryAnalyzer retryAnalyzer)
-    {
-        delegate.setRetryAnalyzer(retryAnalyzer);
     }
 
     @Override
@@ -441,15 +410,39 @@ public abstract class DelegateTestNGMethod
     }
 
     @Override
-    public int compareTo(Object o)
-    {
-        return delegate.compareTo(o);
-    }
-
-    @Override
     public String toString()
     {
         return delegate.toString();
+    }
+
+    @Override
+    public IRetryAnalyzer getRetryAnalyzer(ITestResult iTestResult)
+    {
+        return delegate.getRetryAnalyzer(iTestResult);
+    }
+
+    @Override
+    public void setRetryAnalyzerClass(Class<? extends IRetryAnalyzer> aClass)
+    {
+        delegate.setRetryAnalyzerClass(aClass);
+    }
+
+    @Override
+    public Class<? extends IRetryAnalyzer> getRetryAnalyzerClass()
+    {
+        return delegate.getRetryAnalyzerClass();
+    }
+
+    @Override
+    public int getInterceptedPriority()
+    {
+        return delegate.getInterceptedPriority();
+    }
+
+    @Override
+    public void setInterceptedPriority(int i)
+    {
+        delegate.setInterceptedPriority(i);
     }
 
     @Override
