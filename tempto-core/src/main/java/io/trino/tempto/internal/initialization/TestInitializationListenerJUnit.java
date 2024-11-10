@@ -15,12 +15,11 @@
 package io.trino.tempto.internal.initialization;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
-import io.trino.tempto.AfterMethodWithContext;
-import io.trino.tempto.BeforeMethodWithContext;
 import io.trino.tempto.Requirement;
 import io.trino.tempto.TemptoPlugin;
 import io.trino.tempto.configuration.Configuration;
@@ -34,29 +33,24 @@ import io.trino.tempto.fulfillment.table.TableManagerDispatcher;
 import io.trino.tempto.initialization.SuiteModuleProvider;
 import io.trino.tempto.initialization.TestMethodModuleProvider;
 import io.trino.tempto.internal.ReflectionHelper;
-import io.trino.tempto.internal.ReflectionInjectorHelper;
-import io.trino.tempto.internal.TestSpecificRequirementsResolver;
 import io.trino.tempto.internal.context.GuiceTestContext;
 import io.trino.tempto.internal.context.TestContextStack;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 import org.slf4j.Logger;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
-import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
@@ -66,19 +60,21 @@ import static io.trino.tempto.context.TestContextDsl.runWithTestContext;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.popAllTestContexts;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.pushAllTestContexts;
-import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
 import static io.trino.tempto.fulfillment.TestStatus.FAILURE;
 import static io.trino.tempto.fulfillment.TestStatus.SUCCESS;
 import static io.trino.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
 import static io.trino.tempto.internal.logging.LoggingMdcHelper.cleanLoggingMdc;
-import static io.trino.tempto.internal.logging.LoggingMdcHelper.setupLoggingMdcForTest;
 import static java.util.Collections.emptyList;
-import static java.util.Comparator.comparing;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class TestInitializationListenerJUnit
-        implements ITestListener
+        implements
+        BeforeAllCallback,
+        BeforeEachCallback,
+        AfterTestExecutionCallback,
+        AfterAllCallback,
+        TestExecutionExceptionHandler
 {
     private static final Logger LOGGER = getLogger(TestInitializationListenerJUnit.class);
 
@@ -86,7 +82,6 @@ public class TestInitializationListenerJUnit
     private final List<? extends TestMethodModuleProvider> testMethodModuleProviders;
     private final List<Class<? extends RequirementFulfiller>> suiteLevelFulfillers;
     private final List<Class<? extends RequirementFulfiller>> testMethodLevelFulfillers;
-    private final ReflectionInjectorHelper reflectionInjectorHelper = new ReflectionInjectorHelper();
 
     private final Configuration configuration;
     private Optional<TestContextStack<TestContext>> suiteTestContextStack = Optional.empty();
@@ -132,8 +127,9 @@ public class TestInitializationListenerJUnit
         this.configuration = configuration;
     }
 
+
     @Override
-    public void onStart(ITestContext context)
+    public void beforeAll(ExtensionContext context)
     {
         displayConfigurationToUser();
 
@@ -143,8 +139,8 @@ public class TestInitializationListenerJUnit
         suiteTextContextStack.push(initSuiteTestContext);
 
         try {
-            Set<Requirement> allTestsRequirements = resolveAllTestsRequirements(context);
-            doFulfillment(suiteTextContextStack, suiteLevelFulfillers, allTestsRequirements);
+//            Set<Requirement> allTestsRequirements = resolveAllTestsRequirements(testInstance, context);
+            doFulfillment(suiteTextContextStack, suiteLevelFulfillers, ImmutableSet.of());
         }
         catch (RuntimeException e) {
             LOGGER.error("cannot initialize test suite", e);
@@ -164,31 +160,36 @@ public class TestInitializationListenerJUnit
         }
     }
 
+
     @Override
-    public void onFinish(ITestContext context)
+    public void afterAll(ExtensionContext context)
     {
         if (!suiteTestContextStack.isPresent()) {
             return;
         }
 
-        TestStatus testStatus = context.getFailedTests().size() > 0 ? FAILURE : SUCCESS;
+        TestStatus testStatus = context.getExecutionException().isPresent() ? FAILURE : SUCCESS;
         doCleanup(suiteTestContextStack.get(), suiteLevelFulfillers, testStatus);
     }
 
     @Override
-    public void onTestStart(ITestResult testResult)
+    public void beforeEach(ExtensionContext context)
+            throws Exception
     {
-        setupLoggingMdcForTest(testResult);
+//        setupLoggingMdcForTest(testResult);
         if (!suiteTestContextStack.isPresent()) {
             throw new SuiteInitializationException("test suite not initialized");
         }
-        GuiceTestContext initTestContext = ((GuiceTestContext) suiteTestContextStack.get().peek()).createChildContext(emptyList(), getTestModules(testResult));
+        GuiceTestContext initTestContext = ((GuiceTestContext) suiteTestContextStack.get().peek()).createChildContext(emptyList(),
+//                getTestModules(testResult)
+                emptyList()
+        );
         TestContextStack<TestContext> testContextStack = new TestContextStack<>();
         testContextStack.push(initTestContext);
 
         try {
-            Set<Requirement> testSpecificRequirements = getTestSpecificRequirements(testResult.getMethod());
-            doFulfillment(testContextStack, testMethodLevelFulfillers, testSpecificRequirements);
+//            Set<Requirement> testSpecificRequirements = getTestSpecificRequirements(context.getRequiredTestInstance());
+            doFulfillment(testContextStack, testMethodLevelFulfillers, ImmutableSet.of());
         }
         catch (RuntimeException e) {
             LOGGER.debug("error within test initialization", e);
@@ -198,98 +199,45 @@ public class TestInitializationListenerJUnit
         assertTestContextNotSet();
         pushAllTestContexts(testContextStack);
         TestContext topTestContext = testContextStack.peek();
-        topTestContext.injectMembers(testResult.getInstance());
-
-        runBeforeWithContextMethods(testResult, topTestContext);
+        topTestContext.injectMembers(context.getRequiredTestInstance());
     }
 
     @Override
-    public void onTestSuccess(ITestResult result)
+    public void afterTestExecution(ExtensionContext context)
     {
-        onTestFinished(result, SUCCESS);
+        if (context.getExecutionException().isEmpty()) {
+            onTestFinished(SUCCESS);
+        }
+        else {
+            onTestFinished(FAILURE);
+        }
     }
 
     @Override
-    public void onTestFailure(ITestResult result)
+    public void handleTestExecutionException(ExtensionContext context, Throwable throwable)
+            throws Throwable
     {
-        LOGGER.debug("test failure", result.getThrowable());
-        onTestFinished(result, FAILURE);
+        LOGGER.debug("test failure", throwable);
+        onTestFinished(FAILURE);
+        throw throwable;
     }
 
-    @Override
-    public void onTestSkipped(ITestResult result)
-    {
-        onTestFinished(result, SUCCESS);
-    }
-
-    private void onTestFinished(ITestResult testResult, TestStatus testStatus)
+    private void onTestFinished(TestStatus testStatus)
     {
         if (!testContextIfSet().isPresent()) {
             return;
         }
 
-        boolean runAfterSucceeded = false;
-        try {
-            runAfterWithContextMethods(testResult, testContext());
-            runAfterSucceeded = true;
-        }
-        finally {
-            TestContextStack<TestContext> testContextStack = popAllTestContexts();
-            doCleanup(testContextStack, testMethodLevelFulfillers, runAfterSucceeded ? testStatus : FAILURE);
-            cleanLoggingMdc();
-        }
-    }
-
-    private void runBeforeWithContextMethods(ITestResult testResult, TestContext testContext)
-    {
-        try {
-            invokeMethodsAnnotatedWith(BeforeMethodWithContext.class, testResult, testContext, ClassOrdering.SUPER_FIRST);
-        }
-        catch (RuntimeException e) {
-            TestContextStack<TestContext> testContextStack = popAllTestContexts();
-            doCleanup(testContextStack, testMethodLevelFulfillers, FAILURE);
-            throw e;
-        }
-    }
-
-    private void runAfterWithContextMethods(ITestResult testResult, TestContext testContext)
-    {
-        invokeMethodsAnnotatedWith(AfterMethodWithContext.class, testResult, testContext, ClassOrdering.SUPER_LAST);
-    }
-
-    private void invokeMethodsAnnotatedWith(Class<? extends Annotation> annotationClass, ITestResult testCase, TestContext testContext, ClassOrdering ordering)
-    {
-        Comparator<Class<?>> depthComparator = comparing(clazz -> {
-            int depth = 0;
-            while (clazz.getSuperclass() != null) {
-                clazz = clazz.getSuperclass();
-                depth++;
-            }
-            return depth;
-        });
-        Comparator<Class<?>> classComparator;
-        switch (ordering) {
-            case SUPER_FIRST:
-                classComparator = depthComparator;
-                break;
-            case SUPER_LAST:
-                classComparator = depthComparator.reversed();
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported ordering: " + ordering);
-        }
-
-        Stream.of(testCase.getTestClass().getRealClass().getMethods())
-                .filter(declaredMethod -> declaredMethod.isAnnotationPresent(annotationClass))
-                .sorted(comparing(Method::getDeclaringClass, classComparator))
-                .forEachOrdered(declaredMethod -> {
-                    try {
-                        declaredMethod.invoke(testCase.getInstance(), reflectionInjectorHelper.getMethodArguments(testContext, declaredMethod));
-                    }
-                    catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException("error invoking method annotated with " + annotationClass.getName(), e);
-                    }
-                });
+//        boolean runAfterSucceeded = false;
+//        try {
+//            runAfterWithContextMethods(testResult, testContext());
+//            runAfterSucceeded = true;
+//        }
+//        finally {
+        TestContextStack<TestContext> testContextStack = popAllTestContexts();
+        doCleanup(testContextStack, testMethodLevelFulfillers, testStatus);
+        cleanLoggingMdc();
+//        }
     }
 
     private void doFulfillment(TestContextStack<TestContext> testContextStack,
@@ -369,34 +317,33 @@ public class TestInitializationListenerJUnit
         return combine(modules);
     }
 
-    private Set<Requirement> resolveAllTestsRequirements(ITestContext context)
-    {
-        // we cannot assume that context contains RequirementsAwareTestNGMethod instances here
-        // as interceptor is for some reason called after onStart() which uses this method.
-        Set<Requirement> allTestsRequirements = new HashSet<>();
-        for (ITestNGMethod iTestNGMethod : context.getAllTestMethods()) {
-            Set<Set<Requirement>> requirementsSets = new TestSpecificRequirementsResolver(configuration).resolve(iTestNGMethod);
-            for (Set<Requirement> requirementsSet : requirementsSets) {
-                allTestsRequirements.addAll(requirementsSet);
-            }
-        }
-        return allTestsRequirements;
-    }
-
-    private Set<Requirement> getTestSpecificRequirements(ITestNGMethod testMethod)
-    {
-        return ((RequirementsAwareTestNGMethod) testMethod).getRequirements();
-    }
+//    private Set<Requirement> resolveAllTestsRequirements(Object testInstance, ExtensionContext context)
+//    {
+//        // we cannot assume that context contains RequirementsAwareTestNGMethod instances here
+//        // as interceptor is for some reason called after onStart() which uses this method.
+//        Set<Requirement> allTestsRequirements = new HashSet<>();
+//        List<Method> methods = Arrays.stream(context.getTestClass().get().getDeclaredMethods())
+//                .filter(method -> method.isAnnotationPresent(Test.class))
+//                .toList();
+//        for (Method method : methods) {
+//            ITestNGMethod iTestNGMethod = null;
+//            Set<Set<Requirement>> requirementsSets = new TestSpecificRequirementsResolver(configuration).resolve(method, testInstance);
+//            for (Set<Requirement> requirementsSet : requirementsSets) {
+//                allTestsRequirements.addAll(requirementsSet);
+//            }
+//        }
+//        return allTestsRequirements;
+//    }
+//
+//    private Set<Requirement> getTestSpecificRequirements(ITestNGMethod testMethod)
+//    {
+//        return ((RequirementsAwareTestNGMethod) testMethod).getRequirements();
+//    }
 
     private void setSuiteTestContextStack(TestContextStack<TestContext> suiteTestContextStack)
     {
         checkState(!this.suiteTestContextStack.isPresent(), "suite fulfillment result already set");
         this.suiteTestContextStack = Optional.of(suiteTestContextStack);
-    }
-
-    @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result)
-    {
     }
 
     private static class SuiteInitializationException
@@ -413,11 +360,5 @@ public class TestInitializationListenerJUnit
                     // Suppress stacktrace for all but first 10 exceptions. It is not useful when printed for every test.
                     instanceCount.getAndIncrement() < 10);
         }
-    }
-
-    private enum ClassOrdering
-    {
-        SUPER_FIRST,
-        SUPER_LAST,
     }
 }

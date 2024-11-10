@@ -14,117 +14,79 @@
 
 package io.trino.tempto.internal.listeners;
 
-import com.google.common.base.Joiner;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.google.common.base.Preconditions.checkState;
-import static io.trino.tempto.internal.initialization.RequirementsExpanderInterceptor.getMethodsCountFromContext;
-import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
 
 public class ProgressLoggingListenerJUnit
-        implements ITestListener
+        implements BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback
 {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProgressLoggingListenerJUnit.class);
 
     private int started;
     private int succeeded;
-    private int skipped;
     private int failed;
     private long startTime;
     private long testStartTime;
 
-    private final TestMetadataReader testMetadataReader;
-
-    public ProgressLoggingListenerJUnit()
-    {
-        this.testMetadataReader = new TestMetadataReader();
-    }
-
     @Override
-    public void onStart(ITestContext context)
+    public void beforeAll(ExtensionContext context)
     {
         startTime = currentTimeMillis();
         LOGGER.info("Starting tests");
     }
 
     @Override
-    public void onTestStart(ITestResult testCase)
+    public void beforeEach(ExtensionContext context)
     {
         testStartTime = currentTimeMillis();
         started++;
-        int total = getMethodsCountFromContext(testCase.getTestContext());
-        LOGGER.info("[{} of {}] {}", started, total, formatTestName(testCase));
+        LOGGER.info("[{}] Starting test: {}", started, formatTestName(context));
     }
 
     @Override
-    public void onTestSuccess(ITestResult testCase)
+    public void afterEach(ExtensionContext context)
     {
-        succeeded++;
-        logTestEnd(testCase, "SUCCESS");
-    }
-
-    @Override
-    public void onTestFailure(ITestResult testCase)
-    {
-        failed++;
-        logTestEnd(testCase, "FAILURE");
-        if (testCase.getThrowable() != null) {
-            LOGGER.error("Failure cause:", testCase.getThrowable());
+        long executionTime = currentTimeMillis() - testStartTime;
+        if (context.getExecutionException().isPresent()) {
+            failed++;
+            LOGGER.info("FAILURE: {} took {}", formatTestName(context), formatDuration(executionTime));
+            LOGGER.error("Failure cause:", context.getExecutionException().get());
+        }
+        else {
+            succeeded++;
+            LOGGER.info("SUCCESS: {} took {}", formatTestName(context), formatDuration(executionTime));
         }
     }
 
     @Override
-    public void onTestSkipped(ITestResult testCase)
+    public void afterAll(ExtensionContext context)
     {
-        skipped++;
-        LOGGER.info("SKIPPED");
-    }
-
-    private void logTestEnd(ITestResult testCase, String outcome)
-    {
-        long executionTime = currentTimeMillis() - testStartTime;
-        LOGGER.info("{}     /    {} took {}", outcome, formatTestName(testCase), formatDuration(executionTime));
-    }
-
-    @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult testCase)
-    {
-    }
-
-    @Override
-    public void onFinish(ITestContext context)
-    {
-        checkState(succeeded + failed + skipped > 0, "No tests executed");
+        checkState(succeeded + failed > 0, "No tests executed");
         LOGGER.info("");
         LOGGER.info("Completed {} tests", started);
-        LOGGER.info("{} SUCCEEDED      /      {} FAILED      /      {} SKIPPED", succeeded, failed, skipped);
+        LOGGER.info("{} SUCCEEDED      /      {} FAILED", succeeded, failed);
         LOGGER.info("Tests execution took {}", formatDuration(currentTimeMillis() - startTime));
     }
 
-    private String formatTestName(ITestResult testCase)
+    private String formatTestName(ExtensionContext context)
     {
-        TestMetadata testMetadata = testMetadataReader.readTestMetadata(testCase);
-        String testGroups = Joiner.on(", ").join(testMetadata.testGroups);
-        String testParameters = formatTestParameters(testMetadata.testParameters);
-
-        return format("%s%s (Groups: %s)", testMetadata.testName, testParameters, testGroups);
-    }
-
-    private String formatTestParameters(Object[] testParameters)
-    {
-        if (testParameters.length == 0) {
-            return "";
-        }
-
-        return format(" [%s]", Joiner.on(", ").useForNull("null").join(testParameters));
+//        TestMetadata testMetadata = testMetadataReader.readTestMetadata(testCase);
+//        String testGroups = Joiner.on(", ").join(testMetadata.testGroups);
+//        String testParameters = formatTestParameters(testMetadata.testParameters);
+//
+//        return format("%s%s (Groups: %s)", testMetadata.testName, testParameters, testGroups);
+        return "%s#%s".formatted(context.getRequiredTestClass().getName(), context.getDisplayName());
     }
 
     private static String formatDuration(long durationInMillis)
