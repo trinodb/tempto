@@ -15,7 +15,15 @@
 package io.trino.tempto.runner;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector;
+import org.junit.platform.engine.discovery.ClassNameFilter;
+import org.junit.platform.engine.discovery.DiscoverySelectors;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TagFilter;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
+import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.TestNG;
@@ -36,6 +44,7 @@ import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector
 import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_EXCLUDE_PROPERTY;
 import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
 import static java.util.Collections.singletonList;
+import static org.junit.platform.launcher.TagFilter.includeTags;
 import static org.testng.xml.XmlSuite.ParallelMode.getValidParallel;
 
 public class TemptoRunner
@@ -78,10 +87,17 @@ public class TemptoRunner
             parser.printHelpMessage();
             return;
         }
+        setupTestsConfiguration();
+        if (!testWithJUnit() || !testWithTestNg()) {
+            // tempto-runner is a CLI tool. It has to fail when there are test failures. That way CI step will be marked as failed.
+            System.exit(1);
+        }
+    }
 
+    private boolean testWithTestNg()
+    {
         XmlSuite testSuite = getXmlSuite();
         testSuite.setThreadCount(options.getThreadCount());
-        setupTestsConfiguration();
         System.setProperty(CONVENTION_TESTS_DIR_KEY, options.getConventionTestsDirectory());
         TestNG testNG = new TestNG();
         testNG.setXmlSuites(singletonList(testSuite));
@@ -91,9 +107,35 @@ public class TemptoRunner
         options.getConventionResultsDumpPath()
                 .ifPresent(path -> System.setProperty(CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY, path));
         testNG.run();
-        if (testNG.hasFailure()) {
-            System.exit(1);
+        return !testNG.hasFailure();
+    }
+
+    private boolean testWithJUnit()
+    {
+        // TODO how set setOutputDirectory in Junit 5?
+//        testNG.setOutputDirectory(options.getReportDir());
+        LauncherDiscoveryRequestBuilder requestBuilder = LauncherDiscoveryRequestBuilder.request();
+        options.getTestsPackage().stream()
+                .map(x -> x.replace(".*", "")) // TODO remove. Temporary to comply with TestNG: package pattern
+                .map(DiscoverySelectors::selectPackage).forEach(requestBuilder::selectors);
+        options.getTests().stream().map(DiscoverySelectors::selectClass).forEach(requestBuilder::selectors);
+        options.getExcludedTests().stream().map(ClassNameFilter::excludeClassNamePatterns).forEach(requestBuilder::filters);
+        if (!options.getTestGroups().isEmpty()) {
+            requestBuilder.filters(includeTags(ImmutableList.copyOf(options.getTestGroups())));
         }
+        options.getExcludeGroups().stream().map(TagFilter::excludeTags).forEach(requestBuilder::filters);
+
+        LauncherDiscoveryRequest request = requestBuilder
+// TODO               ConventionBasedTestFactory is still testng
+//                .selectors(selectClass("io.trino.tempto.internal.convention.ConventionBasedTestFactory"))
+                .configurationParameter("junit.jupiter.execution.parallel.enabled", "true")
+                .configurationParameter("junit.jupiter.execution.parallel.config.fixed.parallelism", Integer.toString(options.getThreadCount()))
+                .build();
+
+        // Configure the Launcher and listener
+        SummaryGeneratingListener listener = new SummaryGeneratingListener();
+        LauncherFactory.create().execute(request, listener);
+        return listener.getSummary().getTestsFailedCount() == 0;
     }
 
     private void setupTestsConfiguration()
