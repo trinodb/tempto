@@ -26,7 +26,6 @@ import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.context.TestContext;
 import io.trino.tempto.fulfillment.RequirementFulfiller;
 import io.trino.tempto.fulfillment.RequirementFulfiller.SuiteLevelFulfiller;
-import io.trino.tempto.fulfillment.RequirementFulfiller.TestLevelFulfiller;
 import io.trino.tempto.fulfillment.TestStatus;
 import io.trino.tempto.fulfillment.table.TableManager;
 import io.trino.tempto.fulfillment.table.TableManagerDispatcher;
@@ -81,7 +80,6 @@ public class TestInitializationListenerJUnit
     private final List<? extends SuiteModuleProvider> suiteModuleProviders;
     private final List<? extends TestMethodModuleProvider> testMethodModuleProviders;
     private final List<Class<? extends RequirementFulfiller>> suiteLevelFulfillers;
-    private final List<Class<? extends RequirementFulfiller>> testMethodLevelFulfillers;
 
     private final Configuration configuration;
     private Optional<TestContextStack<TestContext>> suiteTestContextStack = Optional.empty();
@@ -106,10 +104,6 @@ public class TestInitializationListenerJUnit
                         .flatMap(plugin -> plugin.getFulfillers().stream())
                         .filter(clazz -> clazz.isAnnotationPresent(SuiteLevelFulfiller.class))
                         .collect(toImmutableList()),
-                plugins.stream()
-                        .flatMap(plugin -> plugin.getFulfillers().stream())
-                        .filter(clazz -> clazz.isAnnotationPresent(TestLevelFulfiller.class))
-                        .collect(toImmutableList()),
                 testConfiguration());
     }
 
@@ -117,13 +111,11 @@ public class TestInitializationListenerJUnit
             List<? extends SuiteModuleProvider> suiteModuleProviders,
             List<? extends TestMethodModuleProvider> testMethodModuleProviders,
             List<Class<? extends RequirementFulfiller>> suiteLevelFulfillers,
-            List<Class<? extends RequirementFulfiller>> testMethodLevelFulfillers,
             Configuration configuration)
     {
         this.suiteModuleProviders = suiteModuleProviders;
         this.testMethodModuleProviders = testMethodModuleProviders;
         this.suiteLevelFulfillers = suiteLevelFulfillers;
-        this.testMethodLevelFulfillers = testMethodLevelFulfillers;
         this.configuration = configuration;
     }
 
@@ -133,7 +125,7 @@ public class TestInitializationListenerJUnit
     {
         displayConfigurationToUser();
 
-        Module suiteModule = combine(combine(getSuiteModules()), bind(suiteLevelFulfillers), bind(testMethodLevelFulfillers));
+        Module suiteModule = combine(combine(getSuiteModules()), bind(suiteLevelFulfillers));
         GuiceTestContext initSuiteTestContext = new GuiceTestContext(suiteModule);
         TestContextStack<TestContext> suiteTextContextStack = new TestContextStack<>();
         suiteTextContextStack.push(initSuiteTestContext);
@@ -174,7 +166,6 @@ public class TestInitializationListenerJUnit
 
     @Override
     public void beforeEach(ExtensionContext context)
-            throws Exception
     {
 //        setupLoggingMdcForTest(testResult);
         if (!suiteTestContextStack.isPresent()) {
@@ -189,7 +180,7 @@ public class TestInitializationListenerJUnit
 
         try {
 //            Set<Requirement> testSpecificRequirements = getTestSpecificRequirements(context.getRequiredTestInstance());
-            doFulfillment(testContextStack, testMethodLevelFulfillers, ImmutableSet.of());
+            doFulfillment(testContextStack, ImmutableList.of(), ImmutableSet.of());
         }
         catch (RuntimeException e) {
             LOGGER.debug("error within test initialization", e);
@@ -235,7 +226,7 @@ public class TestInitializationListenerJUnit
 //        }
 //        finally {
         TestContextStack<TestContext> testContextStack = popAllTestContexts();
-        doCleanup(testContextStack, testMethodLevelFulfillers, testStatus);
+        doCleanup(testContextStack, ImmutableList.of(), testStatus);
         cleanLoggingMdc();
 //        }
     }
