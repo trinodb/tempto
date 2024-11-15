@@ -14,6 +14,7 @@
 
 package io.trino.tempto.internal.listeners;
 
+import io.airlift.log.Logging;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -32,6 +33,10 @@ public class ProgressLoggingListenerJUnit
         implements BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback
 {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProgressLoggingListenerJUnit.class);
+
+    static {
+        Logging.initialize();
+    }
 
     private int started;
     private int succeeded;
