@@ -91,7 +91,7 @@ ${DOCKER_COMPOSE} pull --quiet
 
 ${DOCKER_COMPOSE} build
 ${DOCKER_COMPOSE} up -d 
-${DOCKER_COMPOSE} logs --no-color trino-master cassandra hadoop-master psql1 psql2 ssh kafka &
+${DOCKER_COMPOSE} logs -f -t --no-color trino-master cassandra hadoop-master psql1 psql2 ssh kafka &
 
 retry check_hive
 retry check_trino
