@@ -23,9 +23,11 @@ import io.trino.tempto.fulfillment.table.TableInstance;
 import io.trino.tempto.fulfillment.table.TableManager;
 import io.trino.tempto.internal.fulfillment.table.TableName;
 import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.DescribeTopicsResult;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.admin.TopicDescription;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -33,10 +35,16 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.Singleton;
+import org.apache.kafka.common.TopicPartitionInfo;
+import org.apache.kafka.common.errors.UnknownTopicOrPartitionException;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import static com.google.common.primitives.Shorts.checkedCast;
 import static java.util.Objects.requireNonNull;
@@ -65,6 +73,7 @@ public class KafkaTableManager
     {
         deleteTopic(tableDefinition.getTopic());
         createTopic(tableDefinition.getTopic(), tableDefinition.getPartitionsCount(), tableDefinition.getReplicationLevel());
+        waitForTopicReadiness(tableDefinition.getTopic(),Duration.ofSeconds(60));
         insertDataIntoTopic(tableDefinition.getTopic(), tableDefinition.getDataSource());
         TableName createdTableName = new TableName(
                 tableHandle.getDatabase().orElse(getDatabaseName()),
@@ -97,6 +106,42 @@ public class KafkaTableManager
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void waitForTopicReadiness(String topic, Duration timeout)
+    {
+        Instant deadline = Instant.now().plus(timeout);
+        int pollIntervalMs = 500;
+        try (AdminClient kafkaAdminClient = getAdminClient()) {
+            while (Instant.now().isBefore(deadline)) {
+                try {
+                    DescribeTopicsResult result = kafkaAdminClient.describeTopics(ImmutableList.of(topic));
+                    TopicDescription topicDescription = result.topicNameValues().get(topic).get();
+                    if (topicDescription != null) {
+                        List<TopicPartitionInfo> partitions = topicDescription.partitions();
+                        boolean allReady = partitions.stream().allMatch(p ->
+                                p.leader() != null && !p.isr().isEmpty()
+                        );
+                        if (!partitions.isEmpty() && allReady) {
+                            return;
+                        }
+                    }
+                }
+                catch (ExecutionException e) {
+                    if ( !(e.getCause() instanceof UnknownTopicOrPartitionException)) {
+                        throw new RuntimeException(String.format("Unexpected error checking topic readiness: %s", e.getCause()), e);
+                    }
+                }
+                if (Instant.now().isBefore(deadline)) {
+                    Thread.sleep(pollIntervalMs);
+                }
+            }
+        }
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        throw new RuntimeException("Topic " + topic + " is not ready after waiting for 60 seconds");
     }
 
     private void insertDataIntoTopic(String topic, KafkaDataSource dataSource)
