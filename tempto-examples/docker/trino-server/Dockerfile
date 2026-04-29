@@ -1,6 +1,6 @@
-FROM ghcr.io/trinodb/testing/centos7-oj11:53
+FROM ghcr.io/trinodb/testing/almalinux9-oj17:126
 
-RUN yum install -y tar
+RUN dnf install -y tar && dnf clean all
 
 RUN curl -SL https://repo1.maven.org/maven2/io/trino/trino-server/356/trino-server-356.tar.gz \
       | tar xz \
