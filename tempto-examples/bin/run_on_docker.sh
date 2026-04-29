@@ -76,12 +76,12 @@ function termination_handler(){
 }
 
 SCRIPT_DIR=$(dirname $(absolutepath "$0"))
-DOCKER_COMPOSE="docker-compose -f ${SCRIPT_DIR}/../docker/docker-compose.yml"
+DOCKER_COMPOSE="docker compose -f ${SCRIPT_DIR}/../docker/docker-compose.yml"
 
 source "${SCRIPT_DIR}/../target/classes/tempto.env"
 
 # check docker and docker compose installation
-docker-compose version
+docker compose version
 docker version
 
 trap termination_handler INT TERM

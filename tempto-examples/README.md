@@ -14,25 +14,21 @@ smoketest to ensure that you've setup everything properly.
     wget -qO- https://get.docker.com/ | sh
     ```
 
-* [```docker-compose >= 1.60```](https://docs.docker.com/compose/install/)
-
-    ```
-    pip install docker-compose
-    ```
+* [```docker compose >= 2.0```](https://docs.docker.com/compose/install/)
 
 #### On Mac OS X
 
 * [```docker-toolbox >= 1.10```](https://www.docker.com/products/docker-toolbox)
 
 On Mac OS X installing docker-toolbox gives access to a preconfigured shell environment
-with ```docker``` and ```docker-compose``` available. The shortcut to this preconfigured
+with ```docker``` and ```docker compose``` available. The shortcut to this preconfigured
 shell environment for docker may be found in Applications/Docker as "Docker Quickstart Terminal."
 Note that all commands given in later parts of these instructions should be run from this
 environment.
 
 ## Running tests
 
-Running tempto example product requires a testing cluster which is provisioned by docker containers and managed by docker-compose.
+Running tempto example product requires a testing cluster which is provisioned by docker containers and managed by docker compose.
 
 Note that one test (`io.trino.tempto.examples.SimpleQueryTest.failingTest`) is made to fail on purpose.
 
@@ -51,7 +47,7 @@ To run example product tests first you need to setup a testing cluster
 
 ```
 cd tempto-examples/docker
-docker-compose up -d
+docker compose up -d
 # wait a while to make sure that testing clusters is up and ready
 ```
 
@@ -82,14 +78,14 @@ To run product tests on MAC please do:
 
 ```
 cd tempto-examples/docker
-docker-compose runner java -jar /workspace/build/libs/tempto-examples-all.jar --config tempto-configuration.yaml,/workspace/docker/tempto-configuration-docker-local.yaml
+docker compose run runner java -jar /workspace/build/libs/tempto-examples-all.jar --config tempto-configuration.yaml,/workspace/docker/tempto-configuration-docker-local.yaml
 ```
 
 To run product tests in debugging mode you can:
 
 ```
 cd tempto-examples/docker
-docker-compose run -p 5005:5005 runner java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -jar /workspace/build/libs/tempto-examples-all.jar --config tempto-configuration.yaml,/workspace/docker/tempto-configuration-docker-local.yaml
+docker compose run -p 5005:5005 runner java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -jar /workspace/build/libs/tempto-examples-all.jar --config tempto-configuration.yaml,/workspace/docker/tempto-configuration-docker-local.yaml
 ```
 
 then you can attach IDE to start debug session.
@@ -97,7 +93,7 @@ then you can attach IDE to start debug session.
 #### Tearing down the testing cluster
 ```
 cd tempto-examples/docker
-docker-compose down
+docker compose down
 ```
 
 
