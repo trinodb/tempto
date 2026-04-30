@@ -159,7 +159,7 @@ public class KafkaTableManager
                         message.getValue())).get();
             }
             catch (Exception e) {
-                throw new RuntimeException("could not send message to topic " + topic);
+                throw new RuntimeException("could not send message to topic " + topic, e);
             }
         }
     }
@@ -169,8 +169,6 @@ public class KafkaTableManager
         Properties props = new Properties();
 
         props.put("bootstrap.servers", brokerConfiguration.getStringMandatory("host") + ":" + brokerConfiguration.getIntMandatory("port"));
-        props.put("acks", "all");
-        props.put("retries", 0);
         props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         for (String key : brokerConfiguration.listKeys()) {
