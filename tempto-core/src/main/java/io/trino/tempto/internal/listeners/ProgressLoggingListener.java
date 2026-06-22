@@ -60,8 +60,16 @@ public class ProgressLoggingListener
     {
         testStartTime = currentTimeMillis();
         started++;
-        int total = getMethodsCountFromContext(testCase.getTestContext());
-        LOGGER.info("[{} of {}] {}", started, total, formatTestName(testCase));
+        // This is an ITestListener callback and TestNG (>= 7.9) invokes it from unguarded code paths
+        // (e.g. when reporting skipped tests); an exception thrown here would not fail the test but
+        // hang the whole suite behind a GraphOrchestrator "worker is null" NPE. Logging must never throw.
+        try {
+            Integer total = getMethodsCountFromContext(testCase.getTestContext());
+            LOGGER.info("[{} of {}] {}", started, total, formatTestName(testCase));
+        }
+        catch (RuntimeException e) {
+            LOGGER.warn("Could not log test start for {}", testCase.getName(), e);
+        }
     }
 
     @Override
