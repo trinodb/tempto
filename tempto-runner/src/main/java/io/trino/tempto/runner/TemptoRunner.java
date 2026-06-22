@@ -36,7 +36,6 @@ import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector
 import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_EXCLUDE_PROPERTY;
 import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
 import static java.util.Collections.singletonList;
-import static org.testng.xml.XmlSuite.ParallelMode.getValidParallel;
 
 public class TemptoRunner
 {
@@ -85,7 +84,6 @@ public class TemptoRunner
         System.setProperty(CONVENTION_TESTS_DIR_KEY, options.getConventionTestsDirectory());
         TestNG testNG = new TestNG();
         testNG.setXmlSuites(singletonList(testSuite));
-        options.getParallel().ifPresent(parallel -> testNG.setParallel(getValidParallel(parallel)));
         testNG.setOutputDirectory(options.getReportDir());
         setupTestsFiltering(testNG);
         options.getConventionResultsDumpPath()
@@ -134,7 +132,12 @@ public class TemptoRunner
         XmlClass conventionBasedTestsClass = new XmlClass("io.trino.tempto.internal.convention.ConventionBasedTestFactory");
         List<XmlClass> classes = newArrayList(conventionBasedTestsClass);
         test.setClasses(classes);
-        test.setParallel(XmlSuite.ParallelMode.METHODS);
+        // Default to per-method parallelism, but honour an explicit --parallel override (e.g.
+        // "--parallel none" is handy for diagnosing failures: in sequential mode TestNG surfaces the
+        // real exception instead of masking it behind the GraphOrchestrator "worker is null" NPE).
+        test.setParallel(options.getParallel()
+                .map(XmlSuite.ParallelMode::getValidParallel)
+                .orElse(XmlSuite.ParallelMode.METHODS));
         return testSuite;
     }
 }

@@ -72,7 +72,7 @@ public class ConventionBasedTestProxyGenerator
             LOGGER.debug("Generating proxy class: {}.{}, annotation: {}", className, methodName, annotation);
 
             return dynamicType
-                    .load(getSystemClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
+                    .load(ConventionBasedTestProxyGenerator.class.getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
                     .getLoaded()
                     .getConstructor(ConventionBasedTest.class)
                     .newInstance(conventionBasedTest);

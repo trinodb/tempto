@@ -82,13 +82,13 @@ class TestInitializationListenerTest
         setup:
         def listener = new TestInitializationListener([], [], [AFulfiller], [BFulfiller], emptyConfiguration())
         def iTestContext = getITestContext(successMethod, testClass)
-        def iTestResult = getITestResult(successMethod, testClass)
+        def invokedMethod = getInvokedMethod()
         listener.onStart(iTestContext)
         assertTestContextNotSet()
-        listener.onTestStart(iTestResult)
+        listener.beforeInvocation(invokedMethod, getITestResult(successMethod, testClass, ITestResult.STARTED))
         assertTestContextSet()
         assert testClass.testContext != null
-        listener.onTestSuccess(iTestResult)
+        listener.afterInvocation(invokedMethod, getITestResult(successMethod, testClass, ITestResult.SUCCESS))
         assertTestContextNotSet()
         listener.onFinish(iTestContext)
 
@@ -132,17 +132,17 @@ class TestInitializationListenerTest
         def testClass = new TestClass()
         def listener = new TestInitializationListener([], [], [AFulfiller], [BFulfiller, CFulfiller], emptyConfiguration())
         def iTestContext = getITestContext(failMethod, testClass)
-        def iTestResult = getITestResult(failMethod, testClass)
+        def invokedMethod = getInvokedMethod()
 
         when:
         listener.onStart(iTestContext)
         try {
-            listener.onTestStart(iTestResult)
+            listener.beforeInvocation(invokedMethod, getITestResult(failMethod, testClass, ITestResult.STARTED))
             assert false
         }
         catch (RuntimeException _) {
         }
-        listener.onTestFailure(iTestResult)
+        listener.afterInvocation(invokedMethod, getITestResult(failMethod, testClass, ITestResult.FAILURE))
         listener.onFinish(iTestContext)
 
         then:
@@ -172,15 +172,23 @@ class TestInitializationListenerTest
         return suiteContext
     }
 
-    def getITestResult(Method method, TestClass testClass)
+    def getITestResult(Method method, TestClass testClass, int status)
     {
         ITestResult testResult = Mock(ITestResult)
         ITestClass iTestClass = getITestClass()
         testResult.method >> getITestNGMethod(method, testClass, iTestClass)
         testResult.testClass >> iTestClass
         testResult.instance >> testResult.method.instance
+        testResult.status >> status
         iTestClass.realClass >> testClass.getClass()
         return testResult
+    }
+
+    def getInvokedMethod()
+    {
+        IInvokedMethod invokedMethod = Mock(IInvokedMethod)
+        invokedMethod.isTestMethod() >> true
+        return invokedMethod
     }
 
     private ITestClass getITestClass()

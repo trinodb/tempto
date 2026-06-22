@@ -39,6 +39,8 @@ import io.trino.tempto.internal.TestSpecificRequirementsResolver;
 import io.trino.tempto.internal.context.GuiceTestContext;
 import io.trino.tempto.internal.context.TestContextStack;
 import org.slf4j.Logger;
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestNGMethod;
@@ -78,7 +80,7 @@ import static java.util.Comparator.comparing;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class TestInitializationListener
-        implements ITestListener
+        implements ITestListener, IInvokedMethodListener
 {
     private static final Logger LOGGER = getLogger(TestInitializationListener.class);
 
@@ -147,8 +149,12 @@ public class TestInitializationListener
             doFulfillment(suiteTextContextStack, suiteLevelFulfillers, allTestsRequirements);
         }
         catch (RuntimeException e) {
+            // Do not rethrow: TestNG >= 7.9 hangs the whole suite when a listener throws during
+            // (parallel) execution instead of failing cleanly (see GraphOrchestrator NPE about a
+            // null worker). Leaving the suite context unset makes every test fail fast in
+            // beforeInvocation() with SuiteInitializationException, which is the supported failure path.
             LOGGER.error("cannot initialize test suite", e);
-            throw e;
+            return;
         }
 
         setSuiteTestContextStack(suiteTextContextStack);
@@ -175,9 +181,23 @@ public class TestInitializationListener
         doCleanup(suiteTestContextStack.get(), suiteLevelFulfillers, testStatus);
     }
 
+    /**
+     * Per-test setup is done from {@link IInvokedMethodListener#beforeInvocation} rather than from
+     * {@link ITestListener#onTestStart} on purpose. TestNG &gt;= 7.9 hangs the whole suite when a
+     * listener throws during (parallel) execution; exceptions thrown from beforeInvocation, on the
+     * other hand, are caught by the invoker and reported as a normal test failure (or, for a
+     * {@link org.testng.SkipException}, a skip). Setup runs only for actual test methods that are
+     * really about to run; skipped tests (failed dependencies/configuration) are reported with a
+     * non-{@link ITestResult#STARTED} status and are left untouched, since setting up (and possibly
+     * throwing) for them would leak contexts and hang the suite.
+     */
     @Override
-    public void onTestStart(ITestResult testResult)
+    public void beforeInvocation(IInvokedMethod method, ITestResult testResult)
     {
+        if (!method.isTestMethod() || testResult.getStatus() != ITestResult.STARTED) {
+            return;
+        }
+
         setupLoggingMdcForTest(testResult);
         if (!suiteTestContextStack.isPresent()) {
             throw new SuiteInitializationException("test suite not initialized");
@@ -204,22 +224,16 @@ public class TestInitializationListener
     }
 
     @Override
-    public void onTestSuccess(ITestResult result)
+    public void afterInvocation(IInvokedMethod method, ITestResult testResult)
     {
-        onTestFinished(result, SUCCESS);
-    }
-
-    @Override
-    public void onTestFailure(ITestResult result)
-    {
-        LOGGER.debug("test failure", result.getThrowable());
-        onTestFinished(result, FAILURE);
-    }
-
-    @Override
-    public void onTestSkipped(ITestResult result)
-    {
-        onTestFinished(result, SUCCESS);
+        if (!method.isTestMethod()) {
+            return;
+        }
+        if (testResult.getStatus() == ITestResult.FAILURE) {
+            LOGGER.debug("test failure", testResult.getThrowable());
+        }
+        TestStatus testStatus = testResult.getStatus() == ITestResult.SUCCESS || testResult.getStatus() == ITestResult.SKIP ? SUCCESS : FAILURE;
+        onTestFinished(testResult, testStatus);
     }
 
     private void onTestFinished(ITestResult testResult, TestStatus testStatus)
