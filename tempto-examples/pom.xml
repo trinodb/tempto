@@ -11,6 +11,8 @@
     <artifactId>tempto-examples</artifactId>
     <packaging>jar</packaging>
 
+    <description>Tempto - usage examples</description>
+
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
         <main-class>io.trino.tempto.examples.TemptoExamples</main-class>
@@ -28,6 +30,7 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+            <classifier>classes</classifier>
         </dependency>
         <dependency>
             <groupId>io.trino.tempto</groupId>

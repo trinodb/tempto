@@ -71,7 +71,7 @@ public class ReflectionInjectorHelper
         }
         try {
             Class<?> createdClass = objectBuilder.make()
-                    .load(getSystemClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+                    .load(getSystemClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
                     .getLoaded();
             return createdClass
                     .getConstructor()

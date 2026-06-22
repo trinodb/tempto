@@ -11,6 +11,8 @@
     <artifactId>tempto-runner</artifactId>
     <packaging>jar</packaging>
 
+    <description>Tempto - test runner</description>
+
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
         <!-- there are no tests in this module -->
