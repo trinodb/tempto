@@ -14,16 +14,14 @@
 
 package io.trino.tempto.query;
 
+import com.google.inject.Inject;
 import io.trino.tempto.context.TestContext;
 import org.slf4j.Logger;
-
-import com.google.inject.Inject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 
 import static io.trino.tempto.query.QueryResult.forSingleIntegerValue;
 import static io.trino.tempto.query.QueryResult.toSqlIndex;
@@ -87,8 +85,13 @@ public class JdbcQueryExecutor
     @Override
     public Connection getConnection()
     {
-        if (connection == null) {
-            openConnection();
+        try {
+            if (connection == null || connection.isClosed()) {
+                openConnection();
+            }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return connection;
     }
