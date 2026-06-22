@@ -81,7 +81,7 @@ services:
       - 'trino-master'
 
   runner:
-    image: 'eclipse-temurin:22-jdk'
+    image: 'eclipse-temurin:25-jdk'
     ports:
       - '5005:5005'
     volumes:

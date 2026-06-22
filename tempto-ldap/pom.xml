@@ -11,6 +11,8 @@
     <artifactId>tempto-ldap</artifactId>
     <packaging>jar</packaging>
 
+    <description>Tempto - LDAP support</description>
+
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
         <!-- there are no tests in this module -->
@@ -27,6 +29,7 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+            <classifier>classes</classifier>
         </dependency>
         <dependency>
             <groupId>io.trino.tempto</groupId>

@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.airlift</groupId>
         <artifactId>airbase</artifactId>
-        <version>157</version>
+        <version>390</version>
     </parent>
 
     <groupId>io.trino.tempto</groupId>
@@ -43,13 +43,15 @@
             See https://github.com/testng-team/testng/discussions/3116
         -->
         <dep.testng.version>7.8.0</dep.testng.version>
+        <dep.slf4j.version>2.0.16</dep.slf4j.version>
 
         <air.check.skip-checkstyle>true</air.check.skip-checkstyle>
         <air.check.skip-modernizer>true</air.check.skip-modernizer>
         <air.check.skip-spotbugs>true</air.check.skip-spotbugs>
         <air.check.skip-pmd>true</air.check.skip-pmd>
+        <air.check.skip-airstyle>true</air.check.skip-airstyle>
 
-        <project.build.targetJdk>21</project.build.targetJdk>
+        <project.build.targetJdk>25</project.build.targetJdk>
     </properties>
 
     <dependencyManagement>
@@ -58,7 +60,7 @@
             <dependency>
                 <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-bom</artifactId>
-                <version>4.0.21</version>
+                <version>4.0.32</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

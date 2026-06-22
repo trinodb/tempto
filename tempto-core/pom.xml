@@ -11,6 +11,8 @@
     <artifactId>tempto-core</artifactId>
     <packaging>jar</packaging>
 
+    <description>Tempto - core test framework</description>
+
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
     </properties>
@@ -55,6 +57,7 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+            <classifier>classes</classifier>
         </dependency>
 
         <dependency>
