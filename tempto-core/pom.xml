@@ -11,6 +11,7 @@
     <artifactId>tempto-core</artifactId>
     <packaging>jar</packaging>
 
+    <name>tempto-core</name>
     <description>Tempto - core test framework</description>
 
     <properties>

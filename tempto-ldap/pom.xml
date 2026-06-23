@@ -11,6 +11,7 @@
     <artifactId>tempto-ldap</artifactId>
     <packaging>jar</packaging>
 
+    <name>tempto-ldap</name>
     <description>Tempto - LDAP support</description>
 
     <properties>
