@@ -94,6 +94,13 @@ public class TestNameGroupNameMethodSelector
     @Override
     public boolean includeMethod(IMethodSelectorContext context, ITestNGMethod method, boolean isTestMethod)
     {
+        if (!isTestMethod) {
+            // Configuration methods (e.g. @BeforeClass) must not be filtered by test name/group selection;
+            // TestNG decides whether to invoke them based on the test methods that are actually selected.
+            // They are also evaluated before the owning ITestClass is attached, so reading their metadata
+            // here (which dereferences ITestNGMethod.getTestClass()) would throw a NullPointerException.
+            return true;
+        }
         TestMetadata testMetadata = testMetadataReader.readTestMetadata(method);
         return includeBasedOnTestName(testMetadata) &&
                 !excludeBasedOnName(testMetadata) &&

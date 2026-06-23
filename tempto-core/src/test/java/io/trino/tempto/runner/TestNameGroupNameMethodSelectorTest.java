@@ -17,6 +17,7 @@ package io.trino.tempto.runner;
 import io.trino.tempto.internal.listeners.TestMetadata;
 import io.trino.tempto.internal.listeners.TestMetadataReader;
 import io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -59,6 +60,29 @@ public class TestNameGroupNameMethodSelectorTest
 
         assertThat(testSelector.includeMethod(mock(IMethodSelectorContext.class), mock(ITestNGMethod.class), true))
                 .isEqualTo(expected);
+    }
+
+    @Test
+    public void configurationMethodsAreAlwaysIncludedWithoutReadingMetadata()
+    {
+        // Configuration methods (e.g. @BeforeClass) are evaluated by the selector before their owning
+        // ITestClass is attached, so ITestNGMethod.getTestClass() is null and reading their metadata throws
+        // a NullPointerException. They must be included regardless of test name/group filters and without
+        // touching the metadata reader. Otherwise @BeforeClass collection fails and the suite ends with
+        // "No tests executed".
+        TestMetadataReader metadataReader = mock(TestMetadataReader.class);
+        when(metadataReader.readTestMetadata(any(ITestNGMethod.class)))
+                .thenThrow(new NullPointerException("getTestClass() is null for configuration methods"));
+        TestNameGroupNameMethodSelector testSelector = new TestNameGroupNameMethodSelector(
+                asSetOptional(asList("someTestThatDoesNotMatch")),
+                asSet(null),
+                asSetOptional(asList("groupThatDoesNotMatch")),
+                asSet(null),
+                metadataReader);
+
+        boolean isTestMethod = false;
+        assertThat(testSelector.includeMethod(mock(IMethodSelectorContext.class), mock(ITestNGMethod.class), isTestMethod))
+                .isTrue();
     }
 
     static Stream<Arguments> testSelectorMatchData()
