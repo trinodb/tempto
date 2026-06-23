@@ -108,7 +108,17 @@ public class TestNameGroupNameMethodSelectorTest
                 Arguments.of("p.q.r.abc", asList("g1", "g2"), null, asList("p.q.r.xyz"), asList("g1", "g3"), asList("g5"), true),
                 Arguments.of("p.q.r.abc", asList("g1", "g2"), null, asList("p.q.r.ab"), asList("g1", "g3"), asList("g5"), true),
                 Arguments.of("p.q.r.abc", asList("g1", "g2"), null, asList("p.q.r.abc"), asList("g1", "g3"), asList("g5"), false),
-                Arguments.of("p.q.r.abc", asList("g1", "g2"), null, asList("p.q.r"), asList("g1", "g3"), asList("g5"), false));
+                Arguments.of("p.q.r.abc", asList("g1", "g2"), null, asList("p.q.r"), asList("g1", "g3"), asList("g5"), false),
+                // When test names and test groups are both requested they are combined with OR: a test matching
+                // either filter is included. This mirrors suites that run a whole group plus a few extra tests by
+                // name (e.g. `-g configured_features -t SomeClass.someTest`), which previously selected nothing
+                // because the name and group sets are disjoint, ending the suite with "No tests executed".
+                // Named test that belongs to a non-requested group is still included by name.
+                Arguments.of("p.TestHiveCreateTable.testCreateTable", asList("storage_formats"), asList("TestHiveCreateTable.testCreateTable"), null, asList("configured_features"), null, true),
+                // Test in a requested group that is not explicitly named is still included by group.
+                Arguments.of("p.TestConfiguredFeatures.selectConfiguredConnectors", asList("configured_features"), asList("TestHiveCreateTable.testCreateTable"), null, asList("configured_features"), null, true),
+                // Matching neither the requested names nor the requested groups is excluded.
+                Arguments.of("p.TestOther.someTest", asList("other_group"), asList("TestHiveCreateTable.testCreateTable"), null, asList("configured_features"), null, false));
     }
 
     private static Optional<Set<String>> asSetOptional(List<String> strings)
