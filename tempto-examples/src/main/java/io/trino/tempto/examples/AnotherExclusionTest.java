@@ -13,9 +13,9 @@
  */
 package io.trino.tempto.examples;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.FileAssert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class AnotherExclusionTest
 {

@@ -15,122 +15,115 @@
 package io.trino.tempto.internal.listeners;
 
 import com.google.common.base.Joiner;
+import org.junit.platform.engine.TestExecutionResult;
+import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
+import org.junit.platform.launcher.TestPlan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.google.common.base.Preconditions.checkState;
-import static io.trino.tempto.internal.initialization.RequirementsExpanderInterceptor.getMethodsCountFromContext;
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
 
+/**
+ * Logs test progress (start, outcome and a final summary) over a whole {@link TestPlan}.
+ * Registered for every Launcher via
+ * {@code META-INF/services/org.junit.platform.launcher.TestExecutionListener}.
+ */
 public class ProgressLoggingListener
-        implements ITestListener
+        implements TestExecutionListener
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProgressLoggingListener.class);
 
-    private int started;
-    private int succeeded;
-    private int skipped;
-    private int failed;
-    private long startTime;
-    private long testStartTime;
+    private final AtomicInteger started = new AtomicInteger();
+    private final AtomicInteger succeeded = new AtomicInteger();
+    private final AtomicInteger skipped = new AtomicInteger();
+    private final AtomicInteger failed = new AtomicInteger();
+    private final ConcurrentHashMap<String, Long> testStartTimes = new ConcurrentHashMap<>();
 
-    private final TestMetadataReader testMetadataReader;
-
-    public ProgressLoggingListener()
-    {
-        this.testMetadataReader = new TestMetadataReader();
-    }
+    private volatile long startTime;
+    private volatile long total;
 
     @Override
-    public void onStart(ITestContext context)
+    public void testPlanExecutionStarted(TestPlan testPlan)
     {
         startTime = currentTimeMillis();
+        total = testPlan.countTestIdentifiers(TestIdentifier::isTest);
         LOGGER.info("Starting tests");
     }
 
     @Override
-    public void onTestStart(ITestResult testCase)
+    public void executionStarted(TestIdentifier testIdentifier)
     {
-        testStartTime = currentTimeMillis();
-        started++;
-        // This is an ITestListener callback and TestNG (>= 7.9) invokes it from unguarded code paths
-        // (e.g. when reporting skipped tests); an exception thrown here would not fail the test but
-        // hang the whole suite behind a GraphOrchestrator "worker is null" NPE. Logging must never throw.
-        try {
-            Integer total = getMethodsCountFromContext(testCase.getTestContext());
-            LOGGER.info("[{} of {}] {}", started, total, formatTestName(testCase));
+        if (!testIdentifier.isTest()) {
+            return;
         }
-        catch (RuntimeException e) {
-            LOGGER.warn("Could not log test start for {}", testCase.getName(), e);
+        testStartTimes.put(testIdentifier.getUniqueId(), currentTimeMillis());
+        int index = started.incrementAndGet();
+        LOGGER.info("[{} of {}] {}", index, total, formatTestName(testIdentifier));
+    }
+
+    @Override
+    public void executionSkipped(TestIdentifier testIdentifier, String reason)
+    {
+        if (!testIdentifier.isTest()) {
+            return;
+        }
+        skipped.incrementAndGet();
+        LOGGER.info("SKIPPED     /    {} ({})", formatTestName(testIdentifier), reason);
+    }
+
+    @Override
+    public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult)
+    {
+        if (!testIdentifier.isTest()) {
+            return;
+        }
+        long executionTime = elapsed(testIdentifier);
+        switch (testExecutionResult.getStatus()) {
+            case SUCCESSFUL -> {
+                succeeded.incrementAndGet();
+                LOGGER.info("SUCCESS     /    {} took {}", formatTestName(testIdentifier), formatDuration(executionTime));
+            }
+            case ABORTED -> {
+                skipped.incrementAndGet();
+                LOGGER.info("ABORTED     /    {} took {}", formatTestName(testIdentifier), formatDuration(executionTime));
+            }
+            case FAILED -> {
+                failed.incrementAndGet();
+                LOGGER.info("FAILURE     /    {} took {}", formatTestName(testIdentifier), formatDuration(executionTime));
+                testExecutionResult.getThrowable().ifPresent(throwable -> LOGGER.error("Failure cause:", throwable));
+            }
         }
     }
 
     @Override
-    public void onTestSuccess(ITestResult testCase)
+    public void testPlanExecutionFinished(TestPlan testPlan)
     {
-        succeeded++;
-        logTestEnd(testCase, "SUCCESS");
-    }
-
-    @Override
-    public void onTestFailure(ITestResult testCase)
-    {
-        failed++;
-        logTestEnd(testCase, "FAILURE");
-        if (testCase.getThrowable() != null) {
-            LOGGER.error("Failure cause:", testCase.getThrowable());
+        if (started.get() + failed.get() + skipped.get() == 0) {
+            return;
         }
-    }
-
-    @Override
-    public void onTestSkipped(ITestResult testCase)
-    {
-        skipped++;
-        LOGGER.info("SKIPPED");
-    }
-
-    private void logTestEnd(ITestResult testCase, String outcome)
-    {
-        long executionTime = currentTimeMillis() - testStartTime;
-        LOGGER.info("{}     /    {} took {}", outcome, formatTestName(testCase), formatDuration(executionTime));
-    }
-
-    @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult testCase) {}
-
-    @Override
-    public void onFinish(ITestContext context)
-    {
-        checkState(succeeded + failed + skipped > 0, "No tests executed");
         LOGGER.info("");
-        LOGGER.info("Completed {} tests", started);
-        LOGGER.info("{} SUCCEEDED      /      {} FAILED      /      {} SKIPPED", succeeded, failed, skipped);
+        LOGGER.info("Completed {} tests", started.get());
+        LOGGER.info("{} SUCCEEDED      /      {} FAILED      /      {} SKIPPED", succeeded.get(), failed.get(), skipped.get());
         LOGGER.info("Tests execution took {}", formatDuration(currentTimeMillis() - startTime));
     }
 
-    private String formatTestName(ITestResult testCase)
+    private long elapsed(TestIdentifier testIdentifier)
     {
-        TestMetadata testMetadata = testMetadataReader.readTestMetadata(testCase);
-        String testGroups = Joiner.on(", ").join(testMetadata.testGroups);
-        String testParameters = formatTestParameters(testMetadata.testParameters);
-
-        return format("%s%s (Groups: %s)", testMetadata.testName, testParameters, testGroups);
+        Long start = testStartTimes.remove(testIdentifier.getUniqueId());
+        return start == null ? 0 : currentTimeMillis() - start;
     }
 
-    private String formatTestParameters(Object[] testParameters)
+    private static String formatTestName(TestIdentifier testIdentifier)
     {
-        if (testParameters.length == 0) {
-            return "";
-        }
-
-        return format(" [%s]", Joiner.on(", ").useForNull("null").join(testParameters));
+        String groups = Joiner.on(", ").join(testIdentifier.getTags().stream().map(tag -> tag.getName()).toList());
+        return format("%s (Groups: %s)", testIdentifier.getDisplayName(), groups);
     }
 
     private static String formatDuration(long durationInMillis)

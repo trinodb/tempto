@@ -26,56 +26,49 @@ import io.trino.tempto.context.TestContextCloseCallback;
 import io.trino.tempto.fulfillment.RequirementFulfiller;
 import io.trino.tempto.fulfillment.RequirementFulfiller.TestLevelFulfiller;
 import io.trino.tempto.fulfillment.TestStatus;
-import io.trino.tempto.internal.TestSpecificRequirementsResolver;
+import io.trino.tempto.initialization.TestMethodInfo;
+import io.trino.tempto.internal.initialization.TemptoTestRunner.RunningTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.testng.IInvokedMethod;
-import org.testng.IResultMap;
-import org.testng.ITestClass;
-import org.testng.ITestContext;
-import org.testng.ITestNGMethod;
-import org.testng.ITestResult;
-import org.testng.internal.ConstructorOrMethod;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Iterables.getOnlyElement;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.assertTestContextNotSet;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.assertTestContextSet;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.popAllTestContexts;
+import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContextIfSet;
+import static io.trino.tempto.fulfillment.TestStatus.FAILURE;
+import static io.trino.tempto.fulfillment.TestStatus.SUCCESS;
 import static io.trino.tempto.internal.configuration.EmptyConfiguration.emptyConfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class TestInitializationListenerTest
+public class TemptoTestRunnerTest
 {
     static final String A = "A";
     static final String B = "B";
     static final String C = "C";
-    static final String BUILTIN = "BuiltIn";
 
     static final String SUITE_A_FULFILL = "AFULFILL";
     static final String TEST_B_FULFILL = "BFULFILL";
     static final String THROWING_TEST_C_FULFILL = "CFULFILL";
-    static final String BUILTIN_FULFLILL = "BUILTIN_FULFILL";
 
     static final String SUITE_A_CLEANUP = "ACLEANUP";
     static final String TEST_B_CLEANUP = "BCLEANUP";
     static final String THROWING_TEST_C_CLEANUP = "CCLEANUP";
-    static final String BUILTIN_CLEANUP = "BUILTIN_CLEANUP";
 
     static final String SUITE_A_CALLBACK = "ACALLBACK";
     static final String TEST_B_CALLBACK = "BCALLBACK";
     static final String THROWING_TEST_C_CALLBACK = "CCALLBACK";
-    static final String BUILTIN_CALLBACK = "BUILTIN_CALLBACK";
 
     static final String BEFORE_METHOD = "beforeMethod";
     static final String AFTER_METHOD = "afterMethod";
@@ -89,12 +82,20 @@ public class TestInitializationListenerTest
     static final DummyRequirement C_REQUIREMENT = new DummyRequirement(C);
     static List<Event> events;
 
-    private final TestSpecificRequirementsResolver testSpecificRequirementsResolver = new TestSpecificRequirementsResolver(emptyConfiguration());
-
     @BeforeEach
     public void setup()
     {
         events = new ArrayList<>();
+    }
+
+    @AfterEach
+    public void cleanup()
+    {
+        // Defensive cleanup so a failing test does not leak suite/thread-local state into the next one.
+        if (testContextIfSet().isPresent()) {
+            popAllTestContexts();
+        }
+        SuiteState.close(FAILURE);
     }
 
     @ParameterizedTest
@@ -102,22 +103,17 @@ public class TestInitializationListenerTest
     public void positiveFlows(TestClass testClass, List<String> eventsList)
             throws Exception
     {
-        TestInitializationListener listener = new TestInitializationListener(
-                List.of(),
-                List.of(),
-                List.of(AFulfiller.class),
-                List.of(BFulfiller.class),
-                emptyConfiguration());
-        ITestContext iTestContext = getITestContext(getSuccessMethod(), testClass);
-        IInvokedMethod invokedMethod = getInvokedMethod();
-        listener.onStart(iTestContext);
+        TemptoRuntime runtime = runtime(List.of(AFulfiller.class), List.of(BFulfiller.class));
+        SuiteState.initialize(runtime, Set.of(A_REQUIREMENT, B_REQUIREMENT));
+        TemptoTestRunner runner = new TemptoTestRunner(runtime);
+
         assertTestContextNotSet();
-        listener.beforeInvocation(invokedMethod, getITestResult(getSuccessMethod(), testClass, ITestResult.STARTED));
+        RunningTest runningTest = runner.setUp(SuiteState.instance().orElseThrow().getSuiteContext(), testMethodInfo(testClass, "testMethodSuccess"));
         assertTestContextSet();
         assertThat(testClass.testContext).isNotNull();
-        listener.afterInvocation(invokedMethod, getITestResult(getSuccessMethod(), testClass, ITestResult.SUCCESS));
+        runner.tearDown(runningTest, SUCCESS);
         assertTestContextNotSet();
-        listener.onFinish(iTestContext);
+        SuiteState.close(SUCCESS);
 
         assertThat(events.stream()
                 .map(s -> s.name)
@@ -175,24 +171,18 @@ public class TestInitializationListenerTest
             throws Exception
     {
         TestClass testClass = new TestClass();
-        TestInitializationListener listener = new TestInitializationListener(
-                List.of(),
-                List.of(),
-                List.of(AFulfiller.class),
-                List.of(BFulfiller.class, CFulfiller.class),
-                emptyConfiguration());
-        ITestContext iTestContext = getITestContext(getFailMethod(), testClass);
-        IInvokedMethod invokedMethod = getInvokedMethod();
+        TemptoRuntime runtime = runtime(List.of(AFulfiller.class), List.of(BFulfiller.class, CFulfiller.class));
+        SuiteState.initialize(runtime, Set.of(A_REQUIREMENT, B_REQUIREMENT, C_REQUIREMENT));
+        TemptoTestRunner runner = new TemptoTestRunner(runtime);
 
-        listener.onStart(iTestContext);
         try {
-            listener.beforeInvocation(invokedMethod, getITestResult(getFailMethod(), testClass, ITestResult.STARTED));
+            runner.setUp(SuiteState.instance().orElseThrow().getSuiteContext(), testMethodInfo(testClass, "testMethodFailed"));
             assertThat(false).isTrue();
         }
         catch (RuntimeException ignored) {
         }
-        listener.afterInvocation(invokedMethod, getITestResult(getFailMethod(), testClass, ITestResult.FAILURE));
-        listener.onFinish(iTestContext);
+        assertTestContextNotSet();
+        SuiteState.close(FAILURE);
 
         assertThat(events.get(0).name).isEqualTo(SUITE_A_FULFILL);
         assertThat(events.get(1).name).isEqualTo(TEST_B_FULFILL);
@@ -207,70 +197,23 @@ public class TestInitializationListenerTest
         assertThat(events.get(0).object).isEqualTo(events.get(6).object);
     }
 
-    private ITestContext getITestContext(Method method, TestClass testClass)
+    private static TemptoRuntime runtime(
+            List<Class<? extends RequirementFulfiller>> suiteLevelFulfillers,
+            List<Class<? extends RequirementFulfiller>> testLevelFulfillers)
     {
-        ITestContext suiteContext = mock(ITestContext.class);
-
-        ITestNGMethod[] allTestMethods = new ITestNGMethod[] {getITestNGMethod(method, testClass, getITestClass())};
-        when(suiteContext.getAllTestMethods()).thenReturn(allTestMethods);
-
-        IResultMap iResultMap = mock(IResultMap.class);
-        when(iResultMap.size()).thenReturn(0);
-        when(suiteContext.getFailedTests()).thenReturn(iResultMap);
-
-        return suiteContext;
+        return new TemptoRuntime(List.of(), List.of(), suiteLevelFulfillers, testLevelFulfillers, emptyConfiguration());
     }
 
-    private ITestResult getITestResult(Method method, TestClass testClass, int status)
-    {
-        ITestResult testResult = mock(ITestResult.class);
-        ITestClass iTestClass = getITestClass();
-        ITestNGMethod testNGMethod = getITestNGMethod(method, testClass, iTestClass);
-        Object instance = testNGMethod.getInstance();
-        when(testResult.getMethod()).thenReturn(testNGMethod);
-        when(testResult.getTestClass()).thenReturn(iTestClass);
-        when(testResult.getInstance()).thenReturn(instance);
-        when(testResult.getStatus()).thenReturn(status);
-        when(iTestClass.getRealClass()).thenReturn((Class) testClass.getClass());
-        return testResult;
-    }
-
-    private IInvokedMethod getInvokedMethod()
-    {
-        IInvokedMethod invokedMethod = mock(IInvokedMethod.class);
-        when(invokedMethod.isTestMethod()).thenReturn(true);
-        return invokedMethod;
-    }
-
-    private ITestClass getITestClass()
-    {
-        ITestClass iTestClass = mock(ITestClass.class);
-        when(iTestClass.getName()).thenReturn("MockTestClass");
-        return iTestClass;
-    }
-
-    private ITestNGMethod getITestNGMethod(Method method, TestClass testClass, ITestClass iTestClass)
-    {
-        ITestNGMethod testMethod = mock(ITestNGMethod.class);
-        when(testMethod.getTestClass()).thenReturn(iTestClass);
-        when(testMethod.getInstance()).thenReturn(testClass);
-        when(testMethod.getGroups()).thenReturn(new String[] {});
-        when(testMethod.getMethodName()).thenReturn("mockTestMethod");
-        when(testMethod.getConstructorOrMethod()).thenReturn(new ConstructorOrMethod(method));
-        Set<Set<Requirement>> requirements = testSpecificRequirementsResolver.resolve(testMethod);
-        return new RequirementsAwareTestNGMethod(testMethod, getOnlyElement(requirements));
-    }
-
-    private Method getSuccessMethod()
+    private static TestMethodInfo testMethodInfo(TestClass testClass, String methodName)
             throws NoSuchMethodException
     {
-        return TestClass.class.getMethod("testMethodSuccess");
-    }
-
-    private Method getFailMethod()
-            throws NoSuchMethodException
-    {
-        return TestClass.class.getMethod("testMethodFailed");
+        Method method = testClass.getClass().getMethod(methodName);
+        return new TestMethodInfo(
+                testClass.getClass().getName() + "." + methodName,
+                Set.of(),
+                testClass.getClass(),
+                Optional.of(method),
+                testClass);
     }
 
     static class TestClassNoOverrideAnnotatedMethods
@@ -398,16 +341,6 @@ public class TestInitializationListenerTest
         {
             super.fulfill(requirements);
             throw new RuntimeException();
-        }
-    }
-
-    static class BuiltInFulfiller
-            extends DummyFulfiller
-    {
-        @Inject
-        BuiltInFulfiller(TestContext testContext)
-        {
-            super(BUILTIN, BUILTIN_FULFLILL, BUILTIN_CLEANUP, BUILTIN_CALLBACK, testContext);
         }
     }
 

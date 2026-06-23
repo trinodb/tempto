@@ -18,24 +18,20 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import io.trino.tempto.Requirement;
-import io.trino.tempto.context.State;
 import io.trino.tempto.context.TestContext;
-import io.trino.tempto.context.TestContextCloseCallback;
 import io.trino.tempto.fulfillment.RequirementFulfiller;
+import io.trino.tempto.internal.context.GuiceTestContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Optional;
 
-import static com.google.inject.Guice.createInjector;
 import static com.google.inject.name.Names.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,7 +44,7 @@ public class ReflectionInjectorHelperTest
     @BeforeEach
     public void setup()
     {
-        Injector injector = createInjector(new AbstractModule()
+        testContext = new GuiceTestContext(new AbstractModule()
         {
             @Override
             protected void configure()
@@ -61,50 +57,6 @@ public class ReflectionInjectorHelperTest
                 bind(new TypeLiteral<List<String>>() {}).toInstance(strings);
             }
         });
-        testContext = new TestContext()
-        {
-            @Override
-            public <T> T getDependency(Class<T> dependencyClass)
-            {
-                return null;
-            }
-
-            @Override
-            public <T> T getDependency(Class<T> dependencyClass, String dependencyName)
-            {
-                return null;
-            }
-
-            @Override
-            public <T> Optional<T> getOptionalDependency(Class<T> dependencyClass)
-            {
-                return null;
-            }
-
-            @Override
-            public <T> Optional<T> getOptionalDependency(Class<T> dependencyClass, String dependencyName)
-            {
-                return null;
-            }
-
-            @Override
-            public TestContext createChildContext(Iterable<State> states)
-            {
-                return null;
-            }
-
-            @Override
-            public void registerCloseCallback(TestContextCloseCallback callback) {}
-
-            @Override
-            public void injectMembers(Object instance)
-            {
-                injector.injectMembers(instance);
-            }
-
-            @Override
-            public void close() {}
-        };
     }
 
     @Test

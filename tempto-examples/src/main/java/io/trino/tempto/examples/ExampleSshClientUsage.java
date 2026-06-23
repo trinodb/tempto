@@ -20,7 +20,8 @@ import io.trino.tempto.ProductTest;
 import io.trino.tempto.process.CliProcess;
 import io.trino.tempto.ssh.SshClient;
 import io.trino.tempto.ssh.SshClientFactory;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -60,7 +61,8 @@ public class ExampleSshClientUsage
     @Named("ssh.roles.host_by_identity.port")
     private Integer hostByIdentityPort;
 
-    @Test(groups = "ssh")
+    @Test
+    @Tag("ssh")
     public void sshClientUsage()
             throws Exception
     {
@@ -72,7 +74,8 @@ public class ExampleSshClientUsage
         }
     }
 
-    @Test(groups = "ssh")
+    @Test
+    @Tag("ssh")
     public void dynamicSshClient()
             throws Exception
     {
@@ -89,7 +92,8 @@ public class ExampleSshClientUsage
         }
     }
 
-    @Test(groups = "ssh")
+    @Test
+    @Tag("ssh")
     public void longRunningCommandTimeout()
             throws Exception
     {

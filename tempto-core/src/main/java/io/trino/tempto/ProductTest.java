@@ -14,10 +14,16 @@
 
 package io.trino.tempto;
 
-import io.trino.tempto.internal.initialization.RequirementsExpanderInterceptor;
-import io.trino.tempto.internal.initialization.TestInitializationListener;
-import io.trino.tempto.internal.listeners.ProgressLoggingListener;
-import org.testng.annotations.Listeners;
+import io.trino.tempto.internal.initialization.TemptoTestExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@Listeners({RequirementsExpanderInterceptor.class, TestInitializationListener.class, ProgressLoggingListener.class})
+/**
+ * Base class for all Tempto (product) tests.
+ * <p>
+ * Extending this class registers the {@link TemptoTestExtension} JUnit 5 extension which is
+ * responsible for creating the per-test {@link io.trino.tempto.context.TestContext}, fulfilling
+ * the test's {@link Requirement}s, injecting members into the test instance and invoking methods
+ * annotated with {@link BeforeMethodWithContext} / {@link AfterMethodWithContext}.
+ */
+@ExtendWith(TemptoTestExtension.class)
 public class ProductTest {}

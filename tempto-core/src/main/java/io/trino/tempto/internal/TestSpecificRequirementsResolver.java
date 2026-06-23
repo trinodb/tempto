@@ -17,7 +17,6 @@ import io.trino.tempto.CompositeRequirement;
 import io.trino.tempto.Requirement;
 import io.trino.tempto.RequirementsProvider;
 import io.trino.tempto.configuration.Configuration;
-import org.testng.ITestNGMethod;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -36,11 +35,15 @@ public class TestSpecificRequirementsResolver
         this.configuration = configuration;
     }
 
-    public Set<Set<Requirement>> resolve(ITestNGMethod testMethod)
+    public Set<Set<Requirement>> resolve(Method javaTestMethod, Object testClassInstance)
     {
-        Method javaTestMethod = getJavaMethodFromTestMethod(testMethod);
+        return resolve(javaTestMethod, Optional.of(testClassInstance));
+    }
+
+    public Set<Set<Requirement>> resolve(Method javaTestMethod, Optional<Object> testClassInstance)
+    {
         CompositeRequirement compositeRequirement = requirementsCollector.collect(javaTestMethod);
-        Optional<Requirement> providedRequirement = getExplicitRequirementsFor(testMethod.getInstance());
+        Optional<Requirement> providedRequirement = getExplicitRequirementsFor(testClassInstance);
         if (providedRequirement.isPresent()) {
             compositeRequirement = compose(providedRequirement.get(), compositeRequirement);
         }
@@ -48,18 +51,10 @@ public class TestSpecificRequirementsResolver
         return compositeRequirement.getRequirementsSets();
     }
 
-    private Optional<Requirement> getExplicitRequirementsFor(Object testClassInstance)
+    private Optional<Requirement> getExplicitRequirementsFor(Optional<Object> testClassInstance)
     {
-        if (testClassInstance instanceof RequirementsProvider) {
-            return Optional.of(((RequirementsProvider) testClassInstance).getRequirements(configuration));
-        }
-        else {
-            return Optional.empty();
-        }
-    }
-
-    private Method getJavaMethodFromTestMethod(ITestNGMethod method)
-    {
-        return method.getConstructorOrMethod().getMethod();
+        return testClassInstance
+                .filter(instance -> instance instanceof RequirementsProvider)
+                .map(instance -> ((RequirementsProvider) instance).getRequirements(configuration));
     }
 }

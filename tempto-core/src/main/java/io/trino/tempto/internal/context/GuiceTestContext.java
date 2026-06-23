@@ -78,7 +78,7 @@ public class GuiceTestContext
         return getDependency(Key.get(dependencyClass, named(dependencyName)));
     }
 
-    private <T> T getDependency(Key key)
+    public <T> T getDependency(Key key)
     {
         return (T) injector.get().getInstance(key);
     }

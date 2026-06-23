@@ -29,7 +29,8 @@ import io.trino.tempto.fulfillment.table.TableInstance;
 import io.trino.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.trino.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 import io.trino.tempto.query.QueryExecutor;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -82,7 +83,8 @@ public class PostgresqlQueryTest
         }
     }
 
-    @Test(groups = "psql_query")
+    @Test
+    @Tag("psql_query")
     @Requires(ImmutableTestJdbcTables.class)
     public void selectFromImmutableTable()
     {
@@ -90,7 +92,8 @@ public class PostgresqlQueryTest
         assertThat(queryExecutor.executeQuery("select * from " + nameInDatabase)).containsOnly(row(1, "x"), row(2, "y"));
     }
 
-    @Test(groups = "psql_query")
+    @Test
+    @Tag("psql_query")
     @Requires(MutableTestJdbcTables.class)
     public void selectFromMutableTable()
     {
@@ -98,7 +101,8 @@ public class PostgresqlQueryTest
         assertThat(queryExecutor.executeQuery("select * from " + tableName)).containsOnly(row(1, "x"), row(2, "y"));
     }
 
-    @Test(groups = "psql_query")
+    @Test
+    @Tag("psql_query")
     @Requires(MutableTestJdbcTables.class)
     public void selectFromTableInDifferentSchema()
     {

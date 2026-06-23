@@ -14,7 +14,8 @@
 
 package io.trino.tempto.examples;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
@@ -28,7 +29,8 @@ import static java.sql.JDBCType.VARCHAR;
 
 public class ExampleQueryAssertTest
 {
-    @Test(enabled = false)
+    @Test
+    @Disabled
     public void testHasColumnName()
     {
         assertThat(query("SELECT * FROM nation WHERE name LIKE 'IR%' ORDER BY name"))
@@ -39,7 +41,8 @@ public class ExampleQueryAssertTest
                         .isSorted());
     }
 
-    @Test(enabled = false)
+    @Test
+    @Disabled
     public void testHasColumnIndex()
     {
         assertThat(query("SELECT nationkey, name FROM nation"))
@@ -48,7 +51,8 @@ public class ExampleQueryAssertTest
                 .column(1, INTEGER, c -> c.contains(5, 17));
     }
 
-    @Test(enabled = false)
+    @Test
+    @Disabled
     public void testContainsOnly()
     {
         assertThat(query("SELECT n.nationkey, n.name, r.name FROM nation n " +
@@ -60,7 +64,8 @@ public class ExampleQueryAssertTest
                         row(1, "ALGERIA", "AFRICA"));
     }
 
-    @Test(enabled = false)
+    @Test
+    @Disabled
     public void testContainsExactly()
     {
         assertThat(query(

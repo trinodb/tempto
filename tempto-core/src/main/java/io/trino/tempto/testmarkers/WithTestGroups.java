@@ -14,15 +14,12 @@
 
 package io.trino.tempto.testmarkers;
 
-import org.testng.ITest;
-
 import java.util.Set;
 
 /**
- * Marker interface for test classes which explicitly define list of groups test belong to.
+ * Marker interface for test classes which explicitly define the list of groups they belong to.
  */
 public interface WithTestGroups
-        extends ITest
 {
     Set<String> getTestGroups();
 }

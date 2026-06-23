@@ -14,14 +14,10 @@
 
 package io.trino.tempto.runner;
 
-import io.trino.tempto.internal.listeners.TestMetadata;
-import io.trino.tempto.internal.listeners.TestMetadataReader;
-import io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector;
+import io.trino.tempto.internal.listeners.TestNameGroupNameFilter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.testng.IMethodSelectorContext;
-import org.testng.ITestNGMethod;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +26,8 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class TestNameGroupNameMethodSelectorTest
+public class TestNameGroupNameFilterTest
 {
     @ParameterizedTest
     @MethodSource("testSelectorMatchData")
@@ -47,17 +40,13 @@ public class TestNameGroupNameMethodSelectorTest
             List<String> excludedTestGroups,
             boolean expected)
     {
-        TestMetadataReader metadataReader = mock(TestMetadataReader.class);
-        when(metadataReader.readTestMetadata(any(ITestNGMethod.class)))
-                .thenReturn(new TestMetadata(Set.copyOf(testGroups), testName, null));
-        TestNameGroupNameMethodSelector testSelector = new TestNameGroupNameMethodSelector(
+        TestNameGroupNameFilter filter = new TestNameGroupNameFilter(
                 asSetOptional(allowedTestNames),
                 asSet(excludedTestNames),
                 asSetOptional(allowedTestGroups),
-                asSet(excludedTestGroups),
-                metadataReader);
+                asSet(excludedTestGroups));
 
-        assertThat(testSelector.includeMethod(mock(IMethodSelectorContext.class), mock(ITestNGMethod.class), true))
+        assertThat(filter.matches(testName, Set.copyOf(testGroups)))
                 .isEqualTo(expected);
     }
 
@@ -92,9 +81,7 @@ public class TestNameGroupNameMethodSelectorTest
         if (strings == null) {
             return Optional.empty();
         }
-        else {
-            return Optional.of(Set.copyOf(strings));
-        }
+        return Optional.of(Set.copyOf(strings));
     }
 
     private static Set<String> asSet(List<String> strings)
@@ -102,8 +89,6 @@ public class TestNameGroupNameMethodSelectorTest
         if (strings == null) {
             return Set.of();
         }
-        else {
-            return Set.copyOf(strings);
-        }
+        return Set.copyOf(strings);
     }
 }

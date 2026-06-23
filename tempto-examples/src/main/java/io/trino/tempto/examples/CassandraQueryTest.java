@@ -21,7 +21,8 @@ import io.trino.tempto.Requires;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.trino.tempto.internal.fulfillment.table.cassandra.CassandraTableDefinition;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -65,7 +66,8 @@ public class CassandraQueryTest
         }
     }
 
-    @Test(groups = "cassandra_query")
+    @Test
+    @Tag("cassandra_query")
     @Requires(CassandraQueryTest.ImmutableTestCassandraTable.class)
     public void selectFromImmutableTable()
     {

@@ -16,19 +16,20 @@ package io.trino.tempto.internal.initialization.modules;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import io.trino.tempto.configuration.Configuration;
+import io.trino.tempto.initialization.TestMethodInfo;
 import io.trino.tempto.initialization.TestMethodModuleProvider;
 import io.trino.tempto.internal.listeners.TestMetadata;
-import io.trino.tempto.internal.listeners.TestMetadataReader;
-import org.testng.ITestResult;
 
 public class TestMethodInfoModuleProvider
         implements TestMethodModuleProvider
 {
-    private final TestMetadataReader testMetadataReader = new TestMetadataReader();
-
-    public Module getModule(Configuration configuration, ITestResult testResult)
+    @Override
+    public Module getModule(Configuration configuration, TestMethodInfo testMethodInfo)
     {
-        TestMetadata testMetadata = testMetadataReader.readTestMetadata(testResult);
+        TestMetadata testMetadata = new TestMetadata(
+                testMethodInfo.testGroups(),
+                testMethodInfo.testName(),
+                new Object[] {});
         return new AbstractModule()
         {
             @Override

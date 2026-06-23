@@ -14,11 +14,13 @@
 
 package io.trino.tempto.examples;
 
+import io.trino.tempto.ProductTest;
 import io.trino.tempto.Requirement;
 import io.trino.tempto.Requirements;
 import io.trino.tempto.RequirementsProvider;
 import io.trino.tempto.configuration.Configuration;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -27,6 +29,7 @@ import static io.trino.tempto.fulfillment.command.TestCommandRequirement.testCom
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommandTest
+        extends ProductTest
         implements RequirementsProvider
 {
     @Override
@@ -38,13 +41,15 @@ public class CommandTest
                 suiteCommand("touch commandTestFile"));
     }
 
-    @Test(groups = "command")
+    @Test
+    @Tag("command")
     public void commandTest()
     {
         assertThat(new File("commandTestFile").exists()).isTrue();
     }
 
-    @Test(groups = "command")
+    @Test
+    @Tag("command")
     public void configurationcommandTest()
     {
         assertThat(new File("configuratioCommandTestFile").exists()).isTrue();

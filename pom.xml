@@ -35,14 +35,6 @@
     <properties>
         <dep.httpcomponents.client.version>4.5.14</dep.httpcomponents.client.version>
         <dep.httpcomponents.core.version>4.4.16</dep.httpcomponents.core.version>
-        <!--
-            Pinned to 7.8.0 deliberately. TestNG >= 7.9.0 hangs parallel suites when a listener/worker
-            throws during execution: the failure is masked by a GraphOrchestrator NPE
-            ("Cannot invoke IWorker.getTasks() because worker is null") and the suite never terminates.
-            7.8.0 is the last release without this regression. Do not bump without verifying the hang is gone.
-            See https://github.com/testng-team/testng/discussions/3116
-        -->
-        <dep.testng.version>7.8.0</dep.testng.version>
         <dep.slf4j.version>2.0.16</dep.slf4j.version>
 
         <air.check.skip-modernizer>true</air.check.skip-modernizer>

@@ -1,0 +1,2 @@
+io.trino.tempto.internal.initialization.SuiteListener
+io.trino.tempto.internal.listeners.ProgressLoggingListener

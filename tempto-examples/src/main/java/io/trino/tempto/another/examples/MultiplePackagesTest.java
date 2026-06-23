@@ -13,7 +13,7 @@
  */
 package io.trino.tempto.another.examples;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

@@ -14,13 +14,16 @@
 
 package io.trino.tempto.internal.convention;
 
-import io.trino.tempto.ProductTest;
 import io.trino.tempto.RequirementsProvider;
 import io.trino.tempto.testmarkers.WithName;
 import io.trino.tempto.testmarkers.WithTestGroups;
 
+/**
+ * A single convention-based (file driven) test. These are exposed to JUnit as dynamic tests by
+ * {@link ConventionBasedTests}; the per-test Tempto lifecycle (context, requirement fulfillment,
+ * member injection) is applied around {@link #test()} by the dynamic test executable.
+ */
 public abstract class ConventionBasedTest
-        extends ProductTest
         implements RequirementsProvider,
                    WithName,
                    WithTestGroups
