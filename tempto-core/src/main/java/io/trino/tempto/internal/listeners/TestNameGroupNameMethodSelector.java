@@ -102,15 +102,28 @@ public class TestNameGroupNameMethodSelector
             return true;
         }
         TestMetadata testMetadata = testMetadataReader.readTestMetadata(method);
-        return includeBasedOnTestName(testMetadata) &&
+        return includeBasedOnNameOrGroup(testMetadata) &&
                 !excludeBasedOnName(testMetadata) &&
-                includeBasedOnGroups(testMetadata) &&
                 !excludeBasedOnGroups(testMetadata);
     }
 
-    private boolean includeBasedOnTestName(TestMetadata testMetadata)
+    private boolean includeBasedOnNameOrGroup(TestMetadata testMetadata)
     {
-        return testNamesToRun.map(strings -> indexOf(strings, testMetadata.testName::contains) != -1).orElse(true);
+        // When both test names and test groups are requested they are combined with OR: a test is included
+        // if it is explicitly named OR it belongs to a requested group. This lets a suite select a whole
+        // group plus a few additional tests by name (e.g. `-g configured_features -t SomeClass.someTest`);
+        // combining with AND would instead require a test to satisfy both filters, which for disjoint name
+        // and group sets selects nothing and ends the suite with "No tests executed". When neither filter is
+        // requested every test is included.
+        if (testNamesToRun.isEmpty() && testGroupsToRun.isEmpty()) {
+            return true;
+        }
+        return matchesRequestedName(testMetadata) || matchesRequestedGroup(testMetadata);
+    }
+
+    private boolean matchesRequestedName(TestMetadata testMetadata)
+    {
+        return testNamesToRun.map(strings -> indexOf(strings, testMetadata.testName::contains) != -1).orElse(false);
     }
 
     private boolean excludeBasedOnName(TestMetadata testMetadata)
@@ -118,9 +131,9 @@ public class TestNameGroupNameMethodSelector
         return testNamesToExclude.stream().anyMatch(exclusion -> matches(testMetadata.testName, exclusion));
     }
 
-    private boolean includeBasedOnGroups(TestMetadata testMetadata)
+    private boolean matchesRequestedGroup(TestMetadata testMetadata)
     {
-        return testGroupsToRun.map(strings -> !intersection(testMetadata.testGroups, strings).isEmpty()).orElse(true);
+        return testGroupsToRun.map(strings -> !intersection(testMetadata.testGroups, strings).isEmpty()).orElse(false);
     }
 
     private boolean excludeBasedOnGroups(TestMetadata testMetadata)
