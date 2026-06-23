@@ -661,7 +661,5 @@ public class TpcdsTableDefinitions
                     .inSchema("tpcds")
                     .build();
 
-    private TpcdsTableDefinitions()
-    {
-    }
+    private TpcdsTableDefinitions() {}
 }

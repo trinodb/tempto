@@ -46,7 +46,5 @@ public class LdapObjectFulfiller<T extends LdapObjectRequirement>
     }
 
     @Override
-    public void cleanup(TestStatus status)
-    {
-    }
+    public void cleanup(TestStatus status) {}
 }

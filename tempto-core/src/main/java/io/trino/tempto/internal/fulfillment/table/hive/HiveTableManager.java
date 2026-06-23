@@ -14,6 +14,8 @@
 package io.trino.tempto.internal.fulfillment.table.hive;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import io.trino.tempto.fulfillment.table.MutableTableRequirement.State;
 import io.trino.tempto.fulfillment.table.TableDefinition;
 import io.trino.tempto.fulfillment.table.TableHandle;
@@ -27,9 +29,6 @@ import io.trino.tempto.internal.hadoop.hdfs.HdfsDataSourceWriter;
 import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryResult;
 import org.slf4j.Logger;
-
-import com.google.inject.name.Named;
-import com.google.inject.Singleton;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -76,8 +75,7 @@ public class HiveTableManager
             @Named("metastore.host") String thriftHost,
             @Named("metastore.port") String thriftPort)
     {
-        this(
-                queryExecutor,
+        this(queryExecutor,
                 hdfsDataSourceWriter,
                 tableNameGenerator,
                 new HiveThriftClient(thriftHost, parseInt(thriftPort)),
@@ -240,8 +238,7 @@ public class HiveTableManager
     private void createTable(HiveTableDefinition tableDefinition, TableName tableName, Optional<String> tableDataPath)
     {
         tableName.getSchema().ifPresent(schema ->
-                queryExecutor.executeQuery("CREATE SCHEMA IF NOT EXISTS " + schema)
-        );
+                queryExecutor.executeQuery("CREATE SCHEMA IF NOT EXISTS " + schema));
         queryExecutor.executeQuery(tableDefinition.getCreateTableDDL(tableName.getNameInDatabase(), tableDataPath));
     }
 

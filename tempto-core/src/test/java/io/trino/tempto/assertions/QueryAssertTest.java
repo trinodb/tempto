@@ -341,7 +341,8 @@ public class QueryAssertTest
     @Test
     public void matchesFileOkWithTypes()
     {
-        SectionParsingResult parsingResult = parseResultFor("""
+        SectionParsingResult parsingResult = parseResultFor(
+                """
                 -- delimiter: |; ignoreOrder: false; types: BIGINT|VARCHAR|VARCHAR
                 1|ALGERIA|AFRICA|
                 2|ARGENTINA|SOUTH AMERICA|
@@ -353,7 +354,8 @@ public class QueryAssertTest
     @Test
     public void matchesFileFailedWrongExplicitTypesInResultFile()
     {
-        SectionParsingResult parsingResult = parseResultFor("""
+        SectionParsingResult parsingResult = parseResultFor(
+                """
                 -- delimiter: |; ignoreOrder: false; types: BIGINT|BIGINT|BIGINT
                 1|ALGERIA|AFRICA|
                 2|ARGENTINA|SOUTH AMERICA|
@@ -367,7 +369,8 @@ public class QueryAssertTest
     @Test
     public void matchesFileOkNoExplicitTypes()
     {
-        SectionParsingResult parsingResult = parseResultFor("""
+        SectionParsingResult parsingResult = parseResultFor(
+                """
                 -- delimiter: |; ignoreOrder: false
                 1|ALGERIA|AFRICA|
                 2|ARGENTINA|SOUTH AMERICA|
@@ -379,7 +382,8 @@ public class QueryAssertTest
     @Test
     public void matchesFileFailedWrongValue()
     {
-        SectionParsingResult parsingResult = parseResultFor("""
+        SectionParsingResult parsingResult = parseResultFor(
+                """
                 -- delimiter: |; ignoreOrder: false
                 1|ALGERIA|AFRICA|
                 3|ARGENTINA|SOUTH AMERICA|
@@ -387,7 +391,8 @@ public class QueryAssertTest
 
         assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).matches(new SqlResultDescriptor(parsingResult)))
                 .isInstanceOf(AssertionError.class)
-                .hasMessage("""
+                .hasMessage(
+                        """
                         Not equal rows:
                         1 - expected: 3|ARGENTINA|SOUTH AMERICA|
                         1 - actual:   2|ARGENTINA|SOUTH AMERICA|""");
@@ -396,7 +401,8 @@ public class QueryAssertTest
     @Test
     public void matchesFileFailedCannotMapExpectedResultToTypesFromDbResult()
     {
-        SectionParsingResult parsingResult = parseResultFor("""
+        SectionParsingResult parsingResult = parseResultFor(
+                """
                 -- delimiter: |; ignoreOrder: false
                 A|ALGERIA|AFRICA|
                 B|ARGENTINA|SOUTH AMERICA|
@@ -404,7 +410,8 @@ public class QueryAssertTest
 
         assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).matches(new SqlResultDescriptor(parsingResult)))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("""
+                .hasMessage(
+                        """
                         Could not map expected file content to query column types; types=[BIGINT, VARCHAR, VARCHAR]; content=<-- delimiter: |; ignoreOrder: false
                         A|ALGERIA|AFRICA|
                         B|ARGENTINA|SOUTH AMERICA|>""")

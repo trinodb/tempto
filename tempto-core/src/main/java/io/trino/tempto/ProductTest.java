@@ -20,6 +20,4 @@ import io.trino.tempto.internal.listeners.ProgressLoggingListener;
 import org.testng.annotations.Listeners;
 
 @Listeners({RequirementsExpanderInterceptor.class, TestInitializationListener.class, ProgressLoggingListener.class})
-public class ProductTest
-{
-}
+public class ProductTest {}

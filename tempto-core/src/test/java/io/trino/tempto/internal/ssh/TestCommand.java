@@ -72,7 +72,5 @@ class TestCommand
     }
 
     @Override
-    public void destroy()
-    {
-    }
+    public void destroy() {}
 }

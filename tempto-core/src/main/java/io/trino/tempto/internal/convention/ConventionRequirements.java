@@ -16,7 +16,5 @@ package io.trino.tempto.internal.convention;
 
 public final class ConventionRequirements
 {
-    private ConventionRequirements()
-    {
-    }
+    private ConventionRequirements() {}
 }

@@ -106,7 +106,9 @@ public class JSchSshClient
             throw new UncheckedIOException(e);
         }
         finally {
-            if (session != null) { session.disconnect(); }
+            if (session != null) {
+                session.disconnect();
+            }
         }
     }
 
@@ -153,9 +155,7 @@ public class JSchSshClient
     }
 
     @Override
-    public void close()
-    {
-    }
+    public void close() {}
 
     private Iterable<String> quote(List<String> command)
     {

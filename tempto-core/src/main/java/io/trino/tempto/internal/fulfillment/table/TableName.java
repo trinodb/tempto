@@ -13,11 +13,10 @@
  */
 package io.trino.tempto.internal.fulfillment.table;
 
-import com.google.common.base.MoreObjects;
-
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
 public class TableName
@@ -88,7 +87,7 @@ public class TableName
     @Override
     public String toString()
     {
-        return MoreObjects.toStringHelper(this)
+        return toStringHelper(this)
                 .add("database", database)
                 .add("schema", schema)
                 .add("name", name)

@@ -86,7 +86,8 @@ public class SqlQueryDescriptor
                             .stream()
                             .filter(mutableTableDescriptor -> mutableTableDescriptor.tableHandle.equals(tableHandle))
                             .findAny().isPresent(),
-                    "Table with name %s is defined twice", tableHandle.getName());
+                    "Table with name %s is defined twice",
+                    tableHandle.getName());
 
             mutableTableDescriptors.add(new MutableTableDescriptor(tableDefinitionName, state, tableHandle));
         }

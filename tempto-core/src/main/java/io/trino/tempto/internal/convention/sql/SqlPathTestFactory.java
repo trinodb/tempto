@@ -105,7 +105,10 @@ public class SqlPathTestFactory
     }
 
     private List<ConventionBasedTest> createTestsForSingleSectionTestFile(
-            Path testFile, String testNamePrefix, Optional<Path> optionalBeforeScriptFile, Optional<Path> optionalAfterScriptFile,
+            Path testFile,
+            String testNamePrefix,
+            Optional<Path> optionalBeforeScriptFile,
+            Optional<Path> optionalAfterScriptFile,
             SectionParsingResult querySection)
     {
         Path resultFile = changeExtension(testFile, RESULT_FILE_EXTENSION);
@@ -116,12 +119,19 @@ public class SqlPathTestFactory
             sqlResultDescriptor = sqlResultDescriptorFor(resultFile);
         }
         return createTestsForSections(
-                testFile, testNamePrefix, optionalBeforeScriptFile, optionalAfterScriptFile,
-                newArrayList(new SqlQueryDescriptor(querySection)), newArrayList(sqlResultDescriptor));
+                testFile,
+                testNamePrefix,
+                optionalBeforeScriptFile,
+                optionalAfterScriptFile,
+                newArrayList(new SqlQueryDescriptor(querySection)),
+                newArrayList(sqlResultDescriptor));
     }
 
     private List<ConventionBasedTest> createTestsForMultiSectionTestFile(
-            Path testFile, String testNamePrefix, Optional<Path> optionalBeforeScriptFile, Optional<Path> optionalAfterScriptFile,
+            Path testFile,
+            String testNamePrefix,
+            Optional<Path> optionalBeforeScriptFile,
+            Optional<Path> optionalAfterScriptFile,
             List<SectionParsingResult> sections)
     {
         checkState((sections.size() % 2) == 1, "First section should contain properties, next sections should represent query and results");
@@ -135,13 +145,21 @@ public class SqlPathTestFactory
         }
 
         return createTestsForSections(
-                testFile, testNamePrefix, optionalBeforeScriptFile, optionalAfterScriptFile,
-                queryDescriptors, resultDescriptors);
+                testFile,
+                testNamePrefix,
+                optionalBeforeScriptFile,
+                optionalAfterScriptFile,
+                queryDescriptors,
+                resultDescriptors);
     }
 
     private List<ConventionBasedTest> createTestsForSections(
-            Path testFile, String testNamePrefix, Optional<Path> optionalBeforeScriptFile, Optional<Path> optionalAfterScriptFile,
-            List<SqlQueryDescriptor> queryDescriptors, List<SqlResultDescriptor> resultDescriptors)
+            Path testFile,
+            String testNamePrefix,
+            Optional<Path> optionalBeforeScriptFile,
+            Optional<Path> optionalAfterScriptFile,
+            List<SqlQueryDescriptor> queryDescriptors,
+            List<SqlResultDescriptor> resultDescriptors)
     {
         checkState(queryDescriptors.size() == resultDescriptors.size());
         List<ConventionBasedTest> conventionBasedTests = newArrayList();

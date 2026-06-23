@@ -47,8 +47,7 @@ public class KerberosJdbcDataSource
         checkArgument(jdbcParamsState.kerberosKeytab.isPresent(), "kerberosKeytab must be specified");
         this.kerberosAuthentication = new KerberosAuthentication(
                 jdbcParamsState.kerberosPrincipal.get(),
-                jdbcParamsState.kerberosKeytab.get()
-        );
+                jdbcParamsState.kerberosKeytab.get());
     }
 
     @Override
@@ -57,7 +56,8 @@ public class KerberosJdbcDataSource
     {
         Subject authenticatedSubject = kerberosAuthentication.authenticate();
         try {
-            return Subject.doAs(authenticatedSubject,
+            return Subject.doAs(
+                    authenticatedSubject,
                     (PrivilegedExceptionAction<Connection>) () -> driver.connect(jdbcUrl, new Properties()));
         }
         catch (PrivilegedActionException e) {
@@ -79,14 +79,10 @@ public class KerberosJdbcDataSource
     }
 
     @Override
-    public void setLogWriter(PrintWriter out)
-    {
-    }
+    public void setLogWriter(PrintWriter out) {}
 
     @Override
-    public void setLoginTimeout(int seconds)
-    {
-    }
+    public void setLoginTimeout(int seconds) {}
 
     @Override
     public int getLoginTimeout()

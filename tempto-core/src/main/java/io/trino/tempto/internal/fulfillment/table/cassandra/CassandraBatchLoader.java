@@ -47,7 +47,8 @@ public class CassandraBatchLoader
 
     private static String createInsertQuery(String tableName, List<String> columnNames)
     {
-        return format("INSERT INTO %s (%s) VALUES(%s)",
+        return format(
+                "INSERT INTO %s (%s) VALUES(%s)",
                 tableName,
                 columnNames.stream().collect(joining(",")),
                 repeatPattern("?", ",", columnNames.size()));

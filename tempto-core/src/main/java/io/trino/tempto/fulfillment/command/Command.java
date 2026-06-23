@@ -33,8 +33,12 @@ public class Command
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Command command1 = (Command) o;
         return Objects.equals(command, command1.command);
     }

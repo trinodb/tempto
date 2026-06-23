@@ -74,8 +74,15 @@ public class SqlQueryConventionBasedTest
     private final SqlResultDescriptor resultDescriptor;
     private final Requirement requirement;
 
-    public SqlQueryConventionBasedTest(Optional<Path> beforeScriptFile, Optional<Path> afterScriptFile,
-            Path queryFile, String testNamePrefix, int queryNumber, int queriesCount, SqlQueryDescriptor queryDescriptor, SqlResultDescriptor resultDescriptor,
+    public SqlQueryConventionBasedTest(
+            Optional<Path> beforeScriptFile,
+            Optional<Path> afterScriptFile,
+            Path queryFile,
+            String testNamePrefix,
+            int queryNumber,
+            int queriesCount,
+            SqlQueryDescriptor queryDescriptor,
+            SqlResultDescriptor resultDescriptor,
             Requirement requirement)
     {
         this.beforeScriptPath = beforeScriptFile;

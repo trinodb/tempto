@@ -69,9 +69,9 @@ public class TableDefinitionsRepository
         if (instance == null) {
             List<TemptoPlugin> plugins = ImmutableList.copyOf(ServiceLoader.load(TemptoPlugin.class).iterator());
             List<TableDefinition> tables = Stream.concat(
-                    plugins.stream()
-                    .flatMap(plugin -> plugin.getTables().stream()),
-                    getAllConventionBasedTableDefinitions().stream())
+                            plugins.stream()
+                                    .flatMap(plugin -> plugin.getTables().stream()),
+                            getAllConventionBasedTableDefinitions().stream())
                     .collect(toImmutableList());
             instance = new TableDefinitionsRepository(tables);
         }

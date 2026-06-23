@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.nullToEmpty;
@@ -52,7 +51,6 @@ import static java.sql.JDBCType.INTEGER;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -97,7 +95,7 @@ public class QueryAssert
         catch (QueryExecutionException e) {
             executionException = e;
         }
-        return new QueryExecutionAssert(ofNullable(executionException));
+        return new QueryExecutionAssert(Optional.ofNullable(executionException));
     }
 
     @CheckReturnValue
@@ -407,8 +405,10 @@ public class QueryAssert
     public <T> QueryAssert column(int columnIndex, JDBCType type, ColumnValuesAssert<T> columnValuesAssert)
     {
         if (fromSqlIndex(columnIndex) > actual.getColumnsCount()) {
-            failWithMessage("Result contains only <%s> columns, extracting column <%s>",
-                    actual.getColumnsCount(), columnIndex);
+            failWithMessage(
+                    "Result contains only <%s> columns, extracting column <%s>",
+                    actual.getColumnsCount(),
+                    columnIndex);
         }
 
         JDBCType actualColumnType = actual.getColumnType(columnIndex);

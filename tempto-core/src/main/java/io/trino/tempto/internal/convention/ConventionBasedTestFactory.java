@@ -81,7 +81,8 @@ public class ConventionBasedTestFactory
                 new GeneratorPathTestFactory(),
                 new SqlPathTestFactory(
                         tableDefinitionsRepository(),
-                        new ConventionBasedTestProxyGenerator(TEST_PACKAGE), configuration));
+                        new ConventionBasedTestProxyGenerator(TEST_PACKAGE),
+                        configuration));
     }
 
     public List<ConventionBasedTest> createTestsForPath(Path path, String testNamePrefix)

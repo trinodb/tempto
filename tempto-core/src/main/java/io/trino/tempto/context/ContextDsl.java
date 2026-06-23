@@ -31,7 +31,5 @@ public final class ContextDsl
         }
     }
 
-    private ContextDsl()
-    {
-    }
+    private ContextDsl() {}
 }

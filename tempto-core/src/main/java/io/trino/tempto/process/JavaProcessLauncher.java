@@ -31,8 +31,7 @@ public final class JavaProcessLauncher
     {
         return new JavaProcessLauncher(
                 System.getProperty("java.home") + File.separator + "bin" + File.separator + "java",
-                System.getProperty("java.class.path")
-        );
+                System.getProperty("java.class.path"));
     }
 
     public JavaProcessLauncher(String javaBin, String classpath)

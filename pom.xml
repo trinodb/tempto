@@ -48,7 +48,6 @@
         <air.check.skip-modernizer>true</air.check.skip-modernizer>
         <air.check.skip-spotbugs>true</air.check.skip-spotbugs>
         <air.check.skip-pmd>true</air.check.skip-pmd>
-        <air.check.skip-airstyle>true</air.check.skip-airstyle>
 
         <project.build.targetJdk>25</project.build.targetJdk>
     </properties>

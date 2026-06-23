@@ -79,7 +79,6 @@ public abstract class AbstractConfiguration
 
     @Override
     public double getDoubleMandatory(String key)
-
     {
         return getDoubleMandatory(key, standardValueNotFoundMessage(key));
     }
@@ -179,7 +178,10 @@ public abstract class AbstractConfiguration
         }
     }
 
-    private String standardValueNotFoundMessage(String key) {return String.format("could not find value for key %s", key);}
+    private String standardValueNotFoundMessage(String key)
+    {
+        return String.format("could not find value for key %s", key);
+    }
 
     @Override
     public Map<String, Object> asMap()

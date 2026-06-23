@@ -79,7 +79,9 @@ public class TableManagerDispatcherModuleProvider
                         .orElse(ReadOnlyTableManager.TYPE.toLowerCase());
                 checkArgument(tableManagerClasses.containsKey(tableManagerType),
                         "unknown table manager type %s for database %s; expecting one of %s",
-                        tableManagerType, database, tableManagerClasses.keySet());
+                        tableManagerType,
+                        database,
+                        tableManagerClasses.keySet());
 
                 Class<? extends TableManager> tableManagerClass = tableManagerClasses.get(tableManagerType.toLowerCase());
 

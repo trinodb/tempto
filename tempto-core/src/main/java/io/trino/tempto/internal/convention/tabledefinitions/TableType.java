@@ -20,5 +20,5 @@ package io.trino.tempto.internal.convention.tabledefinitions;
 public enum TableType
 {
     HIVE,
-    JDBC
+    JDBC,
 }

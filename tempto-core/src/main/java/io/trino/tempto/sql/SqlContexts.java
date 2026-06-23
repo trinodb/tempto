@@ -58,7 +58,5 @@ public final class SqlContexts
         return prefix + randomAlphanumeric(4);
     }
 
-    private SqlContexts()
-    {
-    }
+    private SqlContexts() {}
 }

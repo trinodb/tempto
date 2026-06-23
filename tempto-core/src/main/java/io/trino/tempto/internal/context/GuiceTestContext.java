@@ -15,6 +15,7 @@
 package io.trino.tempto.internal.context;
 
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
@@ -30,7 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.inject.Guice.createInjector;
@@ -44,7 +44,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class GuiceTestContext
         implements TestContext
 {
-    private final static Logger LOGGER = getLogger(GuiceTestContext.class);
+    private static final Logger LOGGER = getLogger(GuiceTestContext.class);
 
     private final Optional<GuiceTestContext> parent;
     private final List<GuiceTestContext> children = synchronizedList(newArrayList());
@@ -134,7 +134,7 @@ public class GuiceTestContext
     @Override
     public void close()
     {
-        copyOf(children).forEach(GuiceTestContext::close);
+        ImmutableList.copyOf(children).forEach(GuiceTestContext::close);
         Lists.reverse(closeCallbacks).forEach(callback -> callback.testContextClosed(this));
 
         if (parent.isPresent()) {

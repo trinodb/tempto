@@ -17,8 +17,8 @@ import com.google.inject.Inject;
 import io.trino.tempto.AfterMethodWithContext;
 import io.trino.tempto.BeforeMethodWithContext;
 import io.trino.tempto.Requirement;
-import io.trino.tempto.Requires;
 import io.trino.tempto.RequirementsProvider;
+import io.trino.tempto.Requires;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.context.State;
 import io.trino.tempto.context.TestContext;
@@ -28,10 +28,10 @@ import io.trino.tempto.fulfillment.RequirementFulfiller.TestLevelFulfiller;
 import io.trino.tempto.fulfillment.TestStatus;
 import io.trino.tempto.internal.TestSpecificRequirementsResolver;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.api.Test;
 import org.testng.IInvokedMethod;
 import org.testng.IResultMap;
 import org.testng.ITestClass;
@@ -131,25 +131,43 @@ public class TestInitializationListenerTest
     {
         return Stream.of(
                 Arguments.of(new TestClass(), List.of(
-                        SUITE_A_FULFILL, TEST_B_FULFILL,
-                        BEFORE_METHOD, AFTER_METHOD,
-                        TEST_B_CLEANUP, TEST_B_CALLBACK,
-                        SUITE_A_CLEANUP, SUITE_A_CALLBACK)),
+                        SUITE_A_FULFILL,
+                        TEST_B_FULFILL,
+                        BEFORE_METHOD,
+                        AFTER_METHOD,
+                        TEST_B_CLEANUP,
+                        TEST_B_CALLBACK,
+                        SUITE_A_CLEANUP,
+                        SUITE_A_CALLBACK)),
                 Arguments.of(new TestClassNoOverrideAnnotatedMethods(), List.of(
-                        SUITE_A_FULFILL, TEST_B_FULFILL,
-                        BEFORE_METHOD, AFTER_METHOD,
-                        TEST_B_CLEANUP, TEST_B_CALLBACK,
-                        SUITE_A_CLEANUP, SUITE_A_CALLBACK)),
+                        SUITE_A_FULFILL,
+                        TEST_B_FULFILL,
+                        BEFORE_METHOD,
+                        AFTER_METHOD,
+                        TEST_B_CLEANUP,
+                        TEST_B_CALLBACK,
+                        SUITE_A_CLEANUP,
+                        SUITE_A_CALLBACK)),
                 Arguments.of(new TestClassOverrideAnnotatedMethods(), List.of(
-                        SUITE_A_FULFILL, TEST_B_FULFILL,
-                        BEFORE_METHOD_OVERRIDE, AFTER_METHOD_OVERRIDE,
-                        TEST_B_CLEANUP, TEST_B_CALLBACK,
-                        SUITE_A_CLEANUP, SUITE_A_CALLBACK)),
+                        SUITE_A_FULFILL,
+                        TEST_B_FULFILL,
+                        BEFORE_METHOD_OVERRIDE,
+                        AFTER_METHOD_OVERRIDE,
+                        TEST_B_CLEANUP,
+                        TEST_B_CALLBACK,
+                        SUITE_A_CLEANUP,
+                        SUITE_A_CALLBACK)),
                 Arguments.of(new TestClassAdditionalAnnotatedMethod(), List.of(
-                        SUITE_A_FULFILL, TEST_B_FULFILL,
-                        BEFORE_METHOD, BEFORE_METHOD_ADDITIONAL, AFTER_METHOD_ADDITIONAL, AFTER_METHOD,
-                        TEST_B_CLEANUP, TEST_B_CALLBACK,
-                        SUITE_A_CLEANUP, SUITE_A_CALLBACK)));
+                        SUITE_A_FULFILL,
+                        TEST_B_FULFILL,
+                        BEFORE_METHOD,
+                        BEFORE_METHOD_ADDITIONAL,
+                        AFTER_METHOD_ADDITIONAL,
+                        AFTER_METHOD,
+                        TEST_B_CLEANUP,
+                        TEST_B_CALLBACK,
+                        SUITE_A_CLEANUP,
+                        SUITE_A_CALLBACK)));
     }
 
     @Test
@@ -256,9 +274,7 @@ public class TestInitializationListenerTest
     }
 
     static class TestClassNoOverrideAnnotatedMethods
-            extends TestClass
-    {
-    }
+            extends TestClass {}
 
     static class TestClassAdditionalAnnotatedMethod
             extends TestClass
@@ -313,14 +329,10 @@ public class TestInitializationListenerTest
             events.add(new Event(AFTER_METHOD, this));
         }
 
-        public void testMethodSuccess()
-        {
-        }
+        public void testMethodSuccess() {}
 
         @Requires(CRequirement.class)
-        public void testMethodFailed()
-        {
-        }
+        public void testMethodFailed() {}
 
         @Override
         public Requirement getRequirements(Configuration configuration)

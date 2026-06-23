@@ -36,12 +36,12 @@ public class HdfsClientTest
         assertThat(hdfsClient.exist(defaultPath)).isTrue();
         assertThat(hdfsClient.getOwner(defaultPath)).isEqualTo("hive");
         assertThat(hdfsClient.getPermission(defaultPath)).isEqualTo("1777");
-
     }
 
     @Inject
     @Test(groups = "hdfs")
-    public void testMetadataOperations() {
+    public void testMetadataOperations()
+    {
         String testPath = "/user/hive/warehouse/test_metadata";
         hdfsClient.createDirectory(testPath);
 

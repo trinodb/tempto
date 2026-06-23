@@ -92,7 +92,7 @@ public class HiveThriftClient
             Table table = client.get_table(getSchema(tableName), tableName.getSchemalessNameInDatabase());
             setRowsCount(tableName, tableStatistics, table);
             try {
-                setColumnStatistics(tableName, tableStatistics, table, fieldSchema -> true);
+                setColumnStatistics(tableName, tableStatistics, table, _ -> true);
             }
             catch (TException ignore) {
                 transport.close();

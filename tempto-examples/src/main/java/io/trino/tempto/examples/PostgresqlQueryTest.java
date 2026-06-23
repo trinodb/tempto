@@ -15,6 +15,7 @@ package io.trino.tempto.examples;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.trino.tempto.ProductTest;
 import io.trino.tempto.Requirement;
 import io.trino.tempto.Requirements;
@@ -29,8 +30,6 @@ import io.trino.tempto.fulfillment.table.jdbc.RelationalDataSource;
 import io.trino.tempto.fulfillment.table.jdbc.RelationalTableDefinition;
 import io.trino.tempto.query.QueryExecutor;
 import org.testng.annotations.Test;
-
-import com.google.inject.name.Named;
 
 import java.util.List;
 
@@ -55,8 +54,7 @@ public class PostgresqlQueryTest
     static {
         RelationalDataSource dataSource = () -> ImmutableList.<List<Object>>of(
                 ImmutableList.of(1, "x"),
-                ImmutableList.of(2, "y")
-        ).iterator();
+                ImmutableList.of(2, "y")).iterator();
         TEST_TABLE_DEFINITION = relationalTableDefinition("test_table", "CREATE TABLE %NAME% (a int, b varchar(100))", dataSource);
     }
 
@@ -68,8 +66,7 @@ public class PostgresqlQueryTest
         {
             return Requirements.compose(
                     new ImmutableTableRequirement(RelationalTableDefinition.like(TEST_TABLE_DEFINITION).withDatabase("psql").build()),
-                    new ImmutableTableRequirement(RelationalTableDefinition.like(TEST_TABLE_DEFINITION).withDatabase("psql").withSchema("test_schema").build())
-            );
+                    new ImmutableTableRequirement(RelationalTableDefinition.like(TEST_TABLE_DEFINITION).withDatabase("psql").withSchema("test_schema").build()));
         }
     }
 
@@ -81,8 +78,7 @@ public class PostgresqlQueryTest
         {
             return Requirements.compose(
                     MutableTableRequirement.builder(TEST_TABLE_DEFINITION).withDatabase("psql").build(),
-                    MutableTableRequirement.builder(TEST_TABLE_DEFINITION).withDatabase("psql").withSchema("test_schema").build()
-            );
+                    MutableTableRequirement.builder(TEST_TABLE_DEFINITION).withDatabase("psql").withSchema("test_schema").build());
         }
     }
 

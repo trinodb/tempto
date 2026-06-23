@@ -29,7 +29,6 @@ import static com.google.common.collect.Iterables.indexOf;
 import static com.google.common.collect.Sets.intersection;
 import static java.lang.System.getProperty;
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.ofNullable;
 
 /**
  * We want to be able to select test methods to be run on per testName/testGroup basis.
@@ -131,9 +130,7 @@ public class TestNameGroupNameMethodSelector
     }
 
     @Override
-    public void setTestMethods(List<ITestNGMethod> testMethods)
-    {
-    }
+    public void setTestMethods(List<ITestNGMethod> testMethods) {}
 
     private static Set<String> getSetSystemProperty(String testNamesToRunProperty)
     {
@@ -146,7 +143,7 @@ public class TestNameGroupNameMethodSelector
     private static Optional<Set<String>> getOptionalSystemProperty(String testNamesToRunProperty)
     {
         String property = getProperty(testNamesToRunProperty);
-        return ofNullable(property)
+        return Optional.ofNullable(property)
                 .map(LIST_SYSTEM_PROPERTY_SPLITTER::split)
                 .map(Sets::newHashSet);
     }

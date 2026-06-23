@@ -14,16 +14,14 @@
 
 package io.trino.tempto.query;
 
+import com.google.inject.Inject;
 import io.trino.tempto.context.TestContext;
 import org.slf4j.Logger;
-
-import com.google.inject.Inject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 
 import static io.trino.tempto.query.QueryResult.forSingleIntegerValue;
 import static io.trino.tempto.query.QueryResult.toSqlIndex;
@@ -40,17 +38,18 @@ public class JdbcQueryExecutor
     private final JdbcConnectivityParamsState jdbcParamsState;
     private final JdbcConnectionsPool jdbcConnectionsPool;
 
-    private Connection connection = null;
+    private Connection connection;
 
     @Inject
-    public JdbcQueryExecutor(JdbcConnectivityParamsState jdbcParamsState,
+    public JdbcQueryExecutor(
+            JdbcConnectivityParamsState jdbcParamsState,
             JdbcConnectionsPool jdbcConnectionsPool,
             TestContext testContext)
     {
         this.jdbcParamsState = requireNonNull(jdbcParamsState, "jdbcParamsState is null");
         this.jdbcConnectionsPool = requireNonNull(jdbcConnectionsPool, "jdbcConnectionsPool is null");
         this.jdbcUrl = jdbcParamsState.url;
-        testContext.registerCloseCallback(context -> this.close());
+        testContext.registerCloseCallback(_ -> this.close());
     }
 
     public void openConnection()

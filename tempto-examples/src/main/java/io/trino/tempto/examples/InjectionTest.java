@@ -15,14 +15,13 @@
 package io.trino.tempto.examples;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.trino.tempto.AfterMethodWithContext;
 import io.trino.tempto.BeforeMethodWithContext;
 import io.trino.tempto.ProductTest;
 import io.trino.tempto.fulfillment.table.ImmutableTablesState;
 import io.trino.tempto.fulfillment.table.MutableTablesState;
 import org.testng.annotations.Test;
-
-import com.google.inject.name.Named;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,8 +35,7 @@ public class InjectionTest
     @Inject
     public void setUp(
             ImmutableTablesState immutableTablesState,
-            @Named("hdfs.username") String hdfsUsername
-    )
+            @Named("hdfs.username") String hdfsUsername)
     {
         testMethodInjection(immutableTablesState, hdfsUsername);
     }
@@ -53,8 +51,7 @@ public class InjectionTest
     @Inject
     public void tearDown(
             ImmutableTablesState immutableTablesState,
-            @Named("hdfs.username") String hdfsUsername
-    )
+            @Named("hdfs.username") String hdfsUsername)
     {
         testMethodInjection(immutableTablesState, hdfsUsername);
     }

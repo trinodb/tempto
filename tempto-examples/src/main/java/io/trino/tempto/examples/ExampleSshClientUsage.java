@@ -15,13 +15,12 @@
 package io.trino.tempto.examples;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.trino.tempto.ProductTest;
 import io.trino.tempto.process.CliProcess;
 import io.trino.tempto.ssh.SshClient;
 import io.trino.tempto.ssh.SshClientFactory;
 import org.testng.annotations.Test;
-
-import com.google.inject.name.Named;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

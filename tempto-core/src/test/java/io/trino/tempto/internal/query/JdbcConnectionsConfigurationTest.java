@@ -27,7 +27,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class JdbcConnectionsConfigurationTest
 {
-    private static final YamlConfiguration CONFIGURATION = new YamlConfiguration("""
+    private static final YamlConfiguration CONFIGURATION = new YamlConfiguration(
+            """
             databases:
               a:
                 jdbc_driver_class: com.acme.ADriver
@@ -58,7 +59,8 @@ public class JdbcConnectionsConfigurationTest
                 blah: true
             """);
 
-    private static final YamlConfiguration BAD_CONFIGURATION = new YamlConfiguration("""
+    private static final YamlConfiguration BAD_CONFIGURATION = new YamlConfiguration(
+            """
             databases:
               a:
                 alias: b

@@ -49,7 +49,5 @@ public class ImmutableTablesFulfiller
     }
 
     @Override
-    public void cleanup(TestStatus status)
-    {
-    }
+    public void cleanup(TestStatus status) {}
 }

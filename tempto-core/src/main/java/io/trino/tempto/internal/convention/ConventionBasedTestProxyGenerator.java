@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Set;
 
 import static java.lang.Character.isAlphabetic;
-import static java.lang.ClassLoader.getSystemClassLoader;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**

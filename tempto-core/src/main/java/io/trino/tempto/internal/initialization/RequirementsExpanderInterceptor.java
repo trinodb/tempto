@@ -49,7 +49,7 @@ public class RequirementsExpanderInterceptor
 
     private final TestSpecificRequirementsResolver testSpecificRequirementsResolver;
 
-    private volatile int seenMethodsCount = 0;
+    private volatile int seenMethodsCount;
 
     public RequirementsExpanderInterceptor()
     {
@@ -97,7 +97,10 @@ public class RequirementsExpanderInterceptor
         }
     }
 
-    private boolean isMethodAlreadyExpanded(IMethodInstance method) {return method.getMethod() instanceof RequirementsAwareTestNGMethod;}
+    private boolean isMethodAlreadyExpanded(IMethodInstance method)
+    {
+        return method.getMethod() instanceof RequirementsAwareTestNGMethod;
+    }
 
     private List<IMethodInstance> expandMethod(IMethodInstance method)
     {

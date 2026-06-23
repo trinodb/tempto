@@ -19,7 +19,6 @@ import io.trino.tempto.testmarkers.WithTestGroups;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
-import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;

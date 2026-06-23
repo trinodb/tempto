@@ -56,8 +56,7 @@ public class KerberosAuthentication
                         new AppConfigurationEntry(
                                 "com.sun.security.auth.module.Krb5LoginModule",
                                 AppConfigurationEntry.LoginModuleControlFlag.REQUIRED,
-                                loginOptions
-                        )
+                                loginOptions),
                 };
             }
         };

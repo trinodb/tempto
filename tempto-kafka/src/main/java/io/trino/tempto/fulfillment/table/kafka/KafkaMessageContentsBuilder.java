@@ -52,7 +52,7 @@ public class KafkaMessageContentsBuilder
     public KafkaMessageContentsBuilder appendIntBigEndian(int v)
     {
         for (int i = 3; i >= 0; --i) {
-            contents.write((v >> (i * 8)) & 0xff);
+            contents.write((v >> (i * 8)) & 0xFF);
         }
         return this;
     }
@@ -60,7 +60,7 @@ public class KafkaMessageContentsBuilder
     public KafkaMessageContentsBuilder appendLongBigEndian(long v)
     {
         for (int i = 7; i >= 0; --i) {
-            contents.write((int) ((v >> (i * 8)) & 0xffL));
+            contents.write((int) ((v >> (i * 8)) & 0xFFL));
         }
         return this;
     }

@@ -108,7 +108,8 @@ public class TemptoRunnerCommandLineParser
         Options options = buildOptions();
         HelpFormatter helpFormatter = new HelpFormatter();
         helpFormatter.setOptionComparator(OPTION_BY_LONG_OPT_COMPARATOR);
-        helpFormatter.printHelp(printWriter,
+        helpFormatter.printHelp(
+                printWriter,
                 120,
                 appName,
                 null,

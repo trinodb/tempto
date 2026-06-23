@@ -67,7 +67,6 @@ public class CassandraQueryExecutor
             .build();
     private final CqlSession session;
 
-
     public static class TypeNotSupportedException
             extends IllegalStateException
     {

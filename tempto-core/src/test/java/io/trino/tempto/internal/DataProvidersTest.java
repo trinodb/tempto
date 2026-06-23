@@ -48,16 +48,13 @@ public class DataProvidersTest
         }
 
         @org.testng.annotations.Test
-        void testMethodWithoutDataProvider()
-        {}
+        void testMethodWithoutDataProvider() {}
 
         @org.testng.annotations.Test(dataProvider = "internal_data_provider")
-        void testMethodWithInternalDataProvider()
-        {}
+        void testMethodWithInternalDataProvider() {}
 
         @org.testng.annotations.Test(dataProvider = "external_data_provider", dataProviderClass = ExternalDataProviderClass.class)
-        void testMethodWithExternalDataProvider()
-        {}
+        void testMethodWithExternalDataProvider() {}
     }
 
     @Test

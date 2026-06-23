@@ -63,7 +63,8 @@ public class HdfsModuleProvider
                 Set<String> configurationKeys = configuration.listKeys();
                 if (!configurationKeys.contains(CONF_HDFS_WEBHDFS_URI_KEY)
                         || !configurationKeys.contains(CONF_TESTS_HDFS_PATH_KEY)) {
-                    logger.debug("No HDFS support enabled as '{}' or '{}' is not configured",
+                    logger.debug(
+                            "No HDFS support enabled as '{}' or '{}' is not configured",
                             CONF_HDFS_WEBHDFS_URI_KEY,
                             CONF_TESTS_HDFS_PATH_KEY);
                     return;

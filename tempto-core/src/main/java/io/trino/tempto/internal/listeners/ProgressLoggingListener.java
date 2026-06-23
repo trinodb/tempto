@@ -32,7 +32,7 @@ import static java.lang.System.currentTimeMillis;
 public class ProgressLoggingListener
         implements ITestListener
 {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ProgressLoggingListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProgressLoggingListener.class);
 
     private int started;
     private int succeeded;
@@ -103,9 +103,7 @@ public class ProgressLoggingListener
     }
 
     @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult testCase)
-    {
-    }
+    public void onTestFailedButWithinSuccessPercentage(ITestResult testCase) {}
 
     @Override
     public void onFinish(ITestContext context)

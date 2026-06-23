@@ -94,9 +94,7 @@ public class ReflectionInjectorHelperTest
             }
 
             @Override
-            public void registerCloseCallback(TestContextCloseCallback callback)
-            {
-            }
+            public void registerCloseCallback(TestContextCloseCallback callback) {}
 
             @Override
             public void injectMembers(Object instance)
@@ -105,9 +103,7 @@ public class ReflectionInjectorHelperTest
             }
 
             @Override
-            public void close()
-            {
-            }
+            public void close() {}
         };
     }
 

@@ -14,7 +14,6 @@
 
 package io.trino.tempto.query;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableBiMap;
@@ -39,7 +38,6 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.sql.JDBCType.INTEGER;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -88,7 +86,7 @@ public class QueryResult
 
     public Optional<Integer> tryFindColumnIndex(String columnName)
     {
-        return ofNullable(columnNamesIndexes.get(columnName));
+        return Optional.ofNullable(columnNamesIndexes.get(columnName));
     }
 
     public List<?> row(int rowIndex)
@@ -231,7 +229,8 @@ public class QueryResult
         {
             checkState(columnTypes.size() == columnNames.size(),
                     "inconsistent number of entries in columnTypes and columnNames lists %s != %s",
-                    columnTypes.size(), columnNames.size());
+                    columnTypes.size(),
+                    columnNames.size());
             this.columnTypes.addAll(columnTypes);
             int sqlColumnIndex = 1;
             for (String columnName : columnNames) {
@@ -247,7 +246,7 @@ public class QueryResult
 
         public QueryResultBuilder addRow(List<?> rowValues)
         {
-            Preconditions.checkState(rowValues.size() == columnTypes.size(), "expected %s objects", columnTypes.size());
+            checkState(rowValues.size() == columnTypes.size(), "expected %s objects", columnTypes.size());
             values.add(newArrayList(rowValues));
             return this;
         }

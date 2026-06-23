@@ -40,7 +40,10 @@ public class JdbcConnectionsConfiguration
 
     private final Configuration configuration;
 
-    public JdbcConnectionsConfiguration(Configuration configuration) {this.configuration = configuration;}
+    public JdbcConnectionsConfiguration(Configuration configuration)
+    {
+        this.configuration = configuration;
+    }
 
     public Set<String> getDefinedJdbcConnectionNames()
     {

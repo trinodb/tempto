@@ -175,7 +175,7 @@ public class ParallelExecution
     {
         return runnables
                 .stream()
-                .map((Runnable runnable) -> (IndexedRunnable) (int threadIndex) -> runnable.run())
+                .map((Runnable runnable) -> (IndexedRunnable) (int _) -> runnable.run())
                 .collect(toList());
     }
 }

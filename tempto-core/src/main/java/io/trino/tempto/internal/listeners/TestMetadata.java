@@ -14,11 +14,12 @@
 
 package io.trino.tempto.internal.listeners;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Set;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ImmutableSet.copyOf;
 
 public class TestMetadata
 {
@@ -28,8 +29,8 @@ public class TestMetadata
 
     public TestMetadata(Set<String> testGroups, String testName, Object[] testParameters)
     {
-        this.testGroups = copyOf(checkNotNull(testGroups, "testGroups can not be null"));
+        this.testGroups = ImmutableSet.copyOf(checkNotNull(testGroups, "testGroups can not be null"));
         this.testName = checkNotNull(testName, "testName can not be null");
-        this.testParameters = firstNonNull(testParameters, new Object[]{});
+        this.testParameters = firstNonNull(testParameters, new Object[] {});
     }
 }

@@ -78,8 +78,7 @@ public class AnnotatedFileParser
     public List<SectionParsingResult> parseFile(Path path)
     {
         try (
-                InputStream inputStream = new BufferedInputStream(newInputStream(path))
-        ) {
+                InputStream inputStream = new BufferedInputStream(newInputStream(path))) {
             return parseFile(inputStream);
         }
         catch (IOException e) {

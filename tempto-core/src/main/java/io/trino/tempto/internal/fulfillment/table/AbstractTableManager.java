@@ -37,7 +37,7 @@ public abstract class AbstractTableManager<T extends TableDefinition>
 
     private final QueryExecutor queryExecutor;
     private final TableNameGenerator tableNameGenerator;
-    private boolean staleMutableTablesDropped = false;
+    private boolean staleMutableTablesDropped;
 
     public AbstractTableManager(QueryExecutor queryExecutor, TableNameGenerator tableNameGenerator)
     {
@@ -97,8 +97,7 @@ public abstract class AbstractTableManager<T extends TableDefinition>
                 tableHandle.getDatabase().orElse(getDatabaseName()),
                 tableHandle.getSchema(),
                 tableHandle.getName(),
-                nameInDatabase
-        );
+                nameInDatabase);
     }
 
     protected TableName createImmutableTableName(TableHandle tableHandle)
@@ -107,8 +106,7 @@ public abstract class AbstractTableManager<T extends TableDefinition>
                 tableHandle.getDatabase().orElse(getDatabaseName()),
                 tableHandle.getSchema(),
                 tableHandle.getName(),
-                tableHandle.getName()
-        );
+                tableHandle.getName());
     }
 
     @Override

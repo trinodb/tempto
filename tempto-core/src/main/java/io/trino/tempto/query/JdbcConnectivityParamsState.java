@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.empty;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
@@ -102,11 +101,11 @@ public class JdbcConnectivityParamsState
         private String url;
         private String user = "";
         private String password = "";
-        private boolean pooling = false;
-        private Optional<String> jar = empty();
+        private boolean pooling;
+        private Optional<String> jar = Optional.empty();
         private List<String> prepareStatements = ImmutableList.of();
-        private Optional<String> kerberosPrincipal = empty();
-        private Optional<String> kerberosKeytab = empty();
+        private Optional<String> kerberosPrincipal = Optional.empty();
+        private Optional<String> kerberosKeytab = Optional.empty();
 
         private Builder() {}
 
@@ -182,8 +181,7 @@ public class JdbcConnectivityParamsState
                     jar,
                     prepareStatements,
                     kerberosPrincipal,
-                    kerberosKeytab
-            );
+                    kerberosKeytab);
         }
     }
 }

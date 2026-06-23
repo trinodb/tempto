@@ -30,13 +30,14 @@ public class JdbcTpchTableDefinitions
     public static final ImmutableList<JDBCType> NATION_TYPES = ImmutableList.of(BIGINT, VARCHAR, BIGINT, VARCHAR);
 
     public static final RelationalTableDefinition NATION =
-            relationalTableDefinition("nation_jdbc",
+            relationalTableDefinition(
+                    "nation_jdbc",
                     "CREATE TABLE %NAME%(" +
                             "   n_nationkey     BIGINT," +
                             "   n_name          VARCHAR(25)," +
                             "   n_regionkey     BIGINT," +
-                            "   n_comment       VARCHAR(152)) ", new JdbcTpchDataSource(TpchTable.NATION, NATION_TYPES, DEFAULT_SCALE_FACTOR));
+                            "   n_comment       VARCHAR(152)) ",
+                    new JdbcTpchDataSource(TpchTable.NATION, NATION_TYPES, DEFAULT_SCALE_FACTOR));
 
     private JdbcTpchTableDefinitions() {}
 }
-

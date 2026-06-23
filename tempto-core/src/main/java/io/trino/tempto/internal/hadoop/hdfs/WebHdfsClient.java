@@ -16,7 +16,6 @@ package io.trino.tempto.internal.hadoop.hdfs;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -237,7 +236,8 @@ public class WebHdfsClient
     }
 
     @Override
-    public void setOwner(String path, String owner) {
+    public void setOwner(String path, String owner)
+    {
         HttpPut request = new HttpPut(buildUri(path, "SETOWNER", ImmutableMap.of("owner", owner)));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
             if (response.getStatusLine().getStatusCode() != SC_OK) {
@@ -258,7 +258,8 @@ public class WebHdfsClient
     }
 
     @Override
-    public void setGroup(String path, String group) {
+    public void setGroup(String path, String group)
+    {
         HttpPut request = new HttpPut(buildUri(path, "SETOWNER", ImmutableMap.of("group", group)));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
             if (response.getStatusLine().getStatusCode() != SC_OK) {
@@ -279,7 +280,8 @@ public class WebHdfsClient
     }
 
     @Override
-    public void setPermission(String path, String octalPermissions) {
+    public void setPermission(String path, String octalPermissions)
+    {
         HttpPut request = new HttpPut(buildUri(path, "SETPERMISSION", ImmutableMap.of("permission", octalPermissions)));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
             if (response.getStatusLine().getStatusCode() != SC_OK) {
@@ -310,8 +312,7 @@ public class WebHdfsClient
         Map<String, String> params = ImmutableMap.of(
                 "xattr.name", key,
                 "xattr.value", value,
-                "flag", "CREATE"
-        );
+                "flag", "CREATE");
         HttpPut setXAttrRequest = new HttpPut(buildUri(path, "SETXATTR", params));
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(setXAttrRequest)) {
             if (response.getStatusLine().getStatusCode() != SC_OK) {
@@ -374,7 +375,8 @@ public class WebHdfsClient
     {
         try (CloseableHttpResponse response = httpRequestsExecutor.execute(request)) {
             if (response.getStatusLine().getStatusCode() != SC_TEMPORARY_REDIRECT) {
-                throw new RuntimeException(format("Expected %s redirect for request %s, but got %s: %s",
+                throw new RuntimeException(format(
+                        "Expected %s redirect for request %s, but got %s: %s",
                         SC_TEMPORARY_REDIRECT,
                         request,
                         response.getStatusLine().getStatusCode(),

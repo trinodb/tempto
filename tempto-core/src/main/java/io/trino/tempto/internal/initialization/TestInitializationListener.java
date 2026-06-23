@@ -100,8 +100,7 @@ public class TestInitializationListener
 
     private TestInitializationListener(List<TemptoPlugin> plugins)
     {
-        this(
-                plugins.stream()
+        this(plugins.stream()
                         .flatMap(plugin -> plugin.getSuiteModules().stream())
                         .map(ReflectionHelper::instantiate)
                         .collect(toImmutableList()),
@@ -300,7 +299,8 @@ public class TestInitializationListener
                 });
     }
 
-    private void doFulfillment(TestContextStack<TestContext> testContextStack,
+    private void doFulfillment(
+            TestContextStack<TestContext> testContextStack,
             List<Class<? extends RequirementFulfiller>> fulfillerClasses,
             Set<Requirement> requirements)
     {
@@ -403,9 +403,7 @@ public class TestInitializationListener
     }
 
     @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result)
-    {
-    }
+    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
 
     private static class SuiteInitializationException
             extends RuntimeException
@@ -414,8 +412,7 @@ public class TestInitializationListener
 
         SuiteInitializationException(String message)
         {
-            super(
-                    message,
+            super(message,
                     null,
                     true,
                     // Suppress stacktrace for all but first 10 exceptions. It is not useful when printed for every test.

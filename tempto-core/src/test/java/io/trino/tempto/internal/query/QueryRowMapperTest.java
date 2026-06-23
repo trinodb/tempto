@@ -40,7 +40,7 @@ public class QueryRowMapperTest
     {
         return Stream.of(
                 Arguments.of("0000", bytes(0x00, 0x00)),
-                Arguments.of("0ab0", bytes(0x0a, 0xb0)));
+                Arguments.of("0ab0", bytes(0x0A, 0xB0)));
     }
 
     @Test

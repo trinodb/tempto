@@ -82,7 +82,5 @@ public interface TableManager<T extends TableDefinition>
 
     Class<? extends TableDefinition> getTableDefinitionClass();
 
-    default void close()
-    {
-    }
+    default void close() {}
 }
