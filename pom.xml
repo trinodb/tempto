@@ -10,7 +10,7 @@
 
     <groupId>io.trino.tempto</groupId>
     <artifactId>tempto-root</artifactId>
-    <version>203-SNAPSHOT</version>
+    <version>204-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>tempto-root</name>
