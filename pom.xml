@@ -58,22 +58,6 @@
         <dependencies>
 
             <dependency>
-                <groupId>org.apache.groovy</groupId>
-                <artifactId>groovy-bom</artifactId>
-                <version>4.0.32</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.spockframework</groupId>
-                <artifactId>spock-bom</artifactId>
-                <version>2.3-groovy-4.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
                 <groupId>com.datastax.oss</groupId>
                 <artifactId>java-driver-core</artifactId>
                 <version>4.14.0</version>
