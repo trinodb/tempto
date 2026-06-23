@@ -40,6 +40,12 @@ public class RequirementsAwareTestNGMethod
     @Override
     public ITestNGMethod clone()
     {
-        return new RequirementsAwareTestNGMethod(super.delegate.clone(), newHashSet(requirements));
+        ITestNGMethod clonedDelegate = super.delegate.clone();
+        // TestNGMethod.clone() resets the cloned method's test class to a bare NoOpTestClass, which does
+        // not implement ITestClassConfigInfo. TestNG's TestMethodWorker.invokeBeforeClassMethods casts the
+        // method's test class to ITestClassConfigInfo, so leaving the NoOpTestClass in place fails with a
+        // ClassCastException. Restore the original (config-aware) ITestClass on the clone.
+        clonedDelegate.setTestClass(super.delegate.getTestClass());
+        return new RequirementsAwareTestNGMethod(clonedDelegate, newHashSet(requirements));
     }
 }

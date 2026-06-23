@@ -112,6 +112,10 @@ public class RequirementsExpanderInterceptor
         else {
             for (Set<Requirement> requirementSet : testSpecificRequirements) {
                 TestNGMethod clonedMethod = (TestNGMethod) method.getMethod().clone();
+                // TestNGMethod.clone() resets the test class to a bare NoOpTestClass (not an
+                // ITestClassConfigInfo), which breaks TestNG's @BeforeClass handling with a ClassCastException.
+                // Restore the original (config-aware) ITestClass on the clone.
+                clonedMethod.setTestClass(method.getMethod().getTestClass());
                 extendedMethods.add(new MethodInstance(new RequirementsAwareTestNGMethod(clonedMethod, requirementSet)));
             }
         }
