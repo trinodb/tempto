@@ -3,6 +3,7 @@
 *.iws
 target/
 pom.xml.versionsBackup
+dependency-reduced-pom.xml
 test-output/
 test-reports/
 tempto_logs/
