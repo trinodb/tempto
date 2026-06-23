@@ -86,8 +86,13 @@ public class JdbcQueryExecutor
     @Override
     public Connection getConnection()
     {
-        if (connection == null) {
-            openConnection();
+        try {
+            if (connection == null || connection.isClosed()) {
+                openConnection();
+            }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return connection;
     }
