@@ -11,6 +11,7 @@
     <artifactId>tempto-runner</artifactId>
     <packaging>jar</packaging>
 
+    <name>tempto-runner</name>
     <description>Tempto - test runner</description>
 
     <properties>

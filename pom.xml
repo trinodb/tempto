@@ -13,6 +13,7 @@
     <version>203-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>tempto-root</name>
     <description>Tempto - test framework</description>
     <url>https://github.com/trinodb/tempto</url>
 
