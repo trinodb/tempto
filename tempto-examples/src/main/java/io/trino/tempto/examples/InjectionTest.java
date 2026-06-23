@@ -21,7 +21,8 @@ import io.trino.tempto.BeforeMethodWithContext;
 import io.trino.tempto.ProductTest;
 import io.trino.tempto.fulfillment.table.ImmutableTablesState;
 import io.trino.tempto.fulfillment.table.MutableTablesState;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +41,8 @@ public class InjectionTest
         testMethodInjection(immutableTablesState, hdfsUsername);
     }
 
-    @Inject
-    @Test(groups = "injection")
+    @Test
+    @Tag("injection")
     public void testInjection()
     {
         assertThat(mutableTablesState).isNotNull();

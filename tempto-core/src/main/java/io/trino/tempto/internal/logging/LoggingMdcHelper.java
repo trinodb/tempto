@@ -14,22 +14,15 @@
 
 package io.trino.tempto.internal.logging;
 
-import io.trino.tempto.internal.listeners.TestMetadata;
-import io.trino.tempto.internal.listeners.TestMetadataReader;
-import org.testng.ITestResult;
-
 public class LoggingMdcHelper
 {
     private static final String MDC_TEST_ID_KEY = "test_id";
-    private static final TestMetadataReader testMetadataReader = new TestMetadataReader();
 
     private LoggingMdcHelper() {}
 
-    public static void setupLoggingMdcForTest(ITestResult testCase)
+    public static void setupLoggingMdcForTest(String testId)
     {
-        TestMetadata testMetadata = testMetadataReader.readTestMetadata(testCase);
-        String testId = testMetadata.testName;
-        org.slf4j.MDC.put("test_id", testId);
+        org.slf4j.MDC.put(MDC_TEST_ID_KEY, testId);
     }
 
     public static void cleanLoggingMdc()

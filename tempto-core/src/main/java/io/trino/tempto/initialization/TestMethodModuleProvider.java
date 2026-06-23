@@ -15,7 +15,6 @@ package io.trino.tempto.initialization;
 
 import com.google.inject.Module;
 import io.trino.tempto.configuration.Configuration;
-import org.testng.ITestResult;
 
 /**
  * Classes implementing this interface provide {@link Module}s
@@ -24,5 +23,5 @@ import org.testng.ITestResult;
 @FunctionalInterface
 public interface TestMethodModuleProvider
 {
-    Module getModule(Configuration configuration, ITestResult testResult);
+    Module getModule(Configuration configuration, TestMethodInfo testMethodInfo);
 }

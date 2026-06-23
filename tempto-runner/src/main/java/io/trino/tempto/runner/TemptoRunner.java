@@ -15,33 +15,35 @@
 package io.trino.tempto.runner;
 
 import com.google.common.base.Joiner;
-import io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector;
+import io.trino.tempto.internal.convention.ConventionBasedTests;
+import io.trino.tempto.internal.listeners.TestNameGroupNameFilter;
+import org.junit.platform.launcher.Launcher;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.core.LauncherFactory;
+import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
+import org.junit.platform.launcher.listeners.TestExecutionSummary;
+import org.junit.platform.reporting.legacy.xml.LegacyXmlReportGeneratingListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.TestNG;
-import org.testng.xml.XmlClass;
-import org.testng.xml.XmlPackage;
-import org.testng.xml.XmlSuite;
-import org.testng.xml.XmlTest;
 
-import java.util.List;
+import java.io.PrintWriter;
+import java.nio.file.Paths;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
-import static com.google.common.collect.Lists.newArrayList;
 import static io.trino.tempto.internal.configuration.TestConfigurationFactory.TEST_CONFIGURATION_URIS_KEY;
 import static io.trino.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_DIR_KEY;
 import static io.trino.tempto.internal.convention.ConventionTestsUtils.CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY;
-import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_EXCLUDE_PROPERTY;
-import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_GROUPS_TO_RUN_PROPERTY;
-import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_EXCLUDE_PROPERTY;
-import static io.trino.tempto.internal.listeners.TestNameGroupNameMethodSelector.TEST_NAMES_TO_RUN_PROPERTY;
-import static java.util.Collections.singletonList;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameFilter.TEST_GROUPS_TO_EXCLUDE_PROPERTY;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameFilter.TEST_GROUPS_TO_RUN_PROPERTY;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameFilter.TEST_NAMES_TO_EXCLUDE_PROPERTY;
+import static io.trino.tempto.internal.listeners.TestNameGroupNameFilter.TEST_NAMES_TO_RUN_PROPERTY;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPackage;
+import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.request;
 
 public class TemptoRunner
 {
     private static final Logger LOG = LoggerFactory.getLogger(TemptoRunner.class);
-    private static final int METHOD_SELECTOR_PRIORITY = 20;
-    private static final String METHOD_SELECTOR_CLASS_NAME = TestNameGroupNameMethodSelector.class.getName();
+
     private final TemptoRunnerCommandLineParser parser;
     private final TemptoRunnerOptions options;
 
@@ -78,20 +80,48 @@ public class TemptoRunner
             return;
         }
 
-        XmlSuite testSuite = getXmlSuite();
-        testSuite.setThreadCount(options.getThreadCount());
         setupTestsConfiguration();
+        setupTestsFiltering();
         System.setProperty(CONVENTION_TESTS_DIR_KEY, options.getConventionTestsDirectory());
-        TestNG testNG = new TestNG();
-        testNG.setXmlSuites(singletonList(testSuite));
-        testNG.setOutputDirectory(options.getReportDir());
-        setupTestsFiltering(testNG);
         options.getConventionResultsDumpPath()
                 .ifPresent(path -> System.setProperty(CONVENTION_TESTS_RESULTS_DUMP_PATH_KEY, path));
-        testNG.run();
-        if (testNG.hasFailure()) {
+
+        LauncherDiscoveryRequest request = buildDiscoveryRequest();
+        Launcher launcher = LauncherFactory.create();
+
+        SummaryGeneratingListener summaryListener = new SummaryGeneratingListener();
+        LegacyXmlReportGeneratingListener reportListener = new LegacyXmlReportGeneratingListener(
+                Paths.get(options.getReportDir()),
+                new PrintWriter(System.out, true));
+        launcher.registerTestExecutionListeners(summaryListener, reportListener);
+
+        launcher.execute(request);
+
+        TestExecutionSummary summary = summaryListener.getSummary();
+        summary.printTo(new PrintWriter(System.out, true));
+        if (summary.getTotalFailureCount() > 0) {
+            summary.printFailuresTo(new PrintWriter(System.out, true));
             System.exit(1);
         }
+    }
+
+    private LauncherDiscoveryRequest buildDiscoveryRequest()
+    {
+        var builder = request();
+        options.getTestsPackage().forEach(pkg -> builder.selectors(selectPackage(pkg)));
+        // Convention-based (file driven) tests are exposed as JUnit dynamic tests by this class.
+        builder.selectors(selectClass(ConventionBasedTests.class));
+        builder.filters(TestNameGroupNameFilter.fromSystemProperties());
+
+        boolean parallel = !options.getParallel().map("none"::equalsIgnoreCase).orElse(false);
+        builder.configurationParameter("junit.jupiter.execution.parallel.enabled", Boolean.toString(parallel));
+        if (parallel) {
+            builder.configurationParameter("junit.jupiter.execution.parallel.mode.default", "concurrent");
+            builder.configurationParameter("junit.jupiter.execution.parallel.mode.classes.default", "concurrent");
+            builder.configurationParameter("junit.jupiter.execution.parallel.config.strategy", "fixed");
+            builder.configurationParameter("junit.jupiter.execution.parallel.config.fixed.parallelism", Integer.toString(options.getThreadCount()));
+        }
+        return builder.build();
     }
 
     private void setupTestsConfiguration()
@@ -99,7 +129,7 @@ public class TemptoRunner
         System.setProperty(TEST_CONFIGURATION_URIS_KEY, options.getConfigFiles());
     }
 
-    private void setupTestsFiltering(TestNG testNG)
+    private void setupTestsFiltering()
     {
         if (!options.getTestGroups().isEmpty()) {
             System.setProperty(TEST_GROUPS_TO_RUN_PROPERTY, Joiner.on(',').join(options.getTestGroups()));
@@ -113,31 +143,5 @@ public class TemptoRunner
         if (!options.getExcludedTests().isEmpty()) {
             System.setProperty(TEST_NAMES_TO_EXCLUDE_PROPERTY, Joiner.on(',').join(options.getExcludedTests()));
         }
-        testNG.addMethodSelector(METHOD_SELECTOR_CLASS_NAME, METHOD_SELECTOR_PRIORITY);
-    }
-
-    private XmlSuite getXmlSuite()
-    {
-        // we cannot use singletonLists here as testNG later
-        // modifies lists stored in XmlSuite ... zonk
-        XmlSuite testSuite = new XmlSuite();
-        testSuite.setName("tempto-tests");
-        testSuite.setFileName("tempto-tests");
-        XmlTest test = new XmlTest(testSuite);
-        test.setName("all");
-        List<XmlPackage> testPackages = options.getTestsPackage().stream()
-                .map(XmlPackage::new)
-                .collect(toImmutableList());
-        test.setPackages(testPackages);
-        XmlClass conventionBasedTestsClass = new XmlClass("io.trino.tempto.internal.convention.ConventionBasedTestFactory");
-        List<XmlClass> classes = newArrayList(conventionBasedTestsClass);
-        test.setClasses(classes);
-        // Default to per-method parallelism, but honour an explicit --parallel override (e.g.
-        // "--parallel none" is handy for diagnosing failures: in sequential mode TestNG surfaces the
-        // real exception instead of masking it behind the GraphOrchestrator "worker is null" NPE).
-        test.setParallel(options.getParallel()
-                .map(XmlSuite.ParallelMode::getValidParallel)
-                .orElse(XmlSuite.ParallelMode.METHODS));
-        return testSuite;
     }
 }

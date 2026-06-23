@@ -14,14 +14,10 @@
 
 package io.trino.tempto.testmarkers;
 
-import org.testng.ITest;
-
 /**
- * Marker interface for test classes which explicitly define dest name.
+ * Marker interface for test classes which explicitly define their test name.
  */
 public interface WithName
-        extends ITest
 {
-    @Override
     String getTestName();
 }

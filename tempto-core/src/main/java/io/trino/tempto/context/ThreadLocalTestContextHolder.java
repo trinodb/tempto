@@ -15,15 +15,18 @@
 package io.trino.tempto.context;
 
 import com.google.common.annotations.VisibleForTesting;
-import io.trino.tempto.internal.context.TestContextStack;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkState;
 
 /**
- * Static helper for holding TestContext stack in a thread local variable.
+ * Static helper for holding the current {@link TestContext} stack in a thread local variable. The
+ * stack is a {@link Deque} whose <em>tail</em> is the top of the stack ({@link Deque#addLast}/
+ * {@link Deque#removeLast}/{@link Deque#getLast}), so iterating it yields contexts bottom-to-top.
  * <p>
  * Justification for existence:
  * <p>
@@ -35,14 +38,15 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public final class ThreadLocalTestContextHolder
 {
-    private static final ThreadLocal<TestContextStack<TestContext>> testContextStackThreadLocal = new InheritableThreadLocal<TestContextStack<TestContext>>()
+    private static final ThreadLocal<Deque<TestContext>> testContextStackThreadLocal = new InheritableThreadLocal<>()
     {
-        protected TestContextStack<TestContext> childValue(TestContextStack<TestContext> parentTestContextStack)
+        @Override
+        protected Deque<TestContext> childValue(Deque<TestContext> parentTestContextStack)
         {
             if (parentTestContextStack != null) {
-                checkState(!parentTestContextStack.empty());
-                TestContextStack<TestContext> childTestContextStack = new TestContextStack<>();
-                childTestContextStack.push(parentTestContextStack.peek());
+                checkState(!parentTestContextStack.isEmpty());
+                Deque<TestContext> childTestContextStack = new ArrayDeque<>();
+                childTestContextStack.addLast(parentTestContextStack.getLast());
                 return childTestContextStack;
             }
 
@@ -53,7 +57,7 @@ public final class ThreadLocalTestContextHolder
     public static TestContext testContext()
     {
         assertTestContextSet();
-        return testContextStackThreadLocal.get().peek();
+        return testContextStackThreadLocal.get().getLast();
     }
 
     public static Optional<TestContext> testContextIfSet()
@@ -68,32 +72,58 @@ public final class ThreadLocalTestContextHolder
     public static void pushTestContext(TestContext testContext)
     {
         ensureTestContextStack();
-        testContextStackThreadLocal.get().push(testContext);
+        testContextStackThreadLocal.get().addLast(testContext);
     }
 
     public static TestContext popTestContext()
     {
         assertTestContextSet();
 
-        TestContextStack<TestContext> testContextStack = testContextStackThreadLocal.get();
-        TestContext testContext = testContextStack.pop();
-        if (testContextStack.empty()) {
+        Deque<TestContext> testContextStack = testContextStackThreadLocal.get();
+        TestContext testContext = testContextStack.removeLast();
+        if (testContextStack.isEmpty()) {
             testContextStackThreadLocal.remove();
         }
 
         return testContext;
     }
 
-    public static void pushAllTestContexts(TestContextStack<? extends TestContext> testContextStack)
+    public static void pushAllTestContexts(Deque<? extends TestContext> testContextStack)
     {
         testContextStack.forEach(ThreadLocalTestContextHolder::pushTestContext);
     }
 
-    public static TestContextStack<TestContext> popAllTestContexts()
+    public static Deque<TestContext> popAllTestContexts()
     {
-        TestContextStack<TestContext> testContextStack = testContextStackThreadLocal.get();
+        Deque<TestContext> testContextStack = testContextStackThreadLocal.get();
         testContextStackThreadLocal.remove();
         return testContextStack;
+    }
+
+    /**
+     * Detaches and returns whatever context stack is currently bound to this thread (if any),
+     * leaving the thread with no context. Pair with {@link #restoreTestContexts}.
+     * <p>
+     * Needed because JUnit's parallel executor uses a work-stealing {@code ForkJoinPool}: a worker
+     * thread can begin running a test while it is already in the middle of another one (during a
+     * join). Saving and restoring the previously bound context lets nested tests coexist on the same
+     * thread without clobbering each other.
+     */
+    public static Optional<Deque<TestContext>> saveAndClearTestContexts()
+    {
+        Deque<TestContext> testContextStack = testContextStackThreadLocal.get();
+        testContextStackThreadLocal.remove();
+        return Optional.ofNullable(testContextStack);
+    }
+
+    public static void restoreTestContexts(Optional<Deque<TestContext>> testContexts)
+    {
+        if (testContexts.isPresent()) {
+            testContextStackThreadLocal.set(testContexts.get());
+        }
+        else {
+            testContextStackThreadLocal.remove();
+        }
     }
 
     public static void assertTestContextNotSet()
@@ -103,7 +133,7 @@ public final class ThreadLocalTestContextHolder
 
     public static void assertTestContextSet()
     {
-        if (testContextStackThreadLocal.get() == null || testContextStackThreadLocal.get().empty()) {
+        if (testContextStackThreadLocal.get() == null || testContextStackThreadLocal.get().isEmpty()) {
             throw new ThreadLocalTestContextException("test context not set for current thread");
         }
     }
@@ -111,7 +141,7 @@ public final class ThreadLocalTestContextHolder
     private static void ensureTestContextStack()
     {
         if (testContextStackThreadLocal.get() == null) {
-            testContextStackThreadLocal.set(new TestContextStack<>());
+            testContextStackThreadLocal.set(new ArrayDeque<>());
         }
     }
 

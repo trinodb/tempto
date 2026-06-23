@@ -29,7 +29,6 @@ import io.trino.tempto.internal.convention.AnnotatedFileParser;
 import io.trino.tempto.internal.convention.AnnotatedFileParser.SectionParsingResult;
 import io.trino.tempto.internal.convention.ConventionBasedTest;
 import io.trino.tempto.internal.convention.ConventionBasedTestFactory;
-import io.trino.tempto.internal.convention.ConventionBasedTestProxyGenerator;
 import io.trino.tempto.internal.convention.MutableTableDescriptor;
 import io.trino.tempto.internal.convention.SqlQueryDescriptor;
 import io.trino.tempto.internal.convention.SqlResultDescriptor;
@@ -63,16 +62,13 @@ public class SqlPathTestFactory
             new SectionParsingResult(Optional.empty(), ImmutableList.of(), ImmutableMap.of(), ImmutableList.of()));
 
     private final TableDefinitionsRepository tableDefinitionsRepository;
-    private final ConventionBasedTestProxyGenerator proxyGenerator;
     private final Configuration configuration;
 
     public SqlPathTestFactory(
             TableDefinitionsRepository tableDefinitionsRepository,
-            ConventionBasedTestProxyGenerator proxyGenerator,
             Configuration configuration)
     {
         this.tableDefinitionsRepository = requireNonNull(tableDefinitionsRepository, "tableDefinitionsRepository is null");
-        this.proxyGenerator = requireNonNull(proxyGenerator, "proxyGenerator is null");
         this.configuration = requireNonNull(configuration, "configuration is null");
     }
 
@@ -177,8 +173,7 @@ public class SqlPathTestFactory
                     queryDescriptor,
                     resultDescriptor,
                     requirement);
-            ConventionBasedTest proxiedConventionTest = proxyGenerator.generateProxy(conventionTest);
-            conventionBasedTests.add(proxiedConventionTest);
+            conventionBasedTests.add(conventionTest);
         }
         return conventionBasedTests;
     }

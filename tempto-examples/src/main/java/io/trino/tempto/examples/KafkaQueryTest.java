@@ -23,7 +23,8 @@ import io.trino.tempto.fulfillment.table.kafka.KafkaMessage;
 import io.trino.tempto.fulfillment.table.kafka.KafkaTableDefinition;
 import io.trino.tempto.fulfillment.table.kafka.ListKafkaDataSource;
 import io.trino.tempto.query.QueryResult;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static io.trino.tempto.assertions.QueryAssert.Row.row;
 import static io.trino.tempto.assertions.QueryAssert.assertThat;
@@ -64,7 +65,8 @@ public class KafkaQueryTest
         }
     }
 
-    @Test(groups = "kafka_query")
+    @Test
+    @Tag("kafka_query")
     @Requires(SimpleKeyAndValueTable.class)
     public void testSelectSimpleKeyAndValue()
     {

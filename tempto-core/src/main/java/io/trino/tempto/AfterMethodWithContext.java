@@ -14,18 +14,17 @@
 
 package io.trino.tempto;
 
-import org.testng.annotations.AfterMethod;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates methods that should be invoked after each test method (like {@link AfterMethod}),
- * but before Tempto context has been destroyed.
- *
- * @see AfterMethod
+ * Annotates methods that should be invoked after each test method (like JUnit's
+ * {@code @AfterEach}), but before the Tempto context has been destroyed.
+ * <p>
+ * Such a method may declare {@code @Inject}-annotated parameters which are resolved from the
+ * current {@link io.trino.tempto.context.TestContext}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

@@ -20,7 +20,6 @@ import io.trino.tempto.RequirementsProvider;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.fulfillment.table.TableDefinitionsRepository;
 import io.trino.tempto.internal.convention.ConventionBasedTest;
-import io.trino.tempto.internal.convention.ConventionBasedTestProxyGenerator;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,8 +51,7 @@ public class SqlPathTestFactoryTest
     public void setup()
     {
         TableDefinitionsRepository tableDefinitionsRepositoryMock = mock(TableDefinitionsRepository.class);
-        ConventionBasedTestProxyGenerator conventionBasedTestProxyGeneratorMock = new ConventionBasedTestProxyGenerator("test");
-        sqlPathTestFactory = new SqlPathTestFactory(tableDefinitionsRepositoryMock, conventionBasedTestProxyGeneratorMock, emptyConfiguration());
+        sqlPathTestFactory = new SqlPathTestFactory(tableDefinitionsRepositoryMock, emptyConfiguration());
     }
 
     @Test

@@ -17,7 +17,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import io.trino.tempto.ProductTest;
 import io.trino.tempto.hadoop.hdfs.HdfsClient;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,8 +28,8 @@ public class HdfsClientTest
     @Inject
     HdfsClient hdfsClient;
 
-    @Inject
-    @Test(groups = "hdfs")
+    @Test
+    @Tag("hdfs")
     public void testDefaultPath()
     {
         String defaultPath = "/user/hive/warehouse";
@@ -38,8 +39,8 @@ public class HdfsClientTest
         assertThat(hdfsClient.getPermission(defaultPath)).isEqualTo("1777");
     }
 
-    @Inject
-    @Test(groups = "hdfs")
+    @Test
+    @Tag("hdfs")
     public void testMetadataOperations()
     {
         String testPath = "/user/hive/warehouse/test_metadata";

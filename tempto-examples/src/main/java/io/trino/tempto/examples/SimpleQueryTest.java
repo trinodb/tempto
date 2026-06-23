@@ -30,9 +30,12 @@ import io.trino.tempto.fulfillment.table.TableInstance;
 import io.trino.tempto.fulfillment.table.TableManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
-import static io.trino.tempto.Requirements.allOf;
+import static io.trino.tempto.Requirements.compose;
 import static io.trino.tempto.assertions.QueryAssert.Row.row;
 import static io.trino.tempto.assertions.QueryAssert.assertThat;
 import static io.trino.tempto.context.ThreadLocalTestContextHolder.testContext;
@@ -44,6 +47,7 @@ import static io.trino.tempto.fulfillment.table.hive.HiveTableDefinition.like;
 import static io.trino.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions.NATION;
 import static io.trino.tempto.fulfillment.table.hive.tpch.TpchTableDefinitions.REGION;
 import static io.trino.tempto.query.QueryExecutor.query;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleQueryTest
@@ -87,7 +91,9 @@ public class SimpleQueryTest
         assertThat(testContextIfSet().isPresent()).isTrue();
     }
 
-    @Test(groups = "query", timeOut = 1000000)
+    @Test
+    @Tag("query")
+    @Timeout(value = 1000000, unit = MILLISECONDS)
     public void createAndDropMutableTable()
     {
         TableDefinition tableDefinition = like(NATION)
@@ -99,14 +105,17 @@ public class SimpleQueryTest
         tableManager.createMutable(tableDefinition);
     }
 
-    @Test(groups = "query")
+    @Test
+    @Tag("query")
     @Requires(SimpleTestRequirements.class)
     public void selectAllFromNation()
     {
         assertThat(query("select * from nation")).hasRowsCount(25);
     }
 
-    @Test(groups = {"smoke", "query"})
+    @Test
+    @Tag("smoke")
+    @Tag("query")
     @Requires(SimpleTestRequirements.class)
     public void selectCountFromNation()
     {
@@ -121,13 +130,17 @@ public class SimpleQueryTest
         @Override
         public Requirement getRequirements(Configuration configuration)
         {
-            return allOf(
+            // Native JUnit does not expand a single test into multiple instances, so unlike the
+            // former Requirements.allOf(...) this fulfills both tables for one test run; the tables
+            // therefore need distinct names.
+            return compose(
                     mutableTable(NATION, "table", LOADED),
-                    mutableTable(REGION, "table", LOADED));
+                    mutableTable(REGION, "table_region", LOADED));
         }
     }
 
-    @Test(groups = "query")
+    @Test
+    @Tag("query")
     @Requires(MultipleTablesTestRequirements.class)
     public void selectAllFromMultipleTables()
     {
@@ -136,13 +149,16 @@ public class SimpleQueryTest
         assertThat(query("select * from " + tableInstance.getNameInDatabase())).hasAnyRows();
     }
 
-    @Test(groups = "failing")
+    @Test
+    @Tag("failing")
     public void failingTest()
     {
         assertThat(1).isEqualTo(2);
     }
 
-    @Test(groups = "skipped", enabled = false)
+    @Test
+    @Tag("skipped")
+    @Disabled
     public void disabledTest()
     {
         assertThat(1).isEqualTo(2);

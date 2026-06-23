@@ -14,13 +14,15 @@
 
 package io.trino.tempto.internal.convention;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.internal.convention.generator.GeneratorPathTestFactory;
 import io.trino.tempto.internal.convention.recursion.RecursionPathTestFactory;
 import io.trino.tempto.internal.convention.sql.SqlPathTestFactory;
+import io.trino.tempto.internal.listeners.TestNameGroupNameFilter;
 import org.slf4j.Logger;
-import org.testng.annotations.Factory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,20 +30,26 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.trino.tempto.fulfillment.table.TableDefinitionsRepository.tableDefinitionsRepository;
 import static io.trino.tempto.internal.configuration.TestConfigurationFactory.testConfiguration;
 import static io.trino.tempto.internal.convention.ConventionTestsUtils.getConventionsTestsPath;
 import static java.util.stream.Collectors.toList;
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * Discovers convention-based (file driven) tests from the {@code testcases} directory tree.
+ */
 public class ConventionBasedTestFactory
 {
     private static final Logger LOGGER = getLogger(ConventionBasedTestFactory.class);
-    private static final ConventionBasedTest[] NO_TEST_CASES = new ConventionBasedTest[0];
 
-    // TODO: make this configurable
-    private static final String TEST_PACKAGE = "io.trino.tempto";
     public static final String TESTCASES_PATH_PART = "testcases";
+
+    // Discovery walks the testcases tree and parses every file; do it once per JVM and share between
+    // suite-level requirement resolution and @TestTemplate expansion.
+    private static final Supplier<List<ConventionBasedTest>> CONVENTION_TESTS =
+            Suppliers.memoize(() -> new ConventionBasedTestFactory().createTestCases());
 
     public interface PathTestFactory
     {
@@ -50,21 +58,31 @@ public class ConventionBasedTestFactory
         List<ConventionBasedTest> createTestsForPath(Path path, String testNamePrefix, ConventionBasedTestFactory factory);
     }
 
-    private List<PathTestFactory> factories;
+    private final List<PathTestFactory> factories = setupFactories();
 
-    @Factory
-    public Object[] createTestCases()
+    /**
+     * The discovered convention tests that match the given name/group selection. Discovery is cached;
+     * both the suite-level requirement resolver and the {@code @TestTemplate} provider call this so
+     * they always agree on which tests run.
+     */
+    public static List<ConventionBasedTest> selectedConventionTests(TestNameGroupNameFilter filter)
+    {
+        return CONVENTION_TESTS.get().stream()
+                .filter(test -> filter.matches(test.getTestName(), test.getTestGroups()))
+                .collect(toImmutableList());
+    }
+
+    public List<ConventionBasedTest> createTestCases()
     {
         LOGGER.debug("Loading file based test cases");
         try {
             Optional<Path> productTestsPath = getConventionsTestsPath(TESTCASES_PATH_PART);
-            if (!productTestsPath.isPresent()) {
+            if (productTestsPath.isEmpty()) {
                 LOGGER.info("No convention tests cases");
-                return NO_TEST_CASES;
+                return ImmutableList.of();
             }
 
-            factories = setupFactories();
-            return createTestsForRootPath(productTestsPath.get());
+            return createTestsForPath(productTestsPath.get(), "sql_tests");
         }
         catch (Exception e) {
             LOGGER.error("Could not create file test", e);
@@ -72,7 +90,6 @@ public class ConventionBasedTestFactory
         }
     }
 
-    @SuppressWarnings("unchecked")
     private List<PathTestFactory> setupFactories()
     {
         Configuration configuration = testConfiguration();
@@ -81,7 +98,6 @@ public class ConventionBasedTestFactory
                 new GeneratorPathTestFactory(),
                 new SqlPathTestFactory(
                         tableDefinitionsRepository(),
-                        new ConventionBasedTestProxyGenerator(TEST_PACKAGE),
                         configuration));
     }
 
@@ -104,10 +120,5 @@ public class ConventionBasedTestFactory
         catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private ConventionBasedTest[] createTestsForRootPath(Path path)
-    {
-        return createTestsForPath(path, "sql_tests").toArray(new ConventionBasedTest[0]);
     }
 }

@@ -19,7 +19,7 @@ import io.trino.tempto.runner.TemptoRunner;
 import io.trino.tempto.runner.TemptoRunnerCommandLineParser;
 
 import static io.trino.tempto.internal.configuration.TestConfigurationFactory.DEFAULT_TEST_CONFIGURATION_LOCATION;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TemptoExamples
 {
