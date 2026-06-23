@@ -10,7 +10,7 @@
 
     <groupId>io.trino.tempto</groupId>
     <artifactId>tempto-root</artifactId>
-    <version>204-SNAPSHOT</version>
+    <version>204</version>
     <packaging>pom</packaging>
 
     <name>tempto-root</name>
@@ -29,7 +29,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/trinodb/tempto.git</connection>
-        <tag>HEAD</tag>
+        <tag>204</tag>
         <url>https://github.com/trinodb/tempto</url>
     </scm>
 
