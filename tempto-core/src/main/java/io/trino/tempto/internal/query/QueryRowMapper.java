@@ -71,45 +71,20 @@ public class QueryRowMapper
             return null;
         }
 
-        switch (expectedType) {
-            case CHAR:
-            case VARCHAR:
-            case NVARCHAR:
-            case LONGVARCHAR:
-            case LONGNVARCHAR:
-                return value;
-            case BINARY:
-            case VARBINARY:
-            case LONGVARBINARY:
-                return convertBinary(value);
-            case BOOLEAN:
-                return convertBoolean(value);
-            case BIT:
-                return convertBit(value);
-            case TINYINT:
-            case SMALLINT:
-            case INTEGER:
-                return Integer.valueOf(value);
-            case BIGINT:
-                return Long.valueOf(value);
-            case REAL:
-            case FLOAT:
-            case DOUBLE:
-                return Double.valueOf(value);
-            case DECIMAL:
-            case NUMERIC:
-                return new BigDecimal(value);
-            case DATE:
-                return Date.valueOf(value);
-            case TIME:
-            case TIME_WITH_TIMEZONE:
-                return Time.valueOf(value);
-            case TIMESTAMP:
-            case TIMESTAMP_WITH_TIMEZONE:
-                return Timestamp.valueOf(value);
-            default:
-                throw unsupportedConversionException(value, expectedType);
-        }
+        return switch (expectedType) {
+            case CHAR, VARCHAR, NVARCHAR, LONGVARCHAR, LONGNVARCHAR -> value;
+            case BINARY, VARBINARY, LONGVARBINARY -> convertBinary(value);
+            case BOOLEAN -> convertBoolean(value);
+            case BIT -> convertBit(value);
+            case TINYINT, SMALLINT, INTEGER -> Integer.valueOf(value);
+            case BIGINT -> Long.valueOf(value);
+            case REAL, FLOAT, DOUBLE -> Double.valueOf(value);
+            case DECIMAL, NUMERIC -> new BigDecimal(value);
+            case DATE -> Date.valueOf(value);
+            case TIME, TIME_WITH_TIMEZONE -> Time.valueOf(value);
+            case TIMESTAMP, TIMESTAMP_WITH_TIMEZONE -> Timestamp.valueOf(value);
+            default -> throw unsupportedConversionException(value, expectedType);
+        };
     }
 
     private byte[] convertBinary(String value)

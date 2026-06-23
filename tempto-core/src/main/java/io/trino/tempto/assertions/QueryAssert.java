@@ -103,7 +103,6 @@ public class QueryAssert
     @CheckReturnValue
     public static AbstractThrowableAssert<?, ? extends Throwable> assertQueryFailure(QueryCallback queryCallback)
     {
-        QueryExecutionException executionException = null;
         try {
             queryCallback.executeQuery();
         }

@@ -32,7 +32,7 @@ public interface TableManager<T extends TableDefinition>
         extends Closeable
 {
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE})
+    @Target(ElementType.TYPE)
     @interface Descriptor
     {
         Class<? extends TableDefinition> tableDefinitionClass();

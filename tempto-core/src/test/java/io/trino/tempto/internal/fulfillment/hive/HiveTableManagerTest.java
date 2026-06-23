@@ -26,7 +26,6 @@ import io.trino.tempto.query.QueryResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
 import java.sql.JDBCType;
 
 import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.CREATED;
@@ -73,7 +72,6 @@ public class HiveTableManagerTest
         tableNameGenerator = mock(TableNameGenerator.class);
         hiveThriftClient = mock(HiveThriftClient.class);
 
-        Connection connection = mock(Connection.class);
         when(tableNameGenerator.generateMutableTableNameInDatabase(any())).thenReturn("nation_randomSuffix");
         tableManager = new HiveTableManager(queryExecutor, dataSourceWriter, tableNameGenerator, hiveThriftClient, ROOT_PATH, "database", false, false);
     }

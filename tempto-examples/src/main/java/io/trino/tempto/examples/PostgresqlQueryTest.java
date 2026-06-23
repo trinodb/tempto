@@ -102,7 +102,7 @@ public class PostgresqlQueryTest
         assertThat(queryExecutor.executeQuery("select * from " + tableName)).containsOnly(row(1, "x"), row(2, "y"));
     }
 
-    @Test(groups = {"psql_query"})
+    @Test(groups = "psql_query")
     @Requires(MutableTestJdbcTables.class)
     public void selectFromTableInDifferentSchema()
     {

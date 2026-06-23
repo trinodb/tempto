@@ -43,6 +43,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.CREATED;
 import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.LOADED;
 import static io.trino.tempto.fulfillment.table.MutableTableRequirement.State.PREPARED;
@@ -162,7 +163,7 @@ public class JdbcTableManager
             return tableInstance;
         }
 
-        assert state == LOADED;
+        checkState(state == LOADED, "Unexpected mutable table state: %s", state);
 
         RelationalDataSource dataSource = tableDefinition.getDataSource();
         insertData(tableName, dataSource);

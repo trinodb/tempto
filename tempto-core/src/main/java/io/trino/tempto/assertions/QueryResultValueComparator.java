@@ -67,50 +67,22 @@ class QueryResultValueComparator
         if (isNull(actual) != isNull(expected)) {
             return false;
         }
-        switch (type) {
-            case CHAR:
-            case VARCHAR:
-            case NVARCHAR:
-            case LONGVARCHAR:
-            case LONGNVARCHAR:
-                return stringsEqual(actual, expected);
-            case BINARY:
-            case VARBINARY:
-            case LONGVARBINARY:
-                return binaryEqual(actual, expected);
-            case BIT:
-            case BOOLEAN:
-                return booleanEqual(actual, expected);
-            case TINYINT:
-            case SMALLINT:
-            case INTEGER:
-                return integerEqual(actual, expected);
-            case BIGINT:
-                return longEqual(actual, expected);
-            case REAL:
-            case FLOAT:
-            case DOUBLE:
-                return floatingEqual(actual, expected);
-            case DECIMAL:
-            case NUMERIC:
-                return bigDecimalEqual(actual, expected);
-            case DATE:
-                return dateEqual(actual, expected);
-            case TIME:
-            case TIME_WITH_TIMEZONE:
-                return timeEqual(actual, expected);
-            case TIMESTAMP:
-                return timestampEqual(actual, expected);
-            case TIMESTAMP_WITH_TIMEZONE:
-                return timestampWithTimezoneEqual(actual, expected);
-            case ARRAY:
-                return arrayEqual(actual, expected);
-            case STRUCT:
-            case JAVA_OBJECT:
-                return Objects.equals(actual, expected);
-            default:
-                throw new RuntimeException("Unsupported sql type " + type);
-        }
+        return switch (type) {
+            case CHAR, VARCHAR, NVARCHAR, LONGVARCHAR, LONGNVARCHAR -> stringsEqual(actual, expected);
+            case BINARY, VARBINARY, LONGVARBINARY -> binaryEqual(actual, expected);
+            case BIT, BOOLEAN -> booleanEqual(actual, expected);
+            case TINYINT, SMALLINT, INTEGER -> integerEqual(actual, expected);
+            case BIGINT -> longEqual(actual, expected);
+            case REAL, FLOAT, DOUBLE -> floatingEqual(actual, expected);
+            case DECIMAL, NUMERIC -> bigDecimalEqual(actual, expected);
+            case DATE -> dateEqual(actual, expected);
+            case TIME, TIME_WITH_TIMEZONE -> timeEqual(actual, expected);
+            case TIMESTAMP -> timestampEqual(actual, expected);
+            case TIMESTAMP_WITH_TIMEZONE -> timestampWithTimezoneEqual(actual, expected);
+            case ARRAY -> arrayEqual(actual, expected);
+            case STRUCT, JAVA_OBJECT -> Objects.equals(actual, expected);
+            default -> throw new RuntimeException("Unsupported sql type " + type);
+        };
     }
 
     private boolean arrayEqual(Object actual, Object expected)

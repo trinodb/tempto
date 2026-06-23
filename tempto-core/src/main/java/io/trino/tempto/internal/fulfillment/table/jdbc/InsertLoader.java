@@ -78,23 +78,11 @@ class InsertLoader
         if (o == null) {
             return "null";
         }
-        switch (jdbcType) {
-            case VARCHAR:
-            case CHAR:
-            case LONGNVARCHAR:
-                return "'" + o.toString() + "'";
-            case TINYINT:
-            case SMALLINT:
-            case INTEGER:
-            case BIGINT:
-            case FLOAT:
-            case REAL:
-            case DOUBLE:
-            case DECIMAL:
-                return o.toString();
-            default:
-                throw new IllegalArgumentException("Unsupported column type for INSERT: " + jdbcType);
-        }
+        return switch (jdbcType) {
+            case VARCHAR, CHAR, LONGNVARCHAR -> "'" + o.toString() + "'";
+            case TINYINT, SMALLINT, INTEGER, BIGINT, FLOAT, REAL, DOUBLE, DECIMAL -> o.toString();
+            default -> throw new IllegalArgumentException("Unsupported column type for INSERT: " + jdbcType);
+        };
     }
 
     @Override

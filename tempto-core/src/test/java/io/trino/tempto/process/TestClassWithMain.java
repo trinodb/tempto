@@ -23,6 +23,8 @@ public class TestClassWithMain
     public static final String EXPECTED_LINE = "hello";
     public static final String PRODUCED_LINE = "world";
 
+    private TestClassWithMain() {}
+
     public static void main(String[] args)
     {
         assertThat(args.length).isEqualTo(1);

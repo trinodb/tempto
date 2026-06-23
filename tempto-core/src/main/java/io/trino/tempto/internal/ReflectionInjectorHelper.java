@@ -32,7 +32,7 @@ import static net.bytebuddy.description.modifier.Visibility.PUBLIC;
 
 public class ReflectionInjectorHelper
 {
-    private static AnnotationDescription INJECT_ANNOTATION_DESCRIPTION = AnnotationDescription.Builder.ofType(Inject.class)
+    private static final AnnotationDescription INJECT_ANNOTATION_DESCRIPTION = AnnotationDescription.Builder.ofType(Inject.class)
             .build();
 
     public Object[] getMethodArguments(TestContext testContext, Method method)

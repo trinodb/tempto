@@ -87,14 +87,14 @@ public class TestInitializationListenerTest
     static final DummyRequirement A_REQUIREMENT = new DummyRequirement(A);
     static final DummyRequirement B_REQUIREMENT = new DummyRequirement(B);
     static final DummyRequirement C_REQUIREMENT = new DummyRequirement(C);
-    static List<Event> EVENTS;
+    static List<Event> events;
 
     private final TestSpecificRequirementsResolver testSpecificRequirementsResolver = new TestSpecificRequirementsResolver(emptyConfiguration());
 
     @BeforeEach
     public void setup()
     {
-        EVENTS = new ArrayList<>();
+        events = new ArrayList<>();
     }
 
     @ParameterizedTest
@@ -119,12 +119,12 @@ public class TestInitializationListenerTest
         assertTestContextNotSet();
         listener.onFinish(iTestContext);
 
-        assertThat(EVENTS.stream()
+        assertThat(events.stream()
                 .map(s -> s.name)
                 .collect(Collectors.toList()))
                 .isEqualTo(eventsList);
-        assertThat(EVENTS.get(1).object).isEqualTo(EVENTS.get(EVENTS.size() - 4).object);
-        assertThat(EVENTS.get(0).object).isEqualTo(EVENTS.get(EVENTS.size() - 2).object);
+        assertThat(events.get(1).object).isEqualTo(events.get(events.size() - 4).object);
+        assertThat(events.get(0).object).isEqualTo(events.get(events.size() - 2).object);
     }
 
     static Stream<Arguments> positiveFlowsData()
@@ -176,17 +176,17 @@ public class TestInitializationListenerTest
         listener.afterInvocation(invokedMethod, getITestResult(getFailMethod(), testClass, ITestResult.FAILURE));
         listener.onFinish(iTestContext);
 
-        assertThat(EVENTS.get(0).name).isEqualTo(SUITE_A_FULFILL);
-        assertThat(EVENTS.get(1).name).isEqualTo(TEST_B_FULFILL);
-        assertThat(EVENTS.get(2).name).isEqualTo(THROWING_TEST_C_FULFILL);
-        assertThat(EVENTS.get(3).name).isEqualTo(THROWING_TEST_C_CALLBACK);
-        assertThat(EVENTS.get(4).name).isEqualTo(TEST_B_CLEANUP);
-        assertThat(EVENTS.get(5).name).isEqualTo(TEST_B_CALLBACK);
-        assertThat(EVENTS.get(6).name).isEqualTo(SUITE_A_CLEANUP);
-        assertThat(EVENTS.get(7).name).isEqualTo(SUITE_A_CALLBACK);
+        assertThat(events.get(0).name).isEqualTo(SUITE_A_FULFILL);
+        assertThat(events.get(1).name).isEqualTo(TEST_B_FULFILL);
+        assertThat(events.get(2).name).isEqualTo(THROWING_TEST_C_FULFILL);
+        assertThat(events.get(3).name).isEqualTo(THROWING_TEST_C_CALLBACK);
+        assertThat(events.get(4).name).isEqualTo(TEST_B_CLEANUP);
+        assertThat(events.get(5).name).isEqualTo(TEST_B_CALLBACK);
+        assertThat(events.get(6).name).isEqualTo(SUITE_A_CLEANUP);
+        assertThat(events.get(7).name).isEqualTo(SUITE_A_CALLBACK);
 
-        assertThat(EVENTS.get(1).object).isEqualTo(EVENTS.get(4).object);
-        assertThat(EVENTS.get(0).object).isEqualTo(EVENTS.get(6).object);
+        assertThat(events.get(1).object).isEqualTo(events.get(4).object);
+        assertThat(events.get(0).object).isEqualTo(events.get(6).object);
     }
 
     private ITestContext getITestContext(Method method, TestClass testClass)
@@ -266,13 +266,13 @@ public class TestInitializationListenerTest
         @BeforeMethodWithContext
         public void beforeMethodAdditional()
         {
-            EVENTS.add(new Event(BEFORE_METHOD_ADDITIONAL, this));
+            events.add(new Event(BEFORE_METHOD_ADDITIONAL, this));
         }
 
         @AfterMethodWithContext
         public void afterMethodAdditional()
         {
-            EVENTS.add(new Event(AFTER_METHOD_ADDITIONAL, this));
+            events.add(new Event(AFTER_METHOD_ADDITIONAL, this));
         }
     }
 
@@ -283,14 +283,14 @@ public class TestInitializationListenerTest
         @BeforeMethodWithContext
         public void beforeMethod()
         {
-            EVENTS.add(new Event(BEFORE_METHOD_OVERRIDE, this));
+            events.add(new Event(BEFORE_METHOD_OVERRIDE, this));
         }
 
         @Override
         @AfterMethodWithContext
         public void afterMethod()
         {
-            EVENTS.add(new Event(AFTER_METHOD_OVERRIDE, this));
+            events.add(new Event(AFTER_METHOD_OVERRIDE, this));
         }
     }
 
@@ -304,13 +304,13 @@ public class TestInitializationListenerTest
         @BeforeMethodWithContext
         public void beforeMethod()
         {
-            EVENTS.add(new Event(BEFORE_METHOD, this));
+            events.add(new Event(BEFORE_METHOD, this));
         }
 
         @AfterMethodWithContext
         public void afterMethod()
         {
-            EVENTS.add(new Event(AFTER_METHOD, this));
+            events.add(new Event(AFTER_METHOD, this));
         }
 
         public void testMethodSuccess()
@@ -427,7 +427,7 @@ public class TestInitializationListenerTest
                 @Override
                 public void testContextClosed(TestContext testContext)
                 {
-                    EVENTS.add(new Event(callbackEventName, this));
+                    events.add(new Event(callbackEventName, this));
                 }
             });
         }
@@ -439,14 +439,14 @@ public class TestInitializationListenerTest
                 return Set.of();
             }
 
-            EVENTS.add(new Event(fulfillEventName, this));
+            events.add(new Event(fulfillEventName, this));
             return Set.of();
         }
 
         @Override
         public void cleanup(TestStatus testStatus)
         {
-            EVENTS.add(new Event(cleanupEventName, this));
+            events.add(new Event(cleanupEventName, this));
         }
     }
 

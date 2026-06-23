@@ -28,5 +28,5 @@ import java.lang.annotation.Target;
  * @see BeforeMethod
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target(ElementType.METHOD)
 public @interface BeforeMethodWithContext {}

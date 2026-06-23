@@ -281,17 +281,11 @@ public class TestInitializationListener
             }
             return depth;
         });
-        Comparator<Class<?>> classComparator;
-        switch (ordering) {
-            case SUPER_FIRST:
-                classComparator = depthComparator;
-                break;
-            case SUPER_LAST:
-                classComparator = depthComparator.reversed();
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported ordering: " + ordering);
-        }
+        Comparator<Class<?>> classComparator = switch (ordering) {
+            case SUPER_FIRST -> depthComparator;
+            case SUPER_LAST -> depthComparator.reversed();
+            default -> throw new UnsupportedOperationException("Unsupported ordering: " + ordering);
+        };
 
         Stream.of(testCase.getTestClass().getRealClass().getMethods())
                 .filter(declaredMethod -> declaredMethod.isAnnotationPresent(annotationClass))

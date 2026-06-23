@@ -48,11 +48,11 @@ import static org.mockito.Mockito.mock;
 
 public class QueryAssertTest
 {
-    private final QueryResult NATION_JOIN_REGION_QUERY_RESULT = buildNationJoinRegionQueryResult();
+    private final QueryResult nationJoinRegionQueryResult = buildNationJoinRegionQueryResult();
 
-    private final QueryResult QUERY_RESULT_WITH_VARBINARY = buildQueryResultWithVarbinary();
+    private final QueryResult queryResultWithVarbinary = buildQueryResultWithVarbinary();
 
-    private final ColumnValuesAssert<Object> EMPTY_COLUMN_VALUE_ASSERT = new ColumnValuesAssert<Object>()
+    private final ColumnValuesAssert<Object> emptyColumnValueAssert = new ColumnValuesAssert<Object>()
     {
         @Override
         public void assertColumnValues(AbstractListAssert<?, ? extends List<?>, Object, ObjectAssert<Object>> columnAssert)
@@ -92,7 +92,7 @@ public class QueryAssertTest
     @Test
     public void hasResultCountFails()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT).hasRowsCount(3))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).hasRowsCount(3))
                 .isInstanceOf(AssertionError.class)
                 .hasMessageStartingWith("Expected row count to be <3>, but was <2>; rows=");
     }
@@ -100,19 +100,19 @@ public class QueryAssertTest
     @Test
     public void hasResultCount()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT).hasRowsCount(2);
+        assertThat(nationJoinRegionQueryResult).hasRowsCount(2);
     }
 
     @Test
     public void hasAnyRowsCorrect()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT).hasAnyRows();
+        assertThat(nationJoinRegionQueryResult).hasAnyRows();
     }
 
     @Test
     public void hasNoRowsFails()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT).hasNoRows())
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).hasNoRows())
                 .isInstanceOf(AssertionError.class)
                 .hasMessageStartingWith("Expected row count to be <0>, but was <2>; rows=");
     }
@@ -120,8 +120,8 @@ public class QueryAssertTest
     @Test
     public void extractingColumnFailsNoSuchColumnIndex()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
-                .column(30, INTEGER, EMPTY_COLUMN_VALUE_ASSERT))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
+                .column(30, INTEGER, emptyColumnValueAssert))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("Result contains only <3> columns, extracting column <30>");
     }
@@ -129,8 +129,8 @@ public class QueryAssertTest
     @Test
     public void extractingColumnFailsNoSuchColumnName()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
-                .column("unknown_column", INTEGER, EMPTY_COLUMN_VALUE_ASSERT))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
+                .column("unknown_column", INTEGER, emptyColumnValueAssert))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("No column with name: <unknown_column>");
     }
@@ -138,8 +138,8 @@ public class QueryAssertTest
     @Test
     public void extractingColumnFailsInvalidType()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
-                .column("n.nationkey", VARCHAR, EMPTY_COLUMN_VALUE_ASSERT))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
+                .column("n.nationkey", VARCHAR, emptyColumnValueAssert))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("Expected <1> column, to be type: <VARCHAR>, but was: <BIGINT>");
     }
@@ -147,21 +147,21 @@ public class QueryAssertTest
     @Test
     public void hasColumnCountWithIndex()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
-                .column(1, BIGINT, EMPTY_COLUMN_VALUE_ASSERT);
+        assertThat(nationJoinRegionQueryResult)
+                .column(1, BIGINT, emptyColumnValueAssert);
     }
 
     @Test
     public void hasColumnCountWithName()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
-                .column("n.nationkey", BIGINT, EMPTY_COLUMN_VALUE_ASSERT);
+        assertThat(nationJoinRegionQueryResult)
+                .column("n.nationkey", BIGINT, emptyColumnValueAssert);
     }
 
     @Test
     public void hasColumnsWrongColumnCount()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT).hasColumns(VARCHAR))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).hasColumns(VARCHAR))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("Expected column count to be <1>, but was <3> - columns <[BIGINT, VARCHAR, VARCHAR]>");
     }
@@ -169,7 +169,7 @@ public class QueryAssertTest
     @Test
     public void hasColumnsDifferentColumnTypes()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT).hasColumns(VARCHAR, VARCHAR, VARCHAR))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).hasColumns(VARCHAR, VARCHAR, VARCHAR))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("Expected <0> column of type <VARCHAR>, but was <BIGINT>, actual columns: [BIGINT, VARCHAR, VARCHAR]");
     }
@@ -177,13 +177,13 @@ public class QueryAssertTest
     @Test
     public void hasColumns()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT).hasColumns(BIGINT, VARCHAR, VARCHAR);
+        assertThat(nationJoinRegionQueryResult).hasColumns(BIGINT, VARCHAR, VARCHAR);
     }
 
     @Test
     public void hasRowsDifferentNumberOfRows()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThat(nationJoinRegionQueryResult)
                 .contains(
                         row(1, "ALGERIA", "AFRICA"),
                         row(2, "ARGENTINA", "SOUTH AMERICA"));
@@ -192,7 +192,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsDifferentValueNoRow()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
                 .contains(
                         row(2, "ARGENTINA", "SOUTH AMERICA"),
                         row(1, "ALGERIA", "valid_value")))
@@ -208,7 +208,7 @@ public class QueryAssertTest
     @Test
     public void hasRows()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThat(nationJoinRegionQueryResult)
                 .contains(
                         row(2, "ARGENTINA", "SOUTH AMERICA"),
                         row(1, "ALGERIA", "AFRICA"));
@@ -217,7 +217,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsMissingSuffixColumn()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
                 .contains(
                         row(2, "ARGENTINA"),
                         row(1, "ALGERIA")))
@@ -234,7 +234,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsMissingMiddleColumn()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
                 .contains(
                         row(2, "SOUTH AMERICA"),
                         row(1, "AFRICA")))
@@ -251,7 +251,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsWithMultiplePossibleValues()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThat(nationJoinRegionQueryResult)
                 .contains(
                         row(2, "ARGENTINA", "SOUTH AMERICA"),
                         row(1, "ALGERIA", anyOf("AFRICA", "MARS")));
@@ -260,7 +260,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsWithMultiplePossibleValuesNoRowMatching()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
                 .contains(
                         row(2, "ARGENTINA", "SOUTH AMERICA"),
                         row(1, "ALGERIA", anyOf("SATURN", null))))
@@ -295,7 +295,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsInOrderDifferentNumberOfRows()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
                 .containsExactly(
                         row(1, "ALGERIA", "AFRICA"),
                         row(2, "ARGENTINA", "SOUTH AMERICA"),
@@ -307,7 +307,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsInOrderDifferentValueNoRow()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
                 .containsExactly(
                         row(1, "ALGERIA", "AFRICA"),
                         row(2, "ARGENTINA", "valid_value")))
@@ -319,7 +319,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsInOrderDifferentOrder()
     {
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult)
                 .containsExactly(
                         row(2, "ARGENTINA", "SOUTH AMERICA"),
                         row(1, "ALGERIA", "AFRICA")))
@@ -332,7 +332,7 @@ public class QueryAssertTest
     @Test
     public void hasRowsInOrder()
     {
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT)
+        assertThat(nationJoinRegionQueryResult)
                 .containsExactly(
                         row(1, "ALGERIA", "AFRICA"),
                         row(2, "ARGENTINA", "SOUTH AMERICA"));
@@ -347,7 +347,7 @@ public class QueryAssertTest
                 2|ARGENTINA|SOUTH AMERICA|
                 """);
 
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT).matches(new SqlResultDescriptor(parsingResult));
+        assertThat(nationJoinRegionQueryResult).matches(new SqlResultDescriptor(parsingResult));
     }
 
     @Test
@@ -359,7 +359,7 @@ public class QueryAssertTest
                 2|ARGENTINA|SOUTH AMERICA|
                 """);
 
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT).matches(new SqlResultDescriptor(parsingResult)))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).matches(new SqlResultDescriptor(parsingResult)))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("Expected <1> column of type <BIGINT>, but was <VARCHAR>, actual columns: [BIGINT, VARCHAR, VARCHAR]");
     }
@@ -373,7 +373,7 @@ public class QueryAssertTest
                 2|ARGENTINA|SOUTH AMERICA|
                 """);
 
-        assertThat(NATION_JOIN_REGION_QUERY_RESULT).matches(new SqlResultDescriptor(parsingResult));
+        assertThat(nationJoinRegionQueryResult).matches(new SqlResultDescriptor(parsingResult));
     }
 
     @Test
@@ -385,7 +385,7 @@ public class QueryAssertTest
                 3|ARGENTINA|SOUTH AMERICA|
                 """);
 
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT).matches(new SqlResultDescriptor(parsingResult)))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).matches(new SqlResultDescriptor(parsingResult)))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("""
                         Not equal rows:
@@ -402,7 +402,7 @@ public class QueryAssertTest
                 B|ARGENTINA|SOUTH AMERICA|
                 """);
 
-        assertThatThrownBy(() -> assertThat(NATION_JOIN_REGION_QUERY_RESULT).matches(new SqlResultDescriptor(parsingResult)))
+        assertThatThrownBy(() -> assertThat(nationJoinRegionQueryResult).matches(new SqlResultDescriptor(parsingResult)))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("""
                         Could not map expected file content to query column types; types=[BIGINT, VARCHAR, VARCHAR]; content=<-- delimiter: |; ignoreOrder: false
@@ -481,7 +481,7 @@ public class QueryAssertTest
     @Test
     public void queryAssertWithVarbinary()
     {
-        assertThatThrownBy(() -> assertThat(QUERY_RESULT_WITH_VARBINARY)
+        assertThatThrownBy(() -> assertThat(queryResultWithVarbinary)
                 .contains(row("three", "three".getBytes(UTF_8))))
                 .isInstanceOf(AssertionError.class)
                 .hasMessage("Could not find rows:\n" +
