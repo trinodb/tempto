@@ -59,18 +59,15 @@ public abstract class TablesState
                 .filter(it -> matches(it, tableHandle))
                 .collect(toList());
 
-        switch (tableInstances.size()) {
-            case 0:
-                throw new IllegalArgumentException(format("No %s instance found for name %s", tableDescription, tableHandle));
-            case 1:
-                return getOnlyElement(tableInstances);
-            default:
-                throw new IllegalArgumentException(format(
-                        "Multiple %s instances found for %s, please use more detailed table handle. Found %s",
-                        tableDescription,
-                        tableHandle,
-                        tableInstances.stream().map(TableInstance::getTableName).collect(toList())));
-        }
+        return switch (tableInstances.size()) {
+            case 0 -> throw new IllegalArgumentException(format("No %s instance found for name %s", tableDescription, tableHandle));
+            case 1 -> getOnlyElement(tableInstances);
+            default -> throw new IllegalArgumentException(format(
+                    "Multiple %s instances found for %s, please use more detailed table handle. Found %s",
+                    tableDescription,
+                    tableHandle,
+                    tableInstances.stream().map(TableInstance::getTableName).collect(toList())));
+        };
     }
 
     public List<TableName> getTableNames(String databaseName)

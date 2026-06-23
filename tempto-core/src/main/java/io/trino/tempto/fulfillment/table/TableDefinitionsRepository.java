@@ -57,7 +57,7 @@ public class TableDefinitionsRepository
 
     private static final String DATASETS_PATH_PART = "datasets";
 
-    private static TableDefinitionsRepository TABLE_DEFINITIONS_REPOSITORY;
+    private static TableDefinitionsRepository instance;
 
     public static TableDefinition tableDefinition(TableHandle tableHandle)
     {
@@ -66,16 +66,16 @@ public class TableDefinitionsRepository
 
     public static TableDefinitionsRepository tableDefinitionsRepository()
     {
-        if (TABLE_DEFINITIONS_REPOSITORY == null) {
+        if (instance == null) {
             List<TemptoPlugin> plugins = ImmutableList.copyOf(ServiceLoader.load(TemptoPlugin.class).iterator());
             List<TableDefinition> tables = Stream.concat(
                     plugins.stream()
                     .flatMap(plugin -> plugin.getTables().stream()),
                     getAllConventionBasedTableDefinitions().stream())
                     .collect(toImmutableList());
-            TABLE_DEFINITIONS_REPOSITORY = new TableDefinitionsRepository(tables);
+            instance = new TableDefinitionsRepository(tables);
         }
-        return TABLE_DEFINITIONS_REPOSITORY;
+        return instance;
     }
 
     private final Map<TableDefinitionRepositoryKey, TableDefinition> tableDefinitions;
@@ -137,14 +137,11 @@ public class TableDefinitionsRepository
     private static TableDefinition tableDefinitionFor(ConventionTableDefinitionDescriptor tableDefinitionDescriptor)
     {
         ConventionTableDefinitionDescriptor.ParsedDDLFile parsedDDLFile = tableDefinitionDescriptor.getParsedDDLFile();
-        switch (parsedDDLFile.getTableType()) {
-            case HIVE:
-                return hiveTableDefinitionFor(tableDefinitionDescriptor);
-            case JDBC:
-                return jdbcTableDefinitionFor(tableDefinitionDescriptor);
-            default:
-                throw new IllegalArgumentException("unknown table type: " + parsedDDLFile.getTableType());
-        }
+        return switch (parsedDDLFile.getTableType()) {
+            case HIVE -> hiveTableDefinitionFor(tableDefinitionDescriptor);
+            case JDBC -> jdbcTableDefinitionFor(tableDefinitionDescriptor);
+            default -> throw new IllegalArgumentException("unknown table type: " + parsedDDLFile.getTableType());
+        };
     }
 
     private static HiveTableDefinition hiveTableDefinitionFor(ConventionTableDefinitionDescriptor tableDefinitionDescriptor)

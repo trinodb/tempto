@@ -44,7 +44,8 @@ public class MutableTablesFulfiller
     @Override
     protected TablesState createState(List<TableInstance> tables)
     {
-        return mutableTablesState = new MutableTablesState(tables);
+        mutableTablesState = new MutableTablesState(tables);
+        return mutableTablesState;
     }
 
     @Override

@@ -23,6 +23,8 @@ import static org.testng.Assert.assertTrue;
 
 public class TemptoExamples
 {
+    private TemptoExamples() {}
+
     public static void main(String[] args)
     {
         TemptoRunnerCommandLineParser parser = TemptoRunnerCommandLineParser

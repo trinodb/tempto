@@ -64,7 +64,7 @@ public interface CliProcess
      *
      * @throws InterruptedException if the thread is interrupted
      * @throws CommandExecutionException if command finishes with non zero status
-     * @throws TimeoutRuntimeException
+     * @throws TimeoutRuntimeException if the process does not finish within the timeout
      */
     void waitForWithTimeoutAndKill()
             throws InterruptedException, TimeoutRuntimeException, CommandExecutionException;

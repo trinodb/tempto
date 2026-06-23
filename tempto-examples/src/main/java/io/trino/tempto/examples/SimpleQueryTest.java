@@ -59,7 +59,7 @@ public class SimpleQueryTest
         }
     }
 
-    @Inject()
+    @Inject
     @Named("hive")
     TableManager tableManager;
 
@@ -95,8 +95,8 @@ public class SimpleQueryTest
                 .setName("some_other_table_name")
                 .build();
 
-        TableInstance instanceCreated = tableManager.createMutable(tableDefinition, CREATED);
-        TableInstance instanceLoaded = tableManager.createMutable(tableDefinition);
+        tableManager.createMutable(tableDefinition, CREATED);
+        tableManager.createMutable(tableDefinition);
     }
 
     @Test(groups = "query")

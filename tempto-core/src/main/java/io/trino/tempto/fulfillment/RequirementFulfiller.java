@@ -29,7 +29,7 @@ public interface RequirementFulfiller
      * Apply annotation to fulfillers which should be evaluated at suite level.
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE})
+    @Target(ElementType.TYPE)
     @interface SuiteLevelFulfiller
     {}
 
@@ -37,7 +37,7 @@ public interface RequirementFulfiller
      * Apply annotation to fulfillers which should be evaluated at testLevel.
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE})
+    @Target(ElementType.TYPE)
     @interface TestLevelFulfiller
     {}
 

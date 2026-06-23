@@ -24,6 +24,8 @@ import static com.google.common.collect.Maps.newHashMap;
 
 public class OpenLdapObjectDefinitions
 {
+    private OpenLdapObjectDefinitions() {}
+
     public static final LdapObjectDefinition TEST_ORG =
             LdapObjectDefinition.builder("TestOrg")
                     .setDistinguishedName("ou=Test,dc=tempto,dc=com")
