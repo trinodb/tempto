@@ -57,11 +57,16 @@ public class TablesStateTest
         tablesState = new TablesState(
                 List.of(
                         db1_table1,
-                        db1_table2, db1_schema1_table2,
-                        db1_table3, db2_table3,
-                        db1_schema2_table4, db2_schema2_table4,
-                        db1_table5, db1_schema3_table5,
-                        db1_schema4_table6, db1_schema5_table6,
+                        db1_table2,
+                        db1_schema1_table2,
+                        db1_table3,
+                        db2_table3,
+                        db1_schema2_table4,
+                        db2_schema2_table4,
+                        db1_table5,
+                        db1_schema3_table5,
+                        db1_schema4_table6,
+                        db1_schema5_table6,
                         db1_schema6_table7),
                 "table") {};
     }

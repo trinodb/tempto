@@ -509,5 +509,5 @@ public abstract class DelegateTestNGMethod
     }
 
     @Override
-    abstract public ITestNGMethod clone();
+    public abstract ITestNGMethod clone();
 }

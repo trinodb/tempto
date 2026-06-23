@@ -202,12 +202,8 @@ public class SqlPathTestFactoryTest
     }
 
     public static class DummyRequirement1
-            implements Requirement
-    {
-    }
+            implements Requirement {}
 
     public static class DummyRequirement2
-            implements Requirement
-    {
-    }
+            implements Requirement {}
 }

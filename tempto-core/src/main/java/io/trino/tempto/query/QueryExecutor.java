@@ -57,7 +57,7 @@ public interface QueryExecutor
      * @param params Parameters to be used while executing query
      * @return QueryResult
      * @deprecated This method runs a query on the {@link #defaultQueryExecutor default executor}.
-     * The concept of default query executor has been found to be confusing and will be removed.
+     *         The concept of default query executor has been found to be confusing and will be removed.
      */
     @Deprecated
     static QueryResult query(@Language("SQL") String sql, QueryParam... params)

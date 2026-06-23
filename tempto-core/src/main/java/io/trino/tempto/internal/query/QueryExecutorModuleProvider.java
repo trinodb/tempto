@@ -15,6 +15,7 @@
 package io.trino.tempto.internal.query;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.PrivateModule;
@@ -27,8 +28,6 @@ import io.trino.tempto.query.JdbcConnectivityParamsState;
 import io.trino.tempto.query.JdbcQueryExecutor;
 import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryExecutorDispatcher;
-
-import com.google.inject.Inject;
 
 import java.util.Map;
 import java.util.Set;

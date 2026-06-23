@@ -20,6 +20,4 @@ package io.trino.tempto;
  * Requirement instances must provide proper implementation of hashCode and equals methods.
  * This is required so we can merge repeating requirements from different tests.
  */
-public interface Requirement
-{
-}
+public interface Requirement {}

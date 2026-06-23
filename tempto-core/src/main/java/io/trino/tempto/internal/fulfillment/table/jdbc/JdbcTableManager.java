@@ -15,6 +15,7 @@
 package io.trino.tempto.internal.fulfillment.table.jdbc;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.fulfillment.table.MutableTableRequirement.State;
 import io.trino.tempto.fulfillment.table.TableDefinition;
@@ -30,8 +31,6 @@ import io.trino.tempto.query.QueryExecutionException;
 import io.trino.tempto.query.QueryExecutor;
 import io.trino.tempto.query.QueryResult;
 import org.slf4j.Logger;
-
-import com.google.inject.name.Named;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -112,8 +111,7 @@ public class JdbcTableManager
                     connection.getCatalog(),
                     escapeNamePattern(tableName.getSchema().orElse(null), escape),
                     escapeNamePattern(tableName.getName(), escape),
-                    new String[] {"TABLE"})
-            ) {
+                    new String[] {"TABLE"})) {
                 return QueryResult.forResultSet(resultSet).getRowsCount() > 0;
             }
         }
@@ -140,8 +138,7 @@ public class JdbcTableManager
         boolean skipCreateSchema = configuration.getBoolean("databases." + databaseName + ".skip_create_schema").orElse(false);
         if (!skipCreateSchema) {
             tableName.getSchema().ifPresent(schema ->
-                    queryExecutor.executeQuery("CREATE SCHEMA IF NOT EXISTS " + schema)
-            );
+                    queryExecutor.executeQuery("CREATE SCHEMA IF NOT EXISTS " + schema));
         }
 
         queryExecutor.executeQuery(tableDefinition.getCreateTableDDL(tableName.getNameInDatabase()));

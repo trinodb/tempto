@@ -73,5 +73,4 @@ public class KafkaQueryTest
                 row("jasio", 1, "ania", 2),
                 row("piotr", 3, "kasia", 4));
     }
-
 }

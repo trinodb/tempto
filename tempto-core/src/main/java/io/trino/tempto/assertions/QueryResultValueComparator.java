@@ -255,8 +255,10 @@ class QueryResultValueComparator
         return ((Number) object).doubleValue();
     }
 
-    private static IllegalArgumentException incompatibleTypes(Object actual, Object expected) {
-        String message = format("Type mismatch: 'actual' value is of type '%s' while 'expected' value is of type '%s'",
+    private static IllegalArgumentException incompatibleTypes(Object actual, Object expected)
+    {
+        String message = format(
+                "Type mismatch: 'actual' value is of type '%s' while 'expected' value is of type '%s'",
                 requireNonNull(actual, "'actual' value is null").getClass().getCanonicalName(),
                 requireNonNull(expected, "'expected' value is null").getClass().getCanonicalName());
         return new IllegalArgumentException(message);

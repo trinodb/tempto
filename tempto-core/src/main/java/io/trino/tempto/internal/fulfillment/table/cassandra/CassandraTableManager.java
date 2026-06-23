@@ -14,6 +14,8 @@
 package io.trino.tempto.internal.fulfillment.table.cassandra;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.fulfillment.table.MutableTableRequirement;
 import io.trino.tempto.fulfillment.table.TableDefinition;
@@ -26,9 +28,6 @@ import io.trino.tempto.internal.fulfillment.table.TableNameGenerator;
 import io.trino.tempto.internal.query.CassandraQueryExecutor;
 import io.trino.tempto.util.Lazy;
 import org.slf4j.Logger;
-
-import com.google.inject.name.Named;
-import com.google.inject.Singleton;
 
 import java.util.List;
 import java.util.Optional;
@@ -176,8 +175,7 @@ public class CassandraTableManager
                 tableHandle.getDatabase().orElse(getDatabaseName()),
                 Optional.of(tableHandle.getSchema().orElse(defaultKeySpace)),
                 tableHandle.getName(),
-                nameInDatabase
-        );
+                nameInDatabase);
     }
 
     protected TableName createImmutableTableName(TableHandle tableHandle)
@@ -186,8 +184,7 @@ public class CassandraTableManager
                 tableHandle.getDatabase().orElse(getDatabaseName()),
                 Optional.of(tableHandle.getSchema().orElse(defaultKeySpace)),
                 tableHandle.getName(),
-                tableHandle.getName()
-        );
+                tableHandle.getName());
     }
 
     private void executeQueryIgnoreTypeError(String sql)

@@ -69,7 +69,7 @@ public class ParallelExecutionTest
     public void shouldFailTimeout()
             throws InterruptedException
     {
-        ParallelExecution parallelExecution = parallelExecution(1, (int threadIndex) -> Thread.sleep(500000));
+        ParallelExecution parallelExecution = parallelExecution(1, (int _) -> Thread.sleep(500000));
 
         parallelExecution.start();
 

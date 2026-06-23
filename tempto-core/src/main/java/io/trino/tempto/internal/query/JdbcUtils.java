@@ -110,7 +110,5 @@ public final class JdbcUtils
                 jdbcParamsState.password);
     }
 
-    private JdbcUtils()
-    {
-    }
+    private JdbcUtils() {}
 }

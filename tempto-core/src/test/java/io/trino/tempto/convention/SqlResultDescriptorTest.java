@@ -49,7 +49,8 @@ public class SqlResultDescriptorTest
     public void sampleResultFile()
             throws IOException
     {
-        String fileContent = """
+        String fileContent =
+                """
                 -- delimiter: |; ignoreOrder: true; types: VARCHAR|BINARY|BIT|INTEGER|REAL|NUMERIC|DATE|TIME|TIMESTAMP
                 A|abcd|1|10|20.0|30.0|2015-11-01|10:55:25|2016-11-01 10:55:25|
                 B|abcd|1|10|20.0|30.0|2015-11-01|10:55:25|2016-11-01 10:55:25|""";
@@ -64,7 +65,7 @@ public class SqlResultDescriptorTest
 
         List<?> values = rows.get(0).getValues();
         assertThat(values.get(0)).isEqualTo("A");
-        assertThat((byte[]) values.get(1)).isEqualTo(new byte[] {(byte) 0xab, (byte) 0xcd});
+        assertThat((byte[]) values.get(1)).isEqualTo(new byte[] {(byte) 0xAB, (byte) 0xCD});
         assertThat(values.get(2)).isEqualTo(true);
         assertThat(values.get(3)).isEqualTo(10);
         assertThat(values.get(4)).isEqualTo(Double.valueOf(20.0));
@@ -78,7 +79,8 @@ public class SqlResultDescriptorTest
     public void sampleResultFileWithoutExplicitExpectedTypes()
             throws IOException
     {
-        String fileContent = """
+        String fileContent =
+                """
                 -- delimiter: |; ignoreOrder: false
                 A|
                 B|""";
@@ -97,7 +99,8 @@ public class SqlResultDescriptorTest
     public void joinAllRowsToOneFile()
             throws IOException
     {
-        String fileContent = """
+        String fileContent =
+                """
                 -- delimiter: |; ignoreOrder: true; joinAllRowsToOne: true; types: VARCHAR
                 A|
                 B|""";

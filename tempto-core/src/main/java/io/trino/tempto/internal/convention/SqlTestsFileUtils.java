@@ -27,9 +27,7 @@ import static org.apache.commons.io.FilenameUtils.removeExtension;
 
 public final class SqlTestsFileUtils
 {
-    private SqlTestsFileUtils()
-    {
-    }
+    private SqlTestsFileUtils() {}
 
     public static Path changeExtension(Path source, String extension)
     {

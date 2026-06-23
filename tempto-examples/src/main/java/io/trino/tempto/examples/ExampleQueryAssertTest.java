@@ -63,7 +63,8 @@ public class ExampleQueryAssertTest
     @Test(enabled = false)
     public void testContainsExactly()
     {
-        assertThat(query("SELECT n.nationkey, n.name, r.name FROM nation n " +
+        assertThat(query(
+                "SELECT n.nationkey, n.name, r.name FROM nation n " +
                         "INNER JOIN region r ON n.regionkey = r.regionkey " +
                         "WHERE name like 'A%' AND n.created > ? ORDER BY n.name",
                 param(DATE, LocalDate.parse("2015-01-01"))))

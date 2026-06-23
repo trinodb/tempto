@@ -29,7 +29,8 @@ public class YamlConfigurationTest
     @Test
     public void create()
     {
-        YamlConfiguration configuration = new YamlConfiguration("""
+        YamlConfiguration configuration = new YamlConfiguration(
+                """
                 a:
                    b:
                       d: ela${foo}
@@ -57,7 +58,8 @@ public class YamlConfigurationTest
     @Test
     public void createMultiple()
     {
-        List<YamlConfiguration> configurations = YamlConfiguration.loadAll("""
+        List<YamlConfiguration> configurations = YamlConfiguration.loadAll(
+                """
                 a: 1
                 list:
                     - element1

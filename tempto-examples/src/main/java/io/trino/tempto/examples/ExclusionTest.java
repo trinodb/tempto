@@ -20,9 +20,7 @@ import static org.testng.FileAssert.fail;
 public class ExclusionTest
 {
     @Test
-    public void passingTest()
-    {
-    }
+    public void passingTest() {}
 
     @Test
     public void failingTest()

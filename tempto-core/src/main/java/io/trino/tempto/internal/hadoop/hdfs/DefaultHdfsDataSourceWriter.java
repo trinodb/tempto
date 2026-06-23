@@ -14,12 +14,11 @@
 
 package io.trino.tempto.internal.hadoop.hdfs;
 
+import com.google.inject.Inject;
 import io.trino.tempto.fulfillment.table.hive.HiveDataSource;
 import io.trino.tempto.hadoop.hdfs.HdfsClient;
 import io.trino.tempto.hadoop.hdfs.HdfsClient.RepeatableContentProducer;
 import org.slf4j.Logger;
-
-import com.google.inject.Inject;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

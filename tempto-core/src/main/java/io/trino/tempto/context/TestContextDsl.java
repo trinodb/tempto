@@ -55,7 +55,5 @@ public final class TestContextDsl
         }
     }
 
-    private TestContextDsl()
-    {
-    }
+    private TestContextDsl() {}
 }

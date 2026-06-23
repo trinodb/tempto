@@ -46,8 +46,7 @@ public class CassandraQueryTest
     static {
         RelationalDataSource dataSource = () -> ImmutableList.<List<Object>>of(
                 ImmutableList.of(1L, "foo", 2L, 754.1985),
-                ImmutableList.of(4L, "bar", 3L, 754.2008)
-        ).iterator();
+                ImmutableList.of(4L, "bar", 3L, 754.2008)).iterator();
         TEST_TABLE_DEFINITION = CassandraTableDefinition.cassandraBuilder(TEST_TABLE_NAME)
                 .withDatabase(TEST_DATABASE_NAME)
                 .withSchema(TEST_SCHEMA_NAME)

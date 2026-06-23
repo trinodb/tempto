@@ -124,8 +124,7 @@ public class ConventionBasedTestProxyGeneratorTest
         }
 
         @Override
-        public void test()
-        {}
+        public void test() {}
 
         @Override
         public Requirement getRequirements(Configuration configuration)

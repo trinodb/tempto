@@ -35,7 +35,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public final class ThreadLocalTestContextHolder
 {
-    private final static ThreadLocal<TestContextStack<TestContext>> testContextStackThreadLocal = new InheritableThreadLocal<TestContextStack<TestContext>>()
+    private static final ThreadLocal<TestContextStack<TestContext>> testContextStackThreadLocal = new InheritableThreadLocal<TestContextStack<TestContext>>()
     {
         protected TestContextStack<TestContext> childValue(TestContextStack<TestContext> parentTestContextStack)
         {
@@ -125,8 +125,7 @@ public final class ThreadLocalTestContextHolder
 
         ThreadLocalTestContextException(String message)
         {
-            super(
-                    message,
+            super(message,
                     null,
                     true,
                     // Suppress stacktrace for all but first 10 exceptions. It is not useful when printed for every test.

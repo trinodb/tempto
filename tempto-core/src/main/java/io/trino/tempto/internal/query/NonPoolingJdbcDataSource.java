@@ -73,14 +73,10 @@ class NonPoolingJdbcDataSource
     }
 
     @Override
-    public void setLogWriter(PrintWriter out)
-    {
-    }
+    public void setLogWriter(PrintWriter out) {}
 
     @Override
-    public void setLoginTimeout(int seconds)
-    {
-    }
+    public void setLoginTimeout(int seconds) {}
 
     @Override
     public int getLoginTimeout()

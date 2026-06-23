@@ -151,7 +151,5 @@ public final class ConventionTestsUtils
                 .map(Paths::get);
     }
 
-    private ConventionTestsUtils()
-    {
-    }
+    private ConventionTestsUtils() {}
 }

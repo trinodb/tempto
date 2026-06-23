@@ -54,8 +54,7 @@ public class DataProviders
                 m -> {
                     DataProvider annotation = m.getAnnotation(DataProvider.class);
                     return annotation != null && annotation.name().equals(dataProviderName);
-                }
-        ).findFirst();
+                }).findFirst();
         if (dataProviderMethodOptional.isPresent()) {
             try {
                 return Optional.of((Object[][]) dataProviderMethodOptional.get().invoke(null));

@@ -14,7 +14,10 @@
 package io.trino.tempto.fulfillment.table.kafka;
 
 import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import io.trino.tempto.configuration.Configuration;
 import io.trino.tempto.fulfillment.table.MutableTableRequirement;
 import io.trino.tempto.fulfillment.table.TableDefinition;
@@ -31,10 +34,6 @@ import org.apache.kafka.clients.admin.TopicDescription;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.google.inject.Singleton;
 import org.apache.kafka.common.TopicPartitionInfo;
 import org.apache.kafka.common.errors.UnknownTopicOrPartitionException;
 
@@ -73,7 +72,7 @@ public class KafkaTableManager
     {
         deleteTopic(tableDefinition.getTopic());
         createTopic(tableDefinition.getTopic(), tableDefinition.getPartitionsCount(), tableDefinition.getReplicationLevel());
-        waitForTopicReadiness(tableDefinition.getTopic(),Duration.ofSeconds(60));
+        waitForTopicReadiness(tableDefinition.getTopic(), Duration.ofSeconds(60));
         insertDataIntoTopic(tableDefinition.getTopic(), tableDefinition.getDataSource());
         TableName createdTableName = new TableName(
                 tableHandle.getDatabase().orElse(getDatabaseName()),
@@ -120,15 +119,14 @@ public class KafkaTableManager
                     if (topicDescription != null) {
                         List<TopicPartitionInfo> partitions = topicDescription.partitions();
                         boolean allReady = partitions.stream().allMatch(p ->
-                                p.leader() != null && !p.isr().isEmpty()
-                        );
+                                p.leader() != null && !p.isr().isEmpty());
                         if (!partitions.isEmpty() && allReady) {
                             return;
                         }
                     }
                 }
                 catch (ExecutionException e) {
-                    if ( !(e.getCause() instanceof UnknownTopicOrPartitionException)) {
+                    if (!(e.getCause() instanceof UnknownTopicOrPartitionException)) {
                         throw new RuntimeException(String.format("Unexpected error checking topic readiness: %s", e.getCause()), e);
                     }
                 }

@@ -14,10 +14,9 @@
 package io.trino.tempto.fulfillment.table;
 
 import com.google.inject.Inject;
-import io.trino.tempto.internal.fulfillment.table.TableName;
-
-import com.google.inject.name.Named;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import io.trino.tempto.internal.fulfillment.table.TableName;
 
 /**
  * Table manager for read only databases.

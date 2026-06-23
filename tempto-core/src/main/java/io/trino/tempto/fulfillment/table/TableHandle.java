@@ -13,13 +13,14 @@
  */
 package io.trino.tempto.fulfillment.table;
 
-import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Splitter;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
@@ -130,7 +131,7 @@ public class TableHandle
     @Override
     public String toString()
     {
-        MoreObjects.ToStringHelper toStringHelper = MoreObjects.toStringHelper(this);
+        ToStringHelper toStringHelper = toStringHelper(this);
         if (database.isPresent()) {
             toStringHelper.add("database", database.get());
         }

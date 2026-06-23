@@ -16,5 +16,5 @@ package io.trino.tempto.fulfillment;
 
 public enum TestStatus
 {
-    SUCCESS, FAILURE;
+    SUCCESS, FAILURE
 }

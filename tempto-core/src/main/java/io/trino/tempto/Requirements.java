@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static com.google.common.collect.ImmutableSet.copyOf;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
@@ -38,7 +37,7 @@ public final class Requirements
 
     public static CompositeRequirement compose(List<Requirement> requirements)
     {
-        return new MultiCompositeRequirement(ImmutableSet.of(copyOf(wrapAsCompositeRequirements(requirements))));
+        return new MultiCompositeRequirement(ImmutableSet.of(ImmutableSet.copyOf(wrapAsCompositeRequirements(requirements))));
     }
 
     public static CompositeRequirement allOf(Requirement... requirements)
@@ -59,7 +58,8 @@ public final class Requirements
                 .map((Requirement requirement) -> {
                     if (requirement instanceof CompositeRequirement) {
                         return (CompositeRequirement) requirement;
-                    } else {
+                    }
+                    else {
                         return new SingletonCompositeRequirement(requirement);
                     }
                 }).collect(toImmutableList());
@@ -126,7 +126,5 @@ public final class Requirements
         }
     }
 
-    private Requirements()
-    {
-    }
+    private Requirements() {}
 }

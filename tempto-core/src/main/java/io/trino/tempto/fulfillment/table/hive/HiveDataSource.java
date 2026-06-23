@@ -32,7 +32,7 @@ public interface HiveDataSource
 
     /**
      * @return collection with table files {@link RepeatableContentProducer}.
-     * For each {@link RepeatableContentProducer} separate file will be created on HDFS
+     *         For each {@link RepeatableContentProducer} separate file will be created on HDFS
      */
     Collection<RepeatableContentProducer> data();
 

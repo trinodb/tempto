@@ -49,7 +49,5 @@ public final class ReflectionHelper
         }
     }
 
-    private ReflectionHelper()
-    {
-    }
+    private ReflectionHelper() {}
 }

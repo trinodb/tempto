@@ -38,7 +38,7 @@ public class MutableTableRequirement
         /**
          * Table with data will be created and dropped by tempto framework.
          */
-        LOADED
+        LOADED,
     }
 
     private final State state;

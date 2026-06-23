@@ -47,8 +47,12 @@ public abstract class CommandRequirement
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CommandRequirement that = (CommandRequirement) o;
         return Objects.equals(setupCommands, that.setupCommands);
     }

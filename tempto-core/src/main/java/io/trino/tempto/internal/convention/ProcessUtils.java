@@ -24,7 +24,7 @@ public final class ProcessUtils
 
     public static void execute(String... cmdarray)
     {
-        execute(process -> {}, cmdarray);
+        execute(_ -> {}, cmdarray);
     }
 
     public static void execute(Consumer<Process> processConsumer, String... cmdarray)
@@ -42,7 +42,5 @@ public final class ProcessUtils
         }
     }
 
-    private ProcessUtils()
-    {
-    }
+    private ProcessUtils() {}
 }

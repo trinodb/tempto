@@ -41,8 +41,7 @@ public class DefaultTableManagerDispatcher<T extends TableDefinition>
     {
         this.classToTableManagers = ArrayListMultimap.create();
         tableManagers.values().stream().forEach(
-                manager -> classToTableManagers.put(manager.getTableDefinitionClass(), manager)
-        );
+                manager -> classToTableManagers.put(manager.getTableDefinitionClass(), manager));
         this.tableManagers = tableManagers;
     }
 

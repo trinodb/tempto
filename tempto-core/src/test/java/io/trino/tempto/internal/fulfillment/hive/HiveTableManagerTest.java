@@ -42,21 +42,23 @@ public class HiveTableManagerTest
     private static final String ROOT_PATH = "/tests-path";
     private static final String MUTABLE_TABLES_PATH = "/user/hive/warehouse/";
 
-    private static final String NATION_DDL_TEMPLATE = """
+    private static final String NATION_DDL_TEMPLATE =
+            """
 
-    CREATE TABLE %NAME%(
-            n_nationid BIGINT,
-            n_name STRING)
-            ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
-""";
+                CREATE TABLE %NAME%(
+                        n_nationid BIGINT,
+                        n_name STRING)
+                        ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
+            """;
 
-    private static final String PARTITIONED_NATION_DDL_TEMPLATE = """
+    private static final String PARTITIONED_NATION_DDL_TEMPLATE =
+            """
 
-    CREATE TABLE %NAME%(
-            n_nationid BIGINT,
-            n_name STRING)
-            ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
-""";
+                CREATE TABLE %NAME%(
+                        n_nationid BIGINT,
+                        n_name STRING)
+                        ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
+            """;
 
     private QueryExecutor queryExecutor;
     private HdfsDataSourceWriter dataSourceWriter;

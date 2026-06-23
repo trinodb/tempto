@@ -34,7 +34,7 @@ public class TestConfigurationFactory
     public static final String TEST_CONFIGURATION_URIS_KEY = "tempto.configurations";
     public static final String DEFAULT_TEST_CONFIGURATION_LOCATION = "tempto-configuration.yaml";
 
-    private static Configuration configuration = null;
+    private static Configuration configuration;
 
     private TestConfigurationFactory() {}
 

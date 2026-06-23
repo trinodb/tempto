@@ -21,7 +21,9 @@ import io.trino.tempto.testmarkers.WithTestGroups;
 
 public abstract class ConventionBasedTest
         extends ProductTest
-        implements RequirementsProvider, WithName, WithTestGroups
+        implements RequirementsProvider,
+                   WithName,
+                   WithTestGroups
 {
     public abstract void test();
 }

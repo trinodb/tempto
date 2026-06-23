@@ -44,7 +44,6 @@ public class RelationalTableDefinition
     protected RelationalTableDefinition(TableHandle handle, String createTableDDLTemplate, RelationalDataSource dataSource)
     {
         super(handle);
-        ;
         this.dataSource = checkNotNull(dataSource, "dataSource is null");
         this.createTableDDLTemplate = checkNotNull(createTableDDLTemplate, "createTableDDLTemplate is null");
         checkArgument(createTableDDLTemplate.contains(NAME_MARKER), "Create table DDL must contain %NAME% placeholder");

@@ -14,10 +14,9 @@
 
 package io.trino.tempto.internal.fulfillment.command;
 
+import com.google.inject.Inject;
 import io.trino.tempto.fulfillment.RequirementFulfiller;
 import io.trino.tempto.fulfillment.command.TestCommandRequirement;
-
-import com.google.inject.Inject;
 
 @RequirementFulfiller.TestLevelFulfiller
 public class TestCommandFulfiller

@@ -35,7 +35,7 @@ class BatchLoader
             throws SQLException
     {
         String questionMarks = IntStream.range(0, columnsCount)
-                .mapToObj(i -> "?")
+                .mapToObj(_ -> "?")
                 .collect(joining(","));
         String sql = String.format("INSERT INTO %s VALUES (%s)", tableName, questionMarks);
 

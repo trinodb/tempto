@@ -86,7 +86,8 @@ public class RequirementsCollectorTest
     public void shouldProvideCommandRequirementsFromConfiguration()
             throws NoSuchMethodException
     {
-        DefaultRequirementsCollector requirementsCollector = new DefaultRequirementsCollector(new YamlConfiguration("""
+        DefaultRequirementsCollector requirementsCollector = new DefaultRequirementsCollector(new YamlConfiguration(
+                """
                 command:
                   test:
                     - test command
@@ -118,26 +119,20 @@ public class RequirementsCollectorTest
     private static class MethodRequirement
     {
         @Requires(ProviderA.class)
-        public void method()
-        {
-        }
+        public void method() {}
     }
 
     @Requires(ProviderB.class)
     private static class ClassRequirement
     {
-        public void method()
-        {
-        }
+        public void method() {}
     }
 
     @Requires(ProviderA.class)
     private static class MethodAndClassRequirement
     {
         @Requires(ProviderB.class)
-        public void method()
-        {
-        }
+        public void method() {}
     }
 
     private static class ProviderA
