@@ -43,6 +43,7 @@ import static java.sql.JDBCType.LONGVARBINARY;
 import static java.sql.JDBCType.LONGVARCHAR;
 import static java.sql.JDBCType.NUMERIC;
 import static java.sql.JDBCType.NVARCHAR;
+import static java.sql.JDBCType.OTHER;
 import static java.sql.JDBCType.SMALLINT;
 import static java.sql.JDBCType.STRUCT;
 import static java.sql.JDBCType.TIME;
@@ -161,7 +162,16 @@ public class QueryResultValueComparatorTest
                 arguments(JAVA_OBJECT, ImmutableMap.of("a", "B"), ImmutableMap.of(), false),
                 arguments(JAVA_OBJECT, ImmutableMap.of("a", "B"), ImmutableMap.of("a", "b"), false),
                 arguments(JAVA_OBJECT, ImmutableMap.of("a", "B"), ImmutableMap.of("x", "y"), false),
-                arguments(JAVA_OBJECT, ImmutableMap.of(), ImmutableMap.of("x", "y"), false));
+                arguments(JAVA_OBJECT, ImmutableMap.of(), ImmutableMap.of("x", "y"), false),
+
+                arguments(OTHER, null, null, true),
+                arguments(OTHER, null, ImmutableMap.of(), false),
+                arguments(OTHER, ImmutableMap.of(), null, false),
+                arguments(OTHER, ImmutableMap.of(), ImmutableMap.of(), true),
+                arguments(OTHER, ImmutableMap.of("a", "B"), ImmutableMap.of(), false),
+                arguments(OTHER, ImmutableMap.of("a", "B"), ImmutableMap.of("a", "b"), false),
+                arguments(OTHER, ImmutableMap.of("a", "B"), ImmutableMap.of("x", "y"), false),
+                arguments(OTHER, ImmutableMap.of(), ImmutableMap.of("x", "y"), false));
     }
 
     @ParameterizedTest

@@ -80,7 +80,7 @@ class QueryResultValueComparator
             case TIMESTAMP -> timestampEqual(actual, expected);
             case TIMESTAMP_WITH_TIMEZONE -> timestampWithTimezoneEqual(actual, expected);
             case ARRAY -> arrayEqual(actual, expected);
-            case STRUCT, JAVA_OBJECT -> Objects.equals(actual, expected);
+            case STRUCT, JAVA_OBJECT, OTHER -> Objects.equals(actual, expected);
             default -> throw new RuntimeException("Unsupported sql type " + type);
         };
     }
